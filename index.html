@@ -1,24 +1,600 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>懒得推荐</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>血脉属性计算器</title>
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <!-- 统一的 Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            secondary: '#8b5cf6',
+            accent: '#ec4899',
+            dark: '#1e293b',
+            light: '#f8fafc'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .hexagon-chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        margin: 0 auto;
+        background-color: #000;
+        border-radius: 8px;
+        padding: 10px;
+      }
+      .gender-btn {
+        @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        text-indent: -9999px; /* 隐藏文字 */
+      }
+      .gender-btn.male {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/670d76a4cec84d99995e5435fdc30762.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=hHK2z5UaLlaR794R32XP7BTJya0%3D');
+      }
+      .gender-btn.female {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/85f1acb581014009b88ef2457fe49cbc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=kyM6FQS9on2xSz26%2B4akuC6zYi4%3D');
+      }
+      .god-btn {
+        @apply w-16 h-16 rounded-lg flex flex-col items-center justify-between p-1 text-sm font-bold transition-all duration-300;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden;
+      }
+      .god-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+      }
+      .god-btn span:first-child {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        margin-top: 4px;
+      }
+      .god-btn span:last-child {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        margin-bottom: 4px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 0 6px;
+        border-radius: 9999px;
+      }
+      .god-btn.palo {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/0a48cbb6a28a41df88ed77e1611fbb10.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=gDlm9W0TmEvMDZJXiIhwZR9vaYs%3D');
+      }
+      .god-btn.koneta {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/bdacf58ecfef4fdd8967061c922ad2a1.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=F6SySj2VNU8B3DzWMGZyZUKFUc0%3D');
+      }
+      .god-btn.sainan {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/f182f706a4db468fba259d11d99ab3fb.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=Ttgwy4qM%2BfDWrY73JhyuCGRKxbs%3D');
+      }
+      .god-btn.level-0::before {
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+      .god-btn.level-1::before {
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .god-btn.level-2::before {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      .bloodline-select {
+        @apply w-20 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary;
+      }
+      .percentage-display {
+        @apply ml-2 px-2 py-1 rounded bg-gray-100 text-gray-700 text-sm font-medium;
+      }
+      .slider-container {
+        @apply w-full my-4;
+      }
+      .slider {
+        @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
+      }
+      .slider::-webkit-slider-thumb {
+        @apply appearance-none w-6 h-6 rounded-full bg-primary cursor-pointer;
+      }
+      .attribute-value {
+        @apply font-bold;
+      }
+      .attribute-container {
+        @apply grid grid-cols-2 gap-2 mb-4;
+      }
+      .attribute-item {
+        @apply flex justify-between items-center p-2 bg-gray-50 rounded;
+      }
+    }
+  </style>
 </head>
-<body>
-    <header>
-        <img id="logo" src="icons/lan.png" alt="Logo">
-        <h1>懒得推荐</h1>
+<body class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 py-8 max-w-3xl">
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">血脉属性计算器</h1>
+      <p class="text-gray-600">计算不同血脉组合的属性值</p>
     </header>
-    <main>
-        <section id="recommendations">
-            <ul id="software-list">
-                <!-- 软件磁贴将在这里动态生成 -->
-            </ul>
-        </section>
+
+    <main class="bg-white rounded-xl shadow-lg p-6">
+      <!-- 血脉选择区域 -->
+      <div class="mb-6">
+        <div class="flex items-center mb-2">
+          <label for="mainBloodline" class="mr-2 font-medium">主血脉:</label>
+          <select id="mainBloodline" class="bloodline-select">
+            <!-- 由JavaScript动态填充 -->
+          </select>
+          <span id="mainPercentage" class="percentage-display">100%</span>
+        </div>
+
+        <div class="slider-container">
+          <input type="range" id="percentageSlider" class="slider" min="70" max="100" step="10" value="100">
+        </div>
+
+        <div id="secondaryBloodlineContainer" class="flex items-center justify-end mt-2 hidden">
+          <span id="secondaryPercentage" class="percentage-display mr-2">0%</span>
+          <select id="secondaryBloodline" class="bloodline-select">
+            <!-- 由JavaScript动态填充 -->
+          </select>
+          <label for="secondaryBloodline" class="ml-2 font-medium">次血脉:</label>
+        </div>
+      </div>
+
+      <!-- 属性值显示区域 -->
+      <div class="attribute-container mb-6">
+        <div class="attribute-item">
+          <span>力量 (力):</span>
+          <span id="strengthValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item">
+          <span>体力 (体):</span>
+          <span id="bodyValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item">
+          <span>技巧 (技):</span>
+          <span id="skillValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item">
+          <span>感知 (感):</span>
+          <span id="perceptionValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item">
+          <span>敏捷 (敏):</span>
+          <span id="agilityValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item">
+          <span>意志 (意):</span>
+          <span id="willValue" class="attribute-value">0.0</span>
+        </div>
+        <div class="attribute-item col-span-2">
+          <span>总计:</span>
+          <span id="totalValue" class="attribute-value">0.0</span>
+        </div>
+      </div>
+
+      <!-- 六角图显示区域 -->
+      <div class="hexagon-chart-container mb-8">
+        <canvas id="attributesChart"></canvas>
+      </div>
+
+      <!-- 按钮区域 -->
+      <div class="flex justify-between items-center">
+        <button id="genderToggle" class="gender-btn female">
+          <span>♀</span>
+        </button>
+        
+        <div class="flex space-x-4">
+          <button id="paloBtn" class="god-btn palo level-0" data-god="palo">
+            <span>帕洛</span>
+            <span id="paloLevel">0</span>
+          </button>
+          <button id="konetaBtn" class="god-btn koneta level-0" data-god="koneta">
+            <span>科内塔</span>
+            <span id="konetaLevel">0</span>
+          </button>
+          <button id="sainanBtn" class="god-btn sainan level-0" data-god="sainan">
+            <span>赛南</span>
+            <span id="sainanLevel">0</span>
+          </button>
+        </div>
+      </div>
     </main>
-    <script type="module" src="data.js"></script>
-    <script type="module" src="main.js"></script>
+
+    <footer class="mt-8 text-center text-gray-600 text-sm">
+      <p>血脉属性计算器 &copy; 2025</p>
+    </footer>
+  </div>
+
+  <script>
+    // 血脉属性数据
+    const bloodlineAttributes = {
+      "赛宁": {
+        "男": { "体": 0.9, "力": 1.1, "技": 1.1, "敏": 0.6, "感": 0.4, "意": 0.4, "总": 4.5 },
+        "女": { "体": 0.8, "力": 1, "技": 1.2, "敏": 0.7, "感": 0.5, "意": 0.3, "总": 4.5 }
+      },
+      "希尔": {
+        "男": { "体": 1.2, "力": 0.8, "技": 1, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
+        "女": { "体": 1.1, "力": 0.7, "技": 1.1, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
+      },
+      "佩尔": {
+        "男": { "体": 0.6, "力": 1, "技": 1.3, "敏": 0.4, "感": 0.8, "意": 0.4, "总": 4.5 },
+        "女": { "体": 0.5, "力": 0.9, "技": 1.4, "敏": 0.5, "感": 0.9, "意": 0.3, "总": 4.5 }
+      },
+      "切瓦": {
+        "男": { "体": 1, "力": 1.2, "技": 0.8, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
+        "女": { "体": 0.9, "力": 1.1, "技": 0.9, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
+      },
+      "牛头": {
+        "男": { "体": 1.3, "力": 1.1, "技": 0.6, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
+        "女": { "体": 1.2, "力": 1, "技": 0.7, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
+      },
+      "法拉": {
+        "男": { "体": 0.4, "力": 0.6, "技": 1.2, "敏": 1, "感": 0.7, "意": 0.4, "总": 4.3 },
+        "女": { "体": 0.3, "力": 0.5, "技": 1.3, "敏": 1.1, "感": 0.8, "意": 0.3, "总": 4.3 }
+      },
+      "古特": {
+        "男": { "体": 0.8, "力": 1.3, "技": 0.4, "敏": 1, "感": 0.4, "意": 0.6, "总": 4.5 },
+        "女": { "体": 0.7, "力": 1.2, "技": 0.5, "敏": 1.1, "感": 0.5, "意": 0.5, "总": 4.5 }
+      },
+      "玛夏": {
+        "男": { "体": 1.1, "力": 0.9, "技": 0.4, "敏": 0.4, "感": 0.4, "意": 1.3, "总": 4.5 },
+        "女": { "体": 1, "力": 0.8, "技": 0.5, "敏": 0.5, "感": 0.5, "意": 1.2, "总": 4.5 }
+      },
+      "瑞格": {
+        "男": { "体": 0.8, "力": 0.4, "技": 1.1, "敏": 1.1, "感": 0.4, "意": 0.7, "总": 4.5 },
+        "女": { "体": 0.7, "力": 0.3, "技": 1.2, "敏": 1.2, "感": 0.5, "意": 0.6, "总": 4.5 }
+      },
+      "瓦诺": {
+        "男": { "体": 0.6, "力": 0.4, "技": 0.9, "敏": 0.4, "感": 0.9, "意": 1.1, "总": 4.3 },
+        "女": { "体": 0.5, "力": 0.3, "技": 1, "敏": 0.5, "感": 1, "意": 1, "总": 4.3 }
+      },
+      "祖扎": {
+        "男": { "体": 0.9, "力": 0.4, "技": 0.8, "敏": 1.3, "感": 0.4, "意": 0.4, "总": 4.2 },
+        "女": { "体": 0.8, "力": 0.3, "技": 0.9, "敏": 1.4, "感": 0.5, "意": 0.3, "总": 4.2 }
+      },
+      "萨尼": {
+        "男": { "体": 0.9, "力": 1, "技": 0.4, "敏": 1.2, "感": 0.4, "意": 0.4, "总": 4.3 },
+        "女": { "体": 0.8, "力": 0.9, "技": 0.5, "敏": 1.3, "感": 0.5, "意": 0.3, "总": 4.3 }
+      },
+      "宏朝": {
+        "男": { "体": 0.4, "力": 0.8, "技": 1.1, "敏": 1.2, "感": 0.6, "意": 0.4, "总": 4.5 },
+        "女": { "体": 0.3, "力": 0.7, "技": 1.2, "敏": 1.3, "感": 0.7, "意": 0.3, "总": 4.5 }
+      },
+      "精灵": {
+        "男": { "体": 0.4, "力": 0.4, "技": 0.6, "敏": 0.8, "感": 1.3, "意": 1, "总": 4.5 },
+        "女": { "体": 0.3, "力": 0.3, "技": 0.7, "敏": 0.9, "感": 1.4, "意": 0.9, "总": 4.5 }
+      },
+      "黑精": {
+        "男": { "体": 0.6, "力": 0.9, "技": 0.4, "敏": 0.9, "感": 1.3, "意": 0.4, "总": 4.5 },
+        "女": { "体": 0.5, "力": 0.8, "技": 0.5, "敏": 1, "感": 1.4, "意": 0.3, "总": 4.5 }
+      }
+    };
+
+    // 神像加成数据
+    const godBonuses = {
+      "palo": {
+        "1": { "体": 0.05, "力": 0.05 },
+        "2": { "体": 0.1, "力": 0.1 }
+      },
+      "koneta": {
+        "1": { "技": 0.05, "敏": 0.05 },
+        "2": { "技": 0.1, "敏": 0.1 }
+      },
+      "sainan": {
+        "1": { "感": 0.05, "意": 0.05 },
+        "2": { "感": 0.1, "意": 0.1 }
+      }
+    };
+
+    // 全局变量
+    let currentGender = '女';
+    let currentMainBloodline = '赛宁';
+    let currentSecondaryBloodline = '古特';
+    let currentMainPercentage = 100;
+    let currentSecondaryPercentage = 0;
+    let currentGodLevels = {
+      "palo": 0,
+      "koneta": 0,
+      "sainan": 0
+    };
+    let attributesChart = null;
+
+    // DOM元素
+    const mainBloodlineSelect = document.getElementById('mainBloodline');
+    const secondaryBloodlineSelect = document.getElementById('secondaryBloodline');
+    const percentageSlider = document.getElementById('percentageSlider');
+    const mainPercentageDisplay = document.getElementById('mainPercentage');
+    const secondaryPercentageDisplay = document.getElementById('secondaryPercentage');
+    const secondaryBloodlineContainer = document.getElementById('secondaryBloodlineContainer');
+    const genderToggle = document.getElementById('genderToggle');
+    const paloBtn = document.getElementById('paloBtn');
+    const konetaBtn = document.getElementById('konetaBtn');
+    const sainanBtn = document.getElementById('sainanBtn');
+    const paloLevelDisplay = document.getElementById('paloLevel');
+    const konetaLevelDisplay = document.getElementById('konetaLevel');
+    const sainanLevelDisplay = document.getElementById('sainanLevel');
+
+    // 属性值显示元素
+    const bodyValueDisplay = document.getElementById('bodyValue');
+    const strengthValueDisplay = document.getElementById('strengthValue');
+    const skillValueDisplay = document.getElementById('skillValue');
+    const agilityValueDisplay = document.getElementById('agilityValue');
+    const perceptionValueDisplay = document.getElementById('perceptionValue');
+    const willValueDisplay = document.getElementById('willValue');
+    const totalValueDisplay = document.getElementById('totalValue');
+
+    // 初始化函数
+    function initialize() {
+      // 填充血脉选择下拉菜单
+      populateBloodlineSelects();
+      
+      // 初始化图表
+      initializeChart();
+      
+      // 计算初始属性值
+      calculateAttributes();
+      
+      // 添加事件监听器
+      addEventListeners();
+    }
+
+    // 填充血脉选择下拉菜单
+    function populateBloodlineSelects() {
+      const bloodlines = Object.keys(bloodlineAttributes);
+      
+      // 清空现有选项
+      mainBloodlineSelect.innerHTML = '';
+      secondaryBloodlineSelect.innerHTML = '';
+      
+      // 添加选项
+      bloodlines.forEach(bloodline => {
+        const mainOption = document.createElement('option');
+        mainOption.value = bloodline;
+        mainOption.textContent = bloodline;
+        if (bloodline === currentMainBloodline) {
+          mainOption.selected = true;
+        }
+        mainBloodlineSelect.appendChild(mainOption);
+        
+        const secondaryOption = document.createElement('option');
+        secondaryOption.value = bloodline;
+        secondaryOption.textContent = bloodline;
+        if (bloodline === currentSecondaryBloodline) {
+          secondaryOption.selected = true;
+        }
+        secondaryBloodlineSelect.appendChild(secondaryOption);
+      });
+    }
+
+    // 初始化图表
+    function initializeChart() {
+      const ctx = document.getElementById('attributesChart').getContext('2d');
+      
+      attributesChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['力量', '体力', '技巧', '感知', '敏捷', '意志'],
+          datasets: [{
+            label: '属性值',
+            data: [0, 0, 0, 0, 0, 0],
+            backgroundColor: 'rgba(255, 102, 0, 0.8)',
+            borderColor: 'rgba(255, 255, 255, 0.8)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+            pointBorderColor: 'rgba(255, 102, 241, 1)',
+            pointHoverBackgroundColor: 'rgba(255, 102, 241, 1)',
+            pointHoverBorderColor: '#fff'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true,
+                color: 'rgba(255, 255, 255, 0.3)'
+              },
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              pointLabels: {
+                color: '#fff'
+              },
+              ticks: {
+                color: '#fff',
+                backdropColor: 'transparent'
+              },
+              suggestedMin: 0,
+              suggestedMax: 1.5
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+
+    // 添加事件监听器
+    function addEventListeners() {
+      // 主血脉选择变化
+      mainBloodlineSelect.addEventListener('change', function() {
+        currentMainBloodline = this.value;
+        calculateAttributes();
+      });
+      
+      // 次血脉选择变化
+      secondaryBloodlineSelect.addEventListener('change', function() {
+        currentSecondaryBloodline = this.value;
+        calculateAttributes();
+      });
+      
+      // 百分比滑块变化
+      percentageSlider.addEventListener('input', function() {
+        currentMainPercentage = parseInt(this.value);
+        currentSecondaryPercentage = 100 - currentMainPercentage;
+        
+        mainPercentageDisplay.textContent = `${currentMainPercentage}%`;
+        secondaryPercentageDisplay.textContent = `${currentSecondaryPercentage}%`;
+        
+        // 显示或隐藏次血脉选择
+        if (currentMainPercentage < 100) {
+          secondaryBloodlineContainer.classList.remove('hidden');
+        } else {
+          secondaryBloodlineContainer.classList.add('hidden');
+        }
+        
+        calculateAttributes();
+      });
+      
+      // 性别切换按钮
+      genderToggle.addEventListener('click', function() {
+        currentGender = currentGender === '男' ? '女' : '男';
+        
+        if (currentGender === '男') {
+          this.classList.remove('female');
+          this.classList.add('male');
+          this.innerHTML = '<span>♂</span>';
+        } else {
+          this.classList.remove('male');
+          this.classList.add('female');
+          this.innerHTML = '<span>♀</span>';
+        }
+        
+        calculateAttributes();
+      });
+      
+      // 神像按钮
+      paloBtn.addEventListener('click', function() {
+        toggleGodLevel('palo', this, paloLevelDisplay);
+      });
+      
+      konetaBtn.addEventListener('click', function() {
+        toggleGodLevel('koneta', this, konetaLevelDisplay);
+      });
+      
+      sainanBtn.addEventListener('click', function() {
+        toggleGodLevel('sainan', this, sainanLevelDisplay);
+      });
+    }
+
+    // 切换神像等级
+    function toggleGodLevel(god, button, levelDisplay) {
+      currentGodLevels[god] = (currentGodLevels[god] + 1) % 3;
+      
+      // 更新按钮样式
+      button.classList.remove('level-0', 'level-1', 'level-2');
+      button.classList.add(`level-${currentGodLevels[god]}`);
+      
+      // 更新等级显示
+      levelDisplay.textContent = currentGodLevels[god];
+      
+      calculateAttributes();
+    }
+
+    // 计算属性值
+    function calculateAttributes() {
+      // 获取主血脉和次血脉的属性值
+      const mainAttributes = bloodlineAttributes[currentMainBloodline][currentGender];
+      const secondaryAttributes = currentSecondaryPercentage > 0 ? 
+        bloodlineAttributes[currentSecondaryBloodline][currentGender] : 
+        { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0, "总": 0 };
+      
+      // 计算基础属性值（血脉比例混合）
+      const baseBody = mainAttributes["体"] * (currentMainPercentage / 100) + secondaryAttributes["体"] * (currentSecondaryPercentage / 100);
+      const baseStrength = mainAttributes["力"] * (currentMainPercentage / 100) + secondaryAttributes["力"] * (currentSecondaryPercentage / 100);
+      const baseSkill = mainAttributes["技"] * (currentMainPercentage / 100) + secondaryAttributes["技"] * (currentSecondaryPercentage / 100);
+      const baseAgility = mainAttributes["敏"] * (currentMainPercentage / 100) + secondaryAttributes["敏"] * (currentSecondaryPercentage / 100);
+      const basePerception = mainAttributes["感"] * (currentMainPercentage / 100) + secondaryAttributes["感"] * (currentSecondaryPercentage / 100);
+      const baseWill = mainAttributes["意"] * (currentMainPercentage / 100) + secondaryAttributes["意"] * (currentSecondaryPercentage / 100);
+      
+      // 计算神像加成
+      let bonusBody = 0;
+      let bonusStrength = 0;
+      let bonusSkill = 0;
+      let bonusAgility = 0;
+      let bonusPerception = 0;
+      let bonusWill = 0;
+      
+      for (const god in currentGodLevels) {
+        const level = currentGodLevels[god];
+        if (level > 0 && godBonuses[god][level]) {
+          const bonus = godBonuses[god][level];
+          bonusBody += bonus["体"] || 0;
+          bonusStrength += bonus["力"] || 0;
+          bonusSkill += bonus["技"] || 0;
+          bonusAgility += bonus["敏"] || 0;
+          bonusPerception += bonus["感"] || 0;
+          bonusWill += bonus["意"] || 0;
+        }
+      }
+      
+      // 计算最终属性值
+      const finalBody = baseBody + bonusBody;
+      const finalStrength = baseStrength + bonusStrength;
+      const finalSkill = baseSkill + bonusSkill;
+      const finalAgility = baseAgility + bonusAgility;
+      const finalPerception = basePerception + bonusPerception;
+      const finalWill = baseWill + bonusWill;
+      const finalTotal = finalBody + finalStrength + finalSkill + finalAgility + finalPerception + finalWill;
+      
+      // 更新属性值显示
+      bodyValueDisplay.textContent = finalBody.toFixed(2);
+      strengthValueDisplay.textContent = finalStrength.toFixed(2);
+      skillValueDisplay.textContent = finalSkill.toFixed(2);
+      agilityValueDisplay.textContent = finalAgility.toFixed(2);
+      perceptionValueDisplay.textContent = finalPerception.toFixed(2);
+      willValueDisplay.textContent = finalWill.toFixed(2);
+      totalValueDisplay.textContent = finalTotal.toFixed(2);
+      
+      // 更新图表
+      updateChart([
+        finalStrength,
+        finalBody,
+        finalSkill,
+        finalPerception,
+        finalAgility,
+        finalWill
+      ]);
+    }
+
+    // 更新图表
+    function updateChart(data) {
+      attributesChart.data.datasets[0].data = data;
+      attributesChart.update();
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
 </body>
 </html>
