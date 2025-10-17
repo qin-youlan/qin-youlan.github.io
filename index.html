@@ -149,8 +149,8 @@
             <div class="input-group">
                 <div class="form-item">
                     <label>人物六维（力 技 敏 体 感 意）：</label>
-                    <input type="text" id="person-growth" value="-0.1385 0.0775 0.3655 -0.0636 0.0049 0" 
-                           placeholder="示例：-0.1385 0.0775 0.3655 -0.0636 0.0049 0，空格分隔，范围-0.2~2">
+                    <input type="text" id="person-growth" value="0 0 0 0 0 0" 
+                           placeholder="输入力技敏体感意，空格分隔，范围-0.2~2">
                 </div>
             </div>
             <!-- 初始等级输入（最大89，支持1级升级） -->
@@ -223,16 +223,6 @@
             <div class="result-content" id="result-content">
                 <p>请输入参数并点击计算按钮，获取最优方案</p>
             </div>
-            <!-- 特定案例验证区域 -->
-            <div class="verify-section">
-                <div class="output-title">特定案例验证（敏捷目标）</div>
-                <div class="result-content" id="verify-content">
-                    <p>案例条件：人物六维=-0.1385 0.0775 0.3655 -0.0636 0.0049 0 | 可用职业=轻步兵、见习骑手、斥候 | 目标属性=敏 | 初始等级=75（最大可升15级）</p>
-                    <p>预期逻辑：在保证敏捷奖励最大的前提下，展示升级次数最少的方案</p>
-                    <p class="highlight" id="verify-result">待计算验证...</p>
-                </div>
-            </div>
-        </div>
     </div>
     <script>
         // 1. 全职业数据（预处理：null替换为0，顺序：力、技、敏、体、感、意）
