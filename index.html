@@ -1,600 +1,572 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>血脉极限</title>
-  <!-- Tailwind CSS v3 -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-  <!-- 统一的 Tailwind 配置 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#6366f1',
-            secondary: '#8b5cf6',
-            accent: '#ec4899',
-            dark: '#1e293b',
-            light: '#f8fafc'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传家宝最优转职方案计算器（最小升级次数版）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Arial", "Microsoft YaHei", sans-serif;
         }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .hexagon-chart-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-        height: 400px;
-        margin: 0 auto;
-        background-color: #000;
-        border-radius: 8px;
-        padding: 10px;
-      }
-      .gender-btn {
-        @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-300;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        text-indent: -9999px; /* 隐藏文字 */
-      }
-      .gender-btn.male {
-        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/670d76a4cec84d99995e5435fdc30762.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=hHK2z5UaLlaR794R32XP7BTJya0%3D');
-      }
-      .gender-btn.female {
-        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/85f1acb581014009b88ef2457fe49cbc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=kyM6FQS9on2xSz26%2B4akuC6zYi4%3D');
-      }
-      .god-btn {
-        @apply w-16 h-16 rounded-lg flex flex-col items-center justify-between p-1 text-sm font-bold transition-all duration-300;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        position: relative;
-        overflow: hidden;
-      }
-      .god-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1;
-      }
-      .god-btn span:first-child {
-        position: relative;
-        z-index: 2;
-        color: white;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        margin-top: 4px;
-      }
-      .god-btn span:last-child {
-        position: relative;
-        z-index: 2;
-        color: white;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        margin-bottom: 4px;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 0 6px;
-        border-radius: 9999px;
-      }
-      .god-btn.palo {
-        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/0a48cbb6a28a41df88ed77e1611fbb10.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=gDlm9W0TmEvMDZJXiIhwZR9vaYs%3D');
-      }
-      .god-btn.koneta {
-        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/bdacf58ecfef4fdd8967061c922ad2a1.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=F6SySj2VNU8B3DzWMGZyZUKFUc0%3D');
-      }
-      .god-btn.sainan {
-        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/f182f706a4db468fba259d11d99ab3fb.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=Ttgwy4qM%2BfDWrY73JhyuCGRKxbs%3D');
-      }
-      .god-btn.level-0::before {
-        background-color: rgba(0, 0, 0, 0.7);
-      }
-      .god-btn.level-1::before {
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-      .god-btn.level-2::before {
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-      .bloodline-select {
-        @apply w-20 p-2 rounded-md border border-gray-300 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary;
-      }
-      .percentage-display {
-        @apply ml-2 px-2 py-1 rounded bg-gray-100 text-gray-700 text-sm font-medium;
-      }
-      .slider-container {
-        @apply w-full my-4;
-      }
-      .slider {
-        @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer;
-      }
-      .slider::-webkit-slider-thumb {
-        @apply appearance-none w-6 h-6 rounded-full bg-primary cursor-pointer;
-      }
-      .attribute-value {
-        @apply font-bold;
-      }
-      .attribute-container {
-        @apply grid grid-cols-2 gap-2 mb-4;
-      }
-      .attribute-item {
-        @apply flex justify-between items-center p-2 bg-gray-50 rounded;
-      }
-    }
-  </style>
+        body {
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .form-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        label {
+            width: 140px;
+            color: #333;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1;
+            max-width: 500px;
+        }
+        .job-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 140px;
+            background-color: #fafafa;
+        }
+        .job-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1;
+            max-width: 200px;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 140px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .output-section {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fafafa;
+            margin-top: 20px;
+        }
+        .output-title {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .result-content {
+            line-height: 1.8;
+            color: #333;
+            font-size: 14px;
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .min-level-tag {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        .exact-value {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .verify-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+    </style>
+  <link rel="icon" href="/favicon.png" type="image/x-icon">
+  <link rel="shortcut icon" href="/favicon-16x16.png" type="image/x-icon">
 </head>
-<body class="bg-gray-50 min-h-screen">
-  <div class="container mx-auto px-4 py-8 max-w-3xl">
-    <header class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800 mb-2">血脉极限</h1>
-      <p class="text-gray-600">血脉极限属性</p>
-    </header>
-
-    <main class="bg-white rounded-xl shadow-lg p-6">
-      <!-- 血脉选择区域 -->
-      <div class="mb-6">
-        <div class="flex items-center mb-2">
-          <label for="mainBloodline" class="mr-2 font-medium">主血脉:</label>
-          <select id="mainBloodline" class="bloodline-select">
-            <!-- 由JavaScript动态填充 -->
-          </select>
-          <span id="mainPercentage" class="percentage-display">100%</span>
+<body>
+    <div class="container">
+        <h2>传家宝最优转职方案计算器（最小升级次数版）</h2>
+        <!-- 输入区域 -->
+        <div class="input-section">
+            <!-- 人物六维输入 -->
+            <div class="input-group">
+                <div class="form-item">
+                    <label>人物六维（力 技 敏 体 感 意）：</label>
+                    <input type="text" id="person-growth" value="-0.1385 0.0775 0.3655 -0.0636 0.0049 0" 
+                           placeholder="示例：-0.1385 0.0775 0.3655 -0.0636 0.0049 0，空格分隔，范围-0.2~2">
+                </div>
+            </div>
+            <!-- 初始等级输入（最大89，支持1级升级） -->
+            <div class="input-group">
+                <div class="form-item">
+                    <label>初始等级：</label>
+                    <input type="number" id="init-level" value="75" min="1" max="89" 
+                           placeholder="默认1，最高89（可升1~89级）">
+                </div>
+            </div>
+            <!-- 传家宝装备选择（新增） -->
+            <div class="input-group">
+                <div class="form-item">
+                    <label>传家宝装备：</label>
+                    <select id="heirloom-equip" onchange="filterJobsByEquip()">
+                        <option value="">-- 请选择传家宝装备 --</option>
+                        <option value="单手剑">单手剑</option>
+                        <option value="枪">枪</option>
+                        <option value="刀">刀</option>
+                        <option value="短弓">短弓</option>
+                        <option value="骑枪">骑枪</option>
+                        <option value="刺剑">刺剑</option>
+                        <option value="弩">弩</option>
+                        <option value="长柄">长柄</option>
+                        <option value="双手剑">双手剑</option>
+                        <option value="单手斧">单手斧</option>
+                        <option value="双手斧">双手斧</option>
+                        <option value="权杖">权杖</option>
+                        <option value="单手锤">单手锤</option>
+                        <option value="链锤">链锤</option>
+                        <option value="长弓">长弓</option>
+                        <option value="匕首">匕首</option>
+                        <option value="双手杖">双手杖</option>
+                        <option value="瓶子">瓶子</option>
+                        <option value="琴">琴</option>
+                        <option value="链甲">链甲</option>
+                        <option value="皮甲">皮甲</option>
+                        <option value="板甲">板甲</option>
+                        <option value="布甲">布甲</option>
+                    </select>
+                </div>
+            </div>
+            <!-- 可用职业选择（多选） -->
+            <div class="input-group">
+                <h3>可用职业（必选1个及以上）：</h3>
+                <div class="job-checkboxes" id="job-checkboxes">
+                    <!-- 职业选项动态生成 -->
+                </div>
+            </div>
+            <!-- 目标属性选择 -->
+            <div class="input-group">
+                <div class="form-item">
+                    <label>目标第一属性：</label>
+                    <select id="target-attr">
+                        <option value="0">力</option>
+                        <option value="1">技</option>
+                        <option value="2" selected>敏</option>
+                        <option value="3">体</option>
+                        <option value="4">感</option>
+                        <option value="5">意</option>
+                    </select>
+                </div>
+            </div>
+            <!-- 计算按钮 -->
+            <button class="btn" onclick="calculateOptimalPlan()">计算最优方案（最小升级次数）</button>
         </div>
-
-        <div class="slider-container">
-          <input type="range" id="percentageSlider" class="slider" min="70" max="100" step="10" value="100">
+        <!-- 输出区域 -->
+        <div class="output-section">
+            <div class="output-title">计算结果（保证最大奖励+最小升级次数）</div>
+            <div class="result-content" id="result-content">
+                <p>请输入参数并点击计算按钮，获取最优方案</p>
+            </div>
+            <!-- 特定案例验证区域 -->
+            <div class="verify-section">
+                <div class="output-title">特定案例验证（敏捷目标）</div>
+                <div class="result-content" id="verify-content">
+                    <p>案例条件：人物六维=-0.1385 0.0775 0.3655 -0.0636 0.0049 0 | 可用职业=轻步兵、见习骑手、斥候 | 目标属性=敏 | 初始等级=75（最大可升15级）</p>
+                    <p>预期逻辑：在保证敏捷奖励最大的前提下，展示升级次数最少的方案</p>
+                    <p class="highlight" id="verify-result">待计算验证...</p>
+                </div>
+            </div>
         </div>
+    </div>
+    <script>
+        // 1. 全职业数据（预处理：null替换为0，顺序：力、技、敏、体、感、意）
+        const allJobs = [
+            { id: "recruit", name: "新兵", growth: [0.1212, 0.1212, 0.1212, 0.1212, 0, 0] },
+            { id: "apprentice-rider", name: "见习骑手", growth: [0.2263, 0.1616, 0.097, 0.1616, 0, 0] },
+            { id: "hunter", name: "猎人", growth: [0.1131, 0.2424, 0.1939, 0.097, 0, 0] },
+            { id: "light-infantry", name: "轻步兵", growth: [0.2101, 0.1131, 0.2263, 0.097, 0, 0] },
+            { id: "heavy-infantry", name: "重步兵", growth: [0.1939, 0.1616, 0.0646, 0.2263, 0, 0] },
+            { id: "self-taught-wizard", name: "自学巫师", growth: [0, 0.1616, 0.0323, 0.0646, 0.1939, 0.1939] },
+            { id: "light-cavalry", name: "轻骑兵", growth: [0.4364, 0.5455, 0.1455, 0.3273, 0, 0] },
+            { id: "heavy-cavalry", name: "重骑兵", growth: [0.5455, 0.2545, 0.1455, 0.5091, 0, 0] },
+            { id: "archer", name: "弓箭手", growth: [0.2545, 0.5818, 0.4727, 0.1455, 0, 0] },
+            { id: "crossbowman", name: "弩手", growth: [0.3273, 0.5455, 0.1455, 0.4364, 0, 0] },
+            { id: "warrior", name: "勇士", growth: [0.5818, 0.1455, 0.4, 0.3273, 0, 0] },
+            { id: "scout", name: "斥候", growth: [0.2545, 0.4, 0.5818, 0.2182, 0, 0] },
+            { id: "phalanx-infantry", name: "方阵步兵", growth: [0.3273, 0.4727, 0.1455, 0.5091, 0, 0] },
+            { id: "heavy-spearman", name: "重甲枪兵", growth: [0.4727, 0.2545, 0.1455, 0.5818, 0, 0] },
+            { id: "druid", name: "德鲁伊", growth: [0, 0, 0.0727, 0.2182, 0.7273, 0.4364] },
+            { id: "priest", name: "牧师", growth: [0, 0, 0.0727, 0.1455, 0.5091, 0.7273] },
+            { id: "royal-cavalry", name: "皇家骑兵", growth: [0.7758, 0.9697, 0.2586, 0.5818, 0, 0] },
+            { id: "raider-cavalry", name: "掠袭骑兵", growth: [0.7111, 0.3879, 0.9697, 0.5172, 0, 0] },
+            { id: "heavy-armor-cavalry", name: "重装骑兵", growth: [1.099, 0.3879, 0.1939, 0.9051, 0, 0] },
+            { id: "command-cavalry", name: "统御骑士", growth: [0.5818, 0.7758, 0.1293, 0.6465, 0, 0.4525] },
+            { id: "fear-cavalry", name: "恐惧骑士", growth: [1.0343, 0.2586, 0.5172, 0.7758, 0, 0] },
+            { id: "apocalypse-cavalry", name: "天启骑士", growth: [0, 0, 0, 0.8404, 0.4525, 1.2929] },
+            { id: "winged-cavalry", name: "翼骑兵", growth: [1.099, 0.1939, 0.2585, 1.0343, 0, 0] },
+            { id: "longbowman", name: "长弓手", growth: [0.8404, 1.099, 0.3879, 0.2586, 0, 0] },
+            { id: "ranger", name: "游侠", growth: [0.4525, 1.0343, 0.8404, 0.2586, 0, 0] },
+            { id: "shield-crossbowman", name: "盾弩手", growth: [0.5818, 0.9697, 0.2586, 0.7758, 0, 0] },
+            { id: "heavy-crossbowman", name: "重弩手", growth: [0.7111, 0.7758, 0.1939, 0.9051, 0, 0] },
+            { id: "jungle-hunter", name: "丛林猎手", growth: [0.52, 0.9, 0.97, 0.19, 0, 0] },
+            { id: "magic-archer", name: "魔弓手", growth: [0, 0, 0.2586, 0.1939, 1.2282, 0.9051] },
+            { id: "berserker", name: "狂战士", growth: [1.0343, 0.2586, 0.7111, 0.5818, 0, 0] },
+            { id: "great-swordsman", name: "大剑士", growth: [0.9697, 0.7758, 0.3232, 0.5172, 0, 0] },
+            { id: "assassin", name: "刺客", growth: [0.2586, 0.9697, 1.099, 0.2586, 0, 0] },
+            { id: "sword-saint", name: "剑圣", growth: [0.7758, 0.5818, 1.0343, 0.1939, 0, 0] },
+            { id: "gladiator", name: "决斗士", growth: [0.5818, 1.0343, 0.6465, 0.3232, 0, 0] },
+            { id: "shadow-swordsman", name: "暗影刀客", growth: [0.5818, 0, 0.6465, 0.2263, 1.1313, 0] },
+            { id: "royal-guard", name: "王室禁卫", growth: [0.5818, 0.8404, 0.1939, 0.9697, 0, 0] },
+            { id: "iron-armor-soldier", name: "铁甲军士", growth: [0.8404, 0.4525, 0.1939, 1.099, 0, 0] },
+            { id: "heavy-armor-monk", name: "重甲僧侣", growth: [0.3232, 0.1939, 0.1939, 0.8404, 0.3879, 0.6465] },
+            { id: "holy-guard", name: "圣堂铁卫", growth: [0.7758, 0.3232, 0.1939, 0.8404, 0, 0.4525] },
+            { id: "eagle-guard", name: "神鹰侍卫", growth: [0.4525, 0.9697, 0.4848, 0.6788, 0, 0] },
+            { id: "elite-warrior", name: "勇士精英", growth: [0.4525, 0.9697, 0.1939, 0.9697, 0, 0] },
+            { id: "great-druid", name: "大德鲁伊", growth: [0, 0, 0.3232, 0.1939, 1.2929, 0.7758] },
+            { id: "bishop", name: "主教", growth: [0, 0, 0.1293, 0.2586, 0.9051, 1.2929] },
+            { id: "alchemist", name: "炼金术师", growth: [0, 0.5818, 0.1939, 0.3879, 0.5172, 0.9051] },
+            { id: "bard", name: "吟游诗人", growth: [0, 0, 0.5818, 0.2586, 1.2929, 0.4525] },
+            { id: "imperial-envoy", name: "帝国密使", growth: [0, 0, 0, 0.3232, 1.1313, 1.1313] },
+            { id: "inner-sword-saint", name: "内宗剑圣", growth: [0, 0.9051, 1.0343, 0.1293, 0.5172, 0] }
+        ];
+        // 属性名称映射
+        const attrNames = ["力", "技", "敏", "体", "感", "意"];
+        // 案例关键职业ID
+        const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
+        // 传家宝装备-适配职业对照表（新增）
+        const equipJobMap = {
+            "单手剑": ["见习骑手","轻骑兵","皇家骑兵", "统御骑士", "翼骑兵", "曙光骑兵", "轻步兵", "勇士", "斥候", "剑圣", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "圣堂铁卫", "内宗剑圣", "新兵"],
+            "枪": ["皇家骑兵", "掠袭骑兵", "重装骑兵", "翼骑兵", "曙光骑兵", "重步兵", "方阵步兵", "重甲枪兵", "王室禁卫", "神鹰侍卫", "勇士精英", "铁甲军士", "新兵"],
+            "刀": ["掠袭骑兵", "翼骑兵", "剑圣", "暗影刀客", "内宗剑圣"],
+            "短弓": ["掠袭骑兵", "猎人", "弓箭手", "游侠", "丛林猎手", "魔弓手", "新兵"],
+            "骑枪": ["重装骑兵"],
+            "刺剑": ["统御骑士", "翼骑兵", "决斗士"],
+            "弩": ["统御骑士", "弩手", "盾弩手"],
+            "长柄": ["恐惧骑士", "重甲枪兵", "铁甲军士"],
+            "双手剑": ["恐惧骑士", "轻步兵", "勇士", "大剑士", "剑圣", "新兵"],
+            "单手斧": ["恐惧骑士", "轻步兵", "勇士", "斥候", "狂战士", "勇士精英", "新兵"],
+            "双手斧": ["恐惧骑士", "轻步兵", "勇士", "狂战士", "新兵"],
+            "权杖": ["天启骑士", "牧师", "主教", "重甲僧侣", "帝国密使"],
+            "单手锤": ["翼骑兵", "方阵步兵", "重甲枪兵", "勇士精英", "铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "链锤": ["铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "长弓": ["长弓手"],
+            "匕首": ["轻步兵", "斥候", "刺客", "决斗士", "暗影刀客", "自学巫师", "新兵"],
+            "双手杖": ["自学巫师", "德鲁伊", "大德鲁伊"],
+            "瓶子": ["炼金术士"],
+            "琴": ["吟游诗人"],
+            "链甲": ["皇家骑兵", "恐惧骑士", "曙光骑兵", "弩手", "盾弩手", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "勇士精英"],
+            "皮甲": [ "见习骑手","掠袭骑兵", "游侠", "魔弓手", "轻步兵", "勇士", "斥候", "狂战士", "大剑士", "刺客", "决斗士"],
+            "板甲": ["重装骑兵", "统御骑士", "天启骑士", "重甲枪兵", "铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "布甲": ["猎人", "弓箭手", "长弓手", "丛林猎手", "剑圣", "暗影刀客", "自学巫师", "德鲁伊", "牧师", "大德鲁伊", "主教", "炼金术士", "吟游诗人", "帝国密使", "内宗剑圣", "新兵"]
+        };
 
-        <div id="secondaryBloodlineContainer" class="flex items-center justify-end mt-2 hidden">
-          <span id="secondaryPercentage" class="percentage-display mr-2">0%</span>
-          <select id="secondaryBloodline" class="bloodline-select">
-            <!-- 由JavaScript动态填充 -->
-          </select>
-          <label for="secondaryBloodline" class="ml-2 font-medium">次血脉:</label>
-        </div>
-      </div>
+        // 页面加载时生成职业多选框 + 初始化筛选
+        window.onload = function() {
+            const jobCheckboxesDom = document.getElementById("job-checkboxes");
+            allJobs.forEach(job => {
+                const isCaseJob = caseJobIds.includes(job.id);
+                const checkbox = document.createElement("div");
+                checkbox.className = "job-checkbox-item";
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="job-${job.id}" value="${job.id}" ${isCaseJob ? "checked" : ""}>
+                    <label for="job-${job.id}">${job.name}</label>
+                `;
+                jobCheckboxesDom.appendChild(checkbox);
+            });
+            // 初始化筛选：显示所有职业
+            filterJobsByEquip();
+        };
 
-      <!-- 属性值显示区域 -->
-      <div class="attribute-container mb-6">
-        <div class="attribute-item">
-          <span>力量 (力):</span>
-          <span id="strengthValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item">
-          <span>体力 (体):</span>
-          <span id="bodyValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item">
-          <span>技巧 (技):</span>
-          <span id="skillValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item">
-          <span>感知 (感):</span>
-          <span id="perceptionValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item">
-          <span>敏捷 (敏):</span>
-          <span id="agilityValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item">
-          <span>意志 (意):</span>
-          <span id="willValue" class="attribute-value">0.0</span>
-        </div>
-        <div class="attribute-item col-span-2">
-          <span>总计:</span>
-          <span id="totalValue" class="attribute-value">0.0</span>
-        </div>
-      </div>
-
-      <!-- 六角图显示区域 -->
-      <div class="hexagon-chart-container mb-8">
-        <canvas id="attributesChart"></canvas>
-      </div>
-
-      <!-- 按钮区域 -->
-      <div class="flex justify-between items-center">
-        <button id="genderToggle" class="gender-btn female">
-          <span>♀</span>
-        </button>
-        
-        <div class="flex space-x-4">
-          <button id="paloBtn" class="god-btn palo level-0" data-god="palo">
-            <span>帕洛</span>
-            <span id="paloLevel">0</span>
-          </button>
-          <button id="konetaBtn" class="god-btn koneta level-0" data-god="koneta">
-            <span>科内塔</span>
-            <span id="konetaLevel">0</span>
-          </button>
-          <button id="sainanBtn" class="god-btn sainan level-0" data-god="sainan">
-            <span>赛南</span>
-            <span id="sainanLevel">0</span>
-          </button>
-        </div>
-      </div>
-    </main>
-
-    <footer class="mt-8 text-center text-gray-600 text-sm">
-      <p>秦又懒 &copy; 2025</p>
-    </footer>
-  </div>
-
-  <script>
-    // 血脉属性数据
-    const bloodlineAttributes = {
-      "赛宁": {
-        "男": { "体": 0.9, "力": 1.1, "技": 1.1, "敏": 0.6, "感": 0.4, "意": 0.4, "总": 4.5 },
-        "女": { "体": 0.8, "力": 1, "技": 1.2, "敏": 0.7, "感": 0.5, "意": 0.3, "总": 4.5 }
-      },
-      "希尔": {
-        "男": { "体": 1.2, "力": 0.8, "技": 1, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
-        "女": { "体": 1.1, "力": 0.7, "技": 1.1, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
-      },
-      "佩尔": {
-        "男": { "体": 0.6, "力": 1, "技": 1.3, "敏": 0.4, "感": 0.8, "意": 0.4, "总": 4.5 },
-        "女": { "体": 0.5, "力": 0.9, "技": 1.4, "敏": 0.5, "感": 0.9, "意": 0.3, "总": 4.5 }
-      },
-      "切瓦": {
-        "男": { "体": 1, "力": 1.2, "技": 0.8, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
-        "女": { "体": 0.9, "力": 1.1, "技": 0.9, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
-      },
-      "牛头": {
-        "男": { "体": 1.3, "力": 1.1, "技": 0.6, "敏": 0.4, "感": 0.4, "意": 0.4, "总": 4.2 },
-        "女": { "体": 1.2, "力": 1, "技": 0.7, "敏": 0.5, "感": 0.5, "意": 0.3, "总": 4.2 }
-      },
-      "法拉": {
-        "男": { "体": 0.4, "力": 0.6, "技": 1.2, "敏": 1, "感": 0.7, "意": 0.4, "总": 4.3 },
-        "女": { "体": 0.3, "力": 0.5, "技": 1.3, "敏": 1.1, "感": 0.8, "意": 0.3, "总": 4.3 }
-      },
-      "古特": {
-        "男": { "体": 0.8, "力": 1.3, "技": 0.4, "敏": 1, "感": 0.4, "意": 0.6, "总": 4.5 },
-        "女": { "体": 0.7, "力": 1.2, "技": 0.5, "敏": 1.1, "感": 0.5, "意": 0.5, "总": 4.5 }
-      },
-      "玛夏": {
-        "男": { "体": 1.1, "力": 0.9, "技": 0.4, "敏": 0.4, "感": 0.4, "意": 1.3, "总": 4.5 },
-        "女": { "体": 1, "力": 0.8, "技": 0.5, "敏": 0.5, "感": 0.5, "意": 1.2, "总": 4.5 }
-      },
-      "瑞格": {
-        "男": { "体": 0.8, "力": 0.4, "技": 1.1, "敏": 1.1, "感": 0.4, "意": 0.7, "总": 4.5 },
-        "女": { "体": 0.7, "力": 0.3, "技": 1.2, "敏": 1.2, "感": 0.5, "意": 0.6, "总": 4.5 }
-      },
-      "瓦诺": {
-        "男": { "体": 0.6, "力": 0.4, "技": 0.9, "敏": 0.4, "感": 0.9, "意": 1.1, "总": 4.3 },
-        "女": { "体": 0.5, "力": 0.3, "技": 1, "敏": 0.5, "感": 1, "意": 1, "总": 4.3 }
-      },
-      "祖扎": {
-        "男": { "体": 0.9, "力": 0.4, "技": 0.8, "敏": 1.3, "感": 0.4, "意": 0.4, "总": 4.2 },
-        "女": { "体": 0.8, "力": 0.3, "技": 0.9, "敏": 1.4, "感": 0.5, "意": 0.3, "总": 4.2 }
-      },
-      "萨尼": {
-        "男": { "体": 0.9, "力": 1, "技": 0.4, "敏": 1.2, "感": 0.4, "意": 0.4, "总": 4.3 },
-        "女": { "体": 0.8, "力": 0.9, "技": 0.5, "敏": 1.3, "感": 0.5, "意": 0.3, "总": 4.3 }
-      },
-      "宏朝": {
-        "男": { "体": 0.4, "力": 0.8, "技": 1.1, "敏": 1.2, "感": 0.6, "意": 0.4, "总": 4.5 },
-        "女": { "体": 0.3, "力": 0.7, "技": 1.2, "敏": 1.3, "感": 0.7, "意": 0.3, "总": 4.5 }
-      },
-      "精灵": {
-        "男": { "体": 0.4, "力": 0.4, "技": 0.6, "敏": 0.8, "感": 1.3, "意": 1, "总": 4.5 },
-        "女": { "体": 0.3, "力": 0.3, "技": 0.7, "敏": 0.9, "感": 1.4, "意": 0.9, "总": 4.5 }
-      },
-      "黑精": {
-        "男": { "体": 0.6, "力": 0.9, "技": 0.4, "敏": 0.9, "感": 1.3, "意": 0.4, "总": 4.5 },
-        "女": { "体": 0.5, "力": 0.8, "技": 0.5, "敏": 1, "感": 1.4, "意": 0.3, "总": 4.5 }
-      }
-    };
-
-    // 神像加成数据
-    const godBonuses = {
-      "palo": {
-        "1": { "体": 0.05, "力": 0.05 },
-        "2": { "体": 0.1, "力": 0.1 }
-      },
-      "koneta": {
-        "1": { "技": 0.05, "敏": 0.05 },
-        "2": { "技": 0.1, "敏": 0.1 }
-      },
-      "sainan": {
-        "1": { "感": 0.05, "意": 0.05 },
-        "2": { "感": 0.1, "意": 0.1 }
-      }
-    };
-
-    // 全局变量
-    let currentGender = '女';
-    let currentMainBloodline = '赛宁';
-    let currentSecondaryBloodline = '古特';
-    let currentMainPercentage = 100;
-    let currentSecondaryPercentage = 0;
-    let currentGodLevels = {
-      "palo": 0,
-      "koneta": 0,
-      "sainan": 0
-    };
-    let attributesChart = null;
-
-    // DOM元素
-    const mainBloodlineSelect = document.getElementById('mainBloodline');
-    const secondaryBloodlineSelect = document.getElementById('secondaryBloodline');
-    const percentageSlider = document.getElementById('percentageSlider');
-    const mainPercentageDisplay = document.getElementById('mainPercentage');
-    const secondaryPercentageDisplay = document.getElementById('secondaryPercentage');
-    const secondaryBloodlineContainer = document.getElementById('secondaryBloodlineContainer');
-    const genderToggle = document.getElementById('genderToggle');
-    const paloBtn = document.getElementById('paloBtn');
-    const konetaBtn = document.getElementById('konetaBtn');
-    const sainanBtn = document.getElementById('sainanBtn');
-    const paloLevelDisplay = document.getElementById('paloLevel');
-    const konetaLevelDisplay = document.getElementById('konetaLevel');
-    const sainanLevelDisplay = document.getElementById('sainanLevel');
-
-    // 属性值显示元素
-    const bodyValueDisplay = document.getElementById('bodyValue');
-    const strengthValueDisplay = document.getElementById('strengthValue');
-    const skillValueDisplay = document.getElementById('skillValue');
-    const agilityValueDisplay = document.getElementById('agilityValue');
-    const perceptionValueDisplay = document.getElementById('perceptionValue');
-    const willValueDisplay = document.getElementById('willValue');
-    const totalValueDisplay = document.getElementById('totalValue');
-
-    // 初始化函数
-    function initialize() {
-      // 填充血脉选择下拉菜单
-      populateBloodlineSelects();
-      
-      // 初始化图表
-      initializeChart();
-      
-      // 计算初始属性值
-      calculateAttributes();
-      
-      // 添加事件监听器
-      addEventListeners();
-    }
-
-    // 填充血脉选择下拉菜单
-    function populateBloodlineSelects() {
-      const bloodlines = Object.keys(bloodlineAttributes);
-      
-      // 清空现有选项
-      mainBloodlineSelect.innerHTML = '';
-      secondaryBloodlineSelect.innerHTML = '';
-      
-      // 添加选项
-      bloodlines.forEach(bloodline => {
-        const mainOption = document.createElement('option');
-        mainOption.value = bloodline;
-        mainOption.textContent = bloodline;
-        if (bloodline === currentMainBloodline) {
-          mainOption.selected = true;
-        }
-        mainBloodlineSelect.appendChild(mainOption);
-        
-        const secondaryOption = document.createElement('option');
-        secondaryOption.value = bloodline;
-        secondaryOption.textContent = bloodline;
-        if (bloodline === currentSecondaryBloodline) {
-          secondaryOption.selected = true;
-        }
-        secondaryBloodlineSelect.appendChild(secondaryOption);
-      });
-    }
-
-    // 初始化图表
-    function initializeChart() {
-      const ctx = document.getElementById('attributesChart').getContext('2d');
-      
-      attributesChart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: ['力量', '体力', '技巧', '感知', '敏捷', '意志'],
-          datasets: [{
-            label: '属性值',
-            data: [0, 0, 0, 0, 0, 0],
-            backgroundColor: 'rgba(255, 102, 0, 0.8)',
-            borderColor: 'rgba(255, 255, 255, 0.8)',
-            borderWidth: 2,
-            pointBackgroundColor: 'rgba(255, 255, 255, 1)',
-            pointBorderColor: 'rgba(255, 102, 241, 1)',
-            pointHoverBackgroundColor: 'rgba(255, 102, 241, 1)',
-            pointHoverBorderColor: '#fff'
-          }]
-        },
-        options: {
-          scales: {
-            r: {
-              angleLines: {
-                display: true,
-                color: 'rgba(255, 255, 255, 0.3)'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              },
-              pointLabels: {
-                color: '#fff'
-              },
-              ticks: {
-                color: '#fff',
-                backdropColor: 'transparent'
-              },
-              suggestedMin: 0,
-              suggestedMax: 1.5
+        // 根据选择的传家宝装备筛选职业（新增）
+        function filterJobsByEquip() {
+            const selectedEquip = document.getElementById("heirloom-equip").value;
+            const allJobCheckboxes = document.querySelectorAll("#job-checkboxes .job-checkbox-item");
+            
+            // 1. 无装备选择时：显示所有职业，保持默认选中状态（案例职业）
+            if (!selectedEquip) {
+                allJobCheckboxes.forEach(checkboxItem => {
+                    const jobName = checkboxItem.querySelector("label").textContent;
+                    const jobId = allJobs.find(job => job.name === jobName)?.id;
+                    const isCaseJob = caseJobIds.includes(jobId);
+                    // 显示职业，并勾选案例职业
+                    checkboxItem.style.display = "flex";
+                    checkboxItem.querySelector("input").checked = isCaseJob;
+                });
+                return;
             }
-          },
-          plugins: {
-            legend: {
-              display: false
+
+            // 2. 有装备选择时：只显示适配职业，取消所有勾选
+            const matchedJobs = equipJobMap[selectedEquip] || [];
+            allJobCheckboxes.forEach(checkboxItem => {
+                const jobName = checkboxItem.querySelector("label").textContent;
+                const isMatched = matchedJobs.includes(jobName);
+                // 显示适配职业，隐藏不适配职业，清空勾选
+                checkboxItem.style.display = isMatched ? "flex" : "none";
+                checkboxItem.querySelector("input").checked = false;
+            });
+        }
+
+        // 2. 核心计算逻辑：保证最大奖励→筛选最小升级次数
+        function calculateOptimalPlan() {
+            // 2.1 解析输入参数
+            const { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp } = parseInputParams();
+            const resultDom = document.getElementById("result-content");
+            const verifyResultDom = document.getElementById("verify-result");
+            // 参数验证
+            if (!personGrowth || !selectedJobs.length || maxAvailableLevelUp < 1) {
+                resultDom.innerHTML = `<p class="highlight">参数错误：请确保六维格式正确、至少选择1个职业、初始等级≤89（可升≥1级）</p>`;
+                verifyResultDom.textContent = "参数错误，无法验证";
+                return;
             }
-          }
+            // 2.2 遍历所有可能的升级次数（从1到最大可升级次数），记录每个次数的最优方案
+            const levelPlanRecords = []; // 存储格式：{ upgradeCount: 升级次数, maxReward: 最大奖励, bestPlan: 最优组合, bestInject: 注入值, reward2: 第2奖励, reward3: 第3奖励, reward2Exact: 第2精确值, reward3Exact: 第3精确值 }
+            for (let upgradeCount = 1; upgradeCount <= maxAvailableLevelUp; upgradeCount++) {
+                // 生成当前升级次数的所有组合
+                const levelCombinations = generateLevelCombinations(selectedJobs.length, upgradeCount);
+                let currentMaxReward = -1;
+                let currentBestPlan = null;
+                let currentBestInject = null;
+                let currentReward2 = 0;
+                let currentReward3 = 0;
+                let currentReward2Exact = 0;
+                let currentReward3Exact = 0;
+                // 遍历当前升级次数的所有组合
+                levelCombinations.forEach(combination => {
+                    // 计算注入值
+                    const injectValues = new Array(6).fill(0);
+                    combination.forEach((level, idx) => {
+                        const job = selectedJobs[idx];
+                        for (let i = 0; i < 6; i++) {
+                            injectValues[i] += (personGrowth[i] + job.growth[i]) * level;
+                        }
+                    });
+                    // 排序注入值（降序，保留索引）
+                    const sortedInjects = [...injectValues].map((val, idx) => ({ val, idx }))
+                        .sort((a, b) => b.val - a.val);
+                    // 跳过目标属性非第一高的组合
+                    if (sortedInjects[0].idx !== targetAttrIndex) return;
+                    // 计算奖励（含精确值）
+                    const S1 = sortedInjects[0].val;
+                    const S2 = sortedInjects[1].val;
+                    const S3 = sortedInjects[2].val;
+                    const denominator = S1 + S2 + S3;
+                    const reward2Exact = denominator === 0 ? 0 : (S2 / denominator) * 60;
+                    const reward3Exact = denominator === 0 ? 0 : (S3 / denominator) * 60;
+                    const reward2 = Math.floor(reward2Exact);
+                    const reward3 = Math.floor(reward3Exact);
+                    const reward1 = 60 - reward2 - reward3;
+                    // 更新当前升级次数的最优方案
+                    const targetInject = injectValues[targetAttrIndex];
+                    const currentBestInjectVal = currentBestInject ? currentBestInject[targetAttrIndex] : 0;
+                    if (reward1 > currentMaxReward || (reward1 === currentMaxReward && targetInject > currentBestInjectVal)) {
+                        currentMaxReward = reward1;
+                        currentBestPlan = combination;
+                        currentBestInject = injectValues;
+                        currentReward2 = reward2;
+                        currentReward3 = reward3;
+                        currentReward2Exact = reward2Exact;
+                        currentReward3Exact = reward3Exact;
+                    }
+                });
+                // 记录当前升级次数的有效方案（需存在有效组合）
+                if (currentMaxReward > -1) {
+                    levelPlanRecords.push({
+                        upgradeCount,
+                        maxReward: currentMaxReward,
+                        bestPlan: currentBestPlan,
+                        bestInject: currentBestInject,
+                        reward2: currentReward2,
+                        reward3: currentReward3,
+                        reward2Exact: currentReward2Exact,
+                        reward3Exact: currentReward3Exact
+                    });
+                }
+            }
+            // 2.3 筛选最优方案：先找全局最大奖励，再找最小升级次数
+            if (levelPlanRecords.length === 0) {
+                resultDom.innerHTML = `<p class="highlight">未找到有效方案（目标属性无法成为第一高）</p>`;
+                verifyResultDom.textContent = "未找到有效方案，无法验证";
+                return;
+            }
+            // 步骤1：找到全局最大奖励值
+            const globalMaxReward = Math.max(...levelPlanRecords.map(plan => plan.maxReward));
+            // 步骤2：筛选出所有能达到最大奖励的方案，按升级次数升序排序
+            const maxRewardPlans = levelPlanRecords.filter(plan => plan.maxReward === globalMaxReward)
+                .sort((a, b) => a.upgradeCount - b.upgradeCount);
+            // 步骤3：选择升级次数最小的方案（第一个）
+            const bestPlan = maxRewardPlans[0];
+            // 2.4 解析最优方案数据
+            const { upgradeCount: minUpgradeCount, bestPlan: minLevelCombination, bestInject: minLevelInjects, 
+                    reward2, reward3, reward2Exact, reward3Exact } = bestPlan;
+            const sortedInjects = [...minLevelInjects].map((val, idx) => ({ val, idx }))
+                .sort((a, b) => b.val - a.val);
+            const S1 = sortedInjects[0].val;
+            const S2 = sortedInjects[1].val;
+            const S3 = sortedInjects[2].val;
+            const finalLevel = initLevel + minUpgradeCount;
+            // 组装升级方案文本
+            let combinationText = "";
+            minLevelCombination.forEach((level, idx) => {
+                if (level > 0) {
+                    combinationText += `${level}级${selectedJobs[idx].name}、`;
+                }
+            });
+            combinationText = combinationText.slice(0, -1) || "无升级（异常）";
+            // 2.5 展示最优结果（标注最小升级次数）
+            resultDom.innerHTML = `
+                <div class="result-item"><strong>1. 核心结论：</strong>在保证目标属性奖励最大（${globalMaxReward}）的前提下，最小升级次数为${minUpgradeCount}次<span class="min-level-tag">最优</span></div>
+                <div class="result-item"><strong>2. 等级路径：</strong>初始等级${initLevel} → 最终等级${finalLevel}（仅需升级${minUpgradeCount}级）</div>
+                <div class="result-item"><strong>3. 最优转职方案：</strong>${combinationText}</div>
+                <div class="result-item"><strong>4. 各属性注入值：</strong></div>
+                <div class="result-item">${attrNames.map((name, i) => `${name}：${minLevelInjects[i].toFixed(4)}`).join(" | ")}</div>
+                <div class="result-item"><strong>5. 前三高注入值：</strong></div>
+                <div class="result-item">第1名：${attrNames[sortedInjects[0].idx]}（${S1.toFixed(4)}）| 第2名：${attrNames[sortedInjects[1].idx]}（${S2.toFixed(4)}）| 第3名：${attrNames[sortedInjects[2].idx]}（${S3.toFixed(4)}）</div>
+                <div class="result-item"><strong>6. 最终奖励（含精确值）：</strong></div>
+                <div class="result-item">目标属性（${attrNames[targetAttrIndex]}）奖励：<span class="highlight">${globalMaxReward}</span></div>
+                <div class="result-item">第2名属性奖励：${reward2} <span class="exact-value">（精确值：${reward2Exact.toFixed(4)}）</span></div>
+                <div class="result-item">第3名属性奖励：${reward3} <span class="exact-value">（精确值：${reward3Exact.toFixed(4)}）</span></div>
+            `;
+            // 2.6 验证特定案例（敏捷目标）
+            verifyCase(personGrowth, selectedJobs, initLevel, targetAttrIndex, maxRewardPlans, verifyResultDom);
         }
-      });
-    }
 
-    // 添加事件监听器
-    function addEventListeners() {
-      // 主血脉选择变化
-      mainBloodlineSelect.addEventListener('change', function() {
-        currentMainBloodline = this.value;
-        calculateAttributes();
-      });
-      
-      // 次血脉选择变化
-      secondaryBloodlineSelect.addEventListener('change', function() {
-        currentSecondaryBloodline = this.value;
-        calculateAttributes();
-      });
-      
-      // 百分比滑块变化
-      percentageSlider.addEventListener('input', function() {
-        currentMainPercentage = parseInt(this.value);
-        currentSecondaryPercentage = 100 - currentMainPercentage;
-        
-        mainPercentageDisplay.textContent = `${currentMainPercentage}%`;
-        secondaryPercentageDisplay.textContent = `${currentSecondaryPercentage}%`;
-        
-        // 显示或隐藏次血脉选择
-        if (currentMainPercentage < 100) {
-          secondaryBloodlineContainer.classList.remove('hidden');
-        } else {
-          secondaryBloodlineContainer.classList.add('hidden');
+        // 3. 辅助函数：解析输入参数
+        function parseInputParams() {
+            // 人物六维（范围-0.2~2）
+            const growthStr = document.getElementById("person-growth").value.trim() || "0 0 0 0 0 0";
+            const personGrowth = growthStr.split(/\s+/).map(num => {
+                const val = parseFloat(num);
+                return isNaN(val) ? 0 : Math.max(-0.2, Math.min(2, val));
+            });
+            // 初始等级（1~89），最大可升级次数=90-初始等级
+            const initLevel = parseInt(document.getElementById("init-level").value) || 1;
+            const maxAvailableLevelUp = Math.max(1, 90 - initLevel);
+            // 可用职业
+            const selectedJobIds = [];
+            document.querySelectorAll("#job-checkboxes input[type='checkbox']:checked").forEach(checkbox => {
+                selectedJobIds.push(checkbox.value);
+            });
+            const selectedJobs = allJobs.filter(job => selectedJobIds.includes(job.id));
+            // 目标属性
+            const targetAttrIndex = parseInt(document.getElementById("target-attr").value) || 0;
+            return { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp };
         }
-        
-        calculateAttributes();
-      });
-      
-      // 性别切换按钮
-      genderToggle.addEventListener('click', function() {
-        currentGender = currentGender === '男' ? '女' : '男';
-        
-        if (currentGender === '男') {
-          this.classList.remove('female');
-          this.classList.add('male');
-          this.innerHTML = '<span>♂</span>';
-        } else {
-          this.classList.remove('male');
-          this.classList.add('female');
-          this.innerHTML = '<span>♀</span>';
+
+        // 4. 辅助函数：生成升级分配组合（n个非负整数和为sum）
+        function generateLevelCombinations(n, sum) {
+            const combinations = [];
+            // 递归生成所有分配方式，兼容sum=1的场景
+            function recursiveGenerate(current, remainingSum, depth) {
+                if (depth === n - 1) {
+                    combinations.push([...current, remainingSum]);
+                    return;
+                }
+                for (let i = 0; i <= remainingSum; i++) {
+                    current.push(i);
+                    recursiveGenerate(current, remainingSum - i, depth + 1);
+                    current.pop();
+                }
+            }
+            recursiveGenerate([], sum, 0);
+            return combinations;
         }
-        
-        calculateAttributes();
-      });
-      
-      // 神像按钮
-      paloBtn.addEventListener('click', function() {
-        toggleGodLevel('palo', this, paloLevelDisplay);
-      });
-      
-      konetaBtn.addEventListener('click', function() {
-        toggleGodLevel('koneta', this, konetaLevelDisplay);
-      });
-      
-      sainanBtn.addEventListener('click', function() {
-        toggleGodLevel('sainan', this, sainanLevelDisplay);
-      });
-    }
 
-    // 切换神像等级
-    function toggleGodLevel(god, button, levelDisplay) {
-      currentGodLevels[god] = (currentGodLevels[god] + 1) % 3;
-      
-      // 更新按钮样式
-      button.classList.remove('level-0', 'level-1', 'level-2');
-      button.classList.add(`level-${currentGodLevels[god]}`);
-      
-      // 更新等级显示
-      levelDisplay.textContent = currentGodLevels[god];
-      
-      calculateAttributes();
-    }
-
-    // 计算属性值
-    function calculateAttributes() {
-      // 获取主血脉和次血脉的属性值
-      const mainAttributes = bloodlineAttributes[currentMainBloodline][currentGender];
-      const secondaryAttributes = currentSecondaryPercentage > 0 ? 
-        bloodlineAttributes[currentSecondaryBloodline][currentGender] : 
-        { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0, "总": 0 };
-      
-      // 计算基础属性值（血脉比例混合）
-      const baseBody = mainAttributes["体"] * (currentMainPercentage / 100) + secondaryAttributes["体"] * (currentSecondaryPercentage / 100);
-      const baseStrength = mainAttributes["力"] * (currentMainPercentage / 100) + secondaryAttributes["力"] * (currentSecondaryPercentage / 100);
-      const baseSkill = mainAttributes["技"] * (currentMainPercentage / 100) + secondaryAttributes["技"] * (currentSecondaryPercentage / 100);
-      const baseAgility = mainAttributes["敏"] * (currentMainPercentage / 100) + secondaryAttributes["敏"] * (currentSecondaryPercentage / 100);
-      const basePerception = mainAttributes["感"] * (currentMainPercentage / 100) + secondaryAttributes["感"] * (currentSecondaryPercentage / 100);
-      const baseWill = mainAttributes["意"] * (currentMainPercentage / 100) + secondaryAttributes["意"] * (currentSecondaryPercentage / 100);
-      
-      // 计算神像加成
-      let bonusBody = 0;
-      let bonusStrength = 0;
-      let bonusSkill = 0;
-      let bonusAgility = 0;
-      let bonusPerception = 0;
-      let bonusWill = 0;
-      
-      for (const god in currentGodLevels) {
-        const level = currentGodLevels[god];
-        if (level > 0 && godBonuses[god][level]) {
-          const bonus = godBonuses[god][level];
-          bonusBody += bonus["体"] || 0;
-          bonusStrength += bonus["力"] || 0;
-          bonusSkill += bonus["技"] || 0;
-          bonusAgility += bonus["敏"] || 0;
-          bonusPerception += bonus["感"] || 0;
-          bonusWill += bonus["意"] || 0;
+        // 5. 辅助函数：验证特定案例（敏捷目标）
+        function verifyCase(personGrowth, selectedJobs, initLevel, targetAttrIndex, maxRewardPlans, verifyResultDom) {
+            // 案例条件匹配：六维、职业、初始等级、目标属性
+            const caseGrowth = [-0.1385, 0.0775, 0.3655, -0.0636, 0.0049, 0];
+            const growthMatch = personGrowth.every((val, idx) => Math.abs(val - caseGrowth[idx]) < 0.0001);
+            const jobIds = selectedJobs.map(job => job.id);
+            const jobMatch = caseJobIds.every(id => jobIds.includes(id)) && jobIds.length === 3;
+            const levelMatch = initLevel === 75;
+            const targetMatch = targetAttrIndex === 2;
+            if (!growthMatch || !jobMatch || !levelMatch || !targetMatch) {
+                verifyResultDom.textContent = "当前输入参数与案例条件不符，无法验证";
+                return;
+            }
+            // 案例预期：最大奖励为43，找到最小升级次数及对应方案
+            const caseExpectedReward = 43;
+            const casePlans = maxRewardPlans.filter(plan => plan.maxReward === caseExpectedReward);
+            if (casePlans.length === 0) {
+                verifyResultDom.innerHTML = `<span class="highlight">验证失败：未找到奖励为43的方案</span>`;
+                return;
+            }
+            // 案例最小升级次数及方案
+            const caseBestPlan = casePlans[0];
+            const { upgradeCount: caseMinLevel, bestPlan: caseCombination } = caseBestPlan;
+            // 解析案例组合（轻步兵、见习骑手、斥候的升级次数）
+            let liLevel = 0, arLevel = 0, scLevel = 0;
+            selectedJobs.forEach((job, idx) => {
+                switch (job.id) {
+                    case "light-infantry": liLevel = caseCombination[idx]; break;
+                    case "apprentice-rider": arLevel = caseCombination[idx]; break;
+                    case "scout": scLevel = caseCombination[idx]; break;
+                }
+            });
+            // 输出案例验证结果
+            verifyResultDom.innerHTML = `
+                验证通过！<br>
+                案例最大奖励：${caseExpectedReward} | 最小升级次数：${caseMinLevel}次<br>
+                对应方案：${liLevel}级轻步兵 + ${arLevel}级见习骑手 + ${scLevel}级斥候<br>
+                等级路径：75级 → ${75 + caseMinLevel}级（仅需升级${caseMinLevel}级）
+            `;
         }
-      }
-      
-      // 计算最终属性值
-      const finalBody = baseBody + bonusBody;
-      const finalStrength = baseStrength + bonusStrength;
-      const finalSkill = baseSkill + bonusSkill;
-      const finalAgility = baseAgility + bonusAgility;
-      const finalPerception = basePerception + bonusPerception;
-      const finalWill = baseWill + bonusWill;
-      const finalTotal = finalBody + finalStrength + finalSkill + finalAgility + finalPerception + finalWill;
-      
-      // 更新属性值显示
-      bodyValueDisplay.textContent = finalBody.toFixed(2);
-      strengthValueDisplay.textContent = finalStrength.toFixed(2);
-      skillValueDisplay.textContent = finalSkill.toFixed(2);
-      agilityValueDisplay.textContent = finalAgility.toFixed(2);
-      perceptionValueDisplay.textContent = finalPerception.toFixed(2);
-      willValueDisplay.textContent = finalWill.toFixed(2);
-      totalValueDisplay.textContent = finalTotal.toFixed(2);
-      
-      // 更新图表
-      updateChart([
-        finalStrength,
-        finalBody,
-        finalSkill,
-        finalPerception,
-        finalAgility,
-        finalWill
-      ]);
-    }
-
-    // 更新图表
-    function updateChart(data) {
-      attributesChart.data.datasets[0].data = data;
-      attributesChart.update();
-    }
-
-    // 页面加载完成后初始化
-    document.addEventListener('DOMContentLoaded', initialize);
-  </script>
+    </script>
 </body>
 </html>
