@@ -18,6 +18,52 @@ header {
     padding: 10px 20px;
 }
 
+/* Logo和标题容器 */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo与标题间距 */
+.logo-container h1 {
+    margin-left: 15px;
+}
+
+/* 搜索框样式 */
+.search-container {
+    position: relative;
+    width: 250px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 8px 8px 8px 35px;
+    border: 1px solid #555;
+    border-radius: 20px;
+    background-color: transparent; /* 透明背景 */
+    color: #fff;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+#search-input::placeholder {
+    color: #aaa;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #777;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 0.9em;
+}
+
 #logo {
     display: inline-block; /* 使图片能够与文本在同一行显示 */
     width: auto; /* 保持图片宽高比 */
@@ -55,7 +101,7 @@ main {
 .software-tile {
     position: relative;
     width: calc(20% - 20px);
-    padding: 20px;
+    padding: 0;
     background-color: #fff;
     border-radius: 8px;
     box-sizing: border-box;
@@ -64,54 +110,128 @@ main {
     overflow: hidden; /* 确保覆盖层不超出磁贴边界 */
 }
 
+/* 磁贴tile-link 样式 */
+.tile-link {
+    display: block;
+    text-decoration: none;
+    height: 100%;
+}
+
     .software-tile:hover {
-        transform: translateY(0px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     }
 
-    .software-tile img {
-        position-area: relative;
-        width: 100%;
-        height: auto;
-        display: block;
-        margin-bottom: 10px;
-        border-radius: 5px;
+/* 磁贴内容样式 */
+.tile-content {
+    padding: 20px;
+    text-align: center;
+}
+
+/* 图标容器样式 */
+.icon-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .icon-container img {
+        width: 60%;
+        height: 60%;
+        object-fit: contain;
     }
 
-    .software-tile h3 {
-        margin: 0 0 5px;
-        font-size: 1.25em;
-    }
+/* 磁贴标题样式 */
+.software-tile h3 {
+    margin: 0 0 10px;
+    font-size: 1.1em;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .software-tile p {
-        margin: 0 0 10px;
-        font-size: 0.9em;
-        color: #666;
-    }
+/* URL文本样式 */
+.url-text {
+    margin: 0;
+    font-size: 0.8em;
+    color: #666;
+    word-break: break-all;
+}
 
-/* 推荐文本样式 */
-.recommend-text {
+/* 磁贴覆盖层样式 */
+.tile-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background-color: rgba(255, 99, 71, 0.9);
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-sizing: border-box;
+}
+
+.software-tile:hover .tile-overlay {
+    opacity: 1;
+}
+
+/* 覆盖层层文本样式 */
+.overlay-text {
+    margin: 0 0 15px;
+    font-size: 0.9em;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* 访问按钮样式 */
+.visit-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #fff;
+    color: #ff6347;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+    .visit-btn:hover {
+        background-color: #f0f0f0;
+    }
+
+/* Logo链接样式 */
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+/* 占位图标占位符图标样式 */
+.placeholder-icon {
+    font-size: 2em;
+    color: #999;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 99, 71, 0.8); /* 推荐背景色 */
-    color: #fff;
-    font-size: 1.25em;
-    font-weight: bold;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    padding:1em;
-    box-sizing: border-box;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
 }
 
-.software-tile:hover .recommend-text {
-    opacity: 1;
+/* 相关工具部分样式 */
+#related-tools {
+    padding: 20px 0;
 }
 
 /* 响应式设计 */

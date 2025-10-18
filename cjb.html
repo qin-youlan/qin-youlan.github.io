@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>插件工具 - 懒得推荐</title>
+    <!-- Font Awesome Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="index.html" class="logo-link">
+                <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
+                <h1>懒得推荐</h1>
+            </a>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="搜索软件...">
+            <i class="fa fa-search search-icon"></i>
+        </div>
+    </header>
+
+    <main>
+        <section class="tool-detail">
+            <div class="container">
+                <div class="tool-header flex items-center mb-8">
+                    <div class="tool-icon mr-6">
+                        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/135135fedac64c35a763f18cf7b57241~tplv-a9rns2rl98-image.image?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1763391662&x-signature=D%2BSsO%2BOFLt7xuW1xcAQjKcoKY7c%3D" alt="插件工具" class="w-20 h-20">
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-bold">插件工具</h2>
+                        <p class="text-gray-400 mt-2">诸神皇冠辅助插件集合</p>
+                    </div>
+                </div>
+                
+                <div class="tool-content bg-gray-800 rounded-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">传家宝最优转职方案计算器（最小升级次数版）</h3>
+                    
+                    <!-- 输入区域 -->
+                    <div class="input-section">
+                        <!-- 人物六维输入 -->
+                        <div class="input-group">
+                            <div class="form-item">
+                                <label>人物六维（力 技 敏 体 感 意）：</label>
+                                <input type="text" id="person-growth" value="0 0 0 0 0 0" 
+                                       placeholder="输入力技敏体感意，空格分隔，范围-0.2~2">
+                            </div>
+                        </div>
+                        <!-- 初始等级输入（最大89，支持1级升级） -->
+                        <div class="input-group">
+                            <div class="form-item">
+                                <label>初始等级：</label>
+                                <input type="number" id="init-level" value="1" min="1" max="89" 
+                                       placeholder="默认1，最高89（可升1~89级）">
+                            </div>
+                        </div>
+                        <!-- 传家宝装备选择（新增） -->
+                        <div class="input-group">
+                            <div class="form-item">
+                                <label>传家宝装备：</label>
+                                <select id="heirloom-equip" onchange="filterJobsByEquip()">
+                                    <option value="">-- 请选择传家宝装备 --</option>
+                                    <option value="单手剑">单手剑</option>
+                                    <option value="枪">枪</option>
+                                    <option value="刀">刀</option>
+                                    <option value="短弓">短弓</option>
+                                    <option value="骑枪">骑枪</option>
+                                    <option value="刺剑">刺剑</option>
+                                    <option value="弩">弩</option>
+                                    <option value="长柄">长柄</option>
+                                    <option value="双手剑">双手剑</option>
+                                    <option value="单手斧">单手斧</option>
+                                    <option value="双手斧">双手斧</option>
+                                    <option value="权杖">权杖</option>
+                                    <option value="单手锤">单手锤</option>
+                                    <option value="链锤">链锤</option>
+                                    <option value="长弓">长弓</option>
+                                    <option value="匕首">匕首</option>
+                                    <option value="双手杖">双手杖</option>
+                                    <option value="瓶子">瓶子</option>
+                                    <option value="琴">琴</option>
+                                    <option value="链甲">链甲</option>
+                                    <option value="皮甲">皮甲</option>
+                                    <option value="板甲">板甲</option>
+                                    <option value="布甲">布甲</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 可用职业选择（多选） -->
+                        <div class="input-group">
+                            <h3>可用职业（必选1个及以上）：</h3>
+                            <div class="job-checkboxes" id="job-checkboxes">
+                                <!-- 职业选项动态生成 -->
+                            </div>
+                        </div>
+                        <!-- 目标属性选择 -->
+                        <div class="input-group">
+                            <div class="form-item">
+                                <label>目标第一属性：</label>
+                                <select id="target-attr">
+                                    <option value="0">力</option>
+                                    <option value="1">技</option>
+                                    <option value="2" selected>敏</option>
+                                    <option value="3">体</option>
+                                    <option value="4">感</option>
+                                    <option value="5">意</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- 计算按钮 -->
+                        <button class="btn" onclick="calculateOptimalPlan()">计算最优方案（最小升级次数）</button>
+                    </div>
+                    
+                    <!-- 输出区域 -->
+                    <div class="output-section mt-6">
+                        <div class="output-title">计算结果（保证最大奖励+最小升级次数）</div>
+                        <div class="result-content" id="result-content">
+                            <p>请输入参数并点击计算按钮，获取最优方案</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 验证区域 -->
+                    <div class="verify-section mt-6">
+                        <div class="output-title">案例验证</div>
+                        <div class="result-content" id="verify-result">
+                            <p>输入案例参数后自动验证</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="related-tools" class="mt-12">
+            <div class="container">
+                <h3 class="text-xl font-bold mb-6">相关工具</h3>
+                <ul id="related-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- 相关工具磁贴 -->
+                    <li class="software-tile">
+                        <a href="hx.html" target="_self" class="tile-link">
+                            <div class="tile-content">
+                                <div class="icon-container">
+                                    <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/a6b3d9f372c846a29c55fb9d6bba424a~tplv-a9rns2rl98-image.image?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1763391667&x-signature=dxzMflaeqsyi3HCZ1D1wc9wqDUU%3D" alt="核心工具">
+                                </div>
+                                <h3>核心工具</h3>
+                                <p class="url-text">hx.html</p>
+                            </div>
+                            <div class="tile-overlay">
+                                <p class="overlay-text">核心工具详细描述</p>
+                                <span class="visit-btn">点击前往</span>
+                            </div>
+                        </a>
+                    </li>
+                    
+                    <li class="software-tile">
+                        <a href="ldzs.html" target="_self" class="tile-link">
+                            <div class="tile-content">
+                                <div class="icon-container">
+                                    <img src="https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/81b375e1133349889e90a439080d55c2.png~tplv-a9rns2rl98-24:720:720.png?rcl=202510182304409CC5BC0D155843F79DA5&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404680&x-signature=XDk26f2c1cxtxgFZTEmgeuxSk3g%3D" alt="诸神工具">
+                                </div>
+                                <h3>诸神工具</h3>
+                                <p class="url-text">ldzs.html</p>
+                            </div>
+                            <div class="tile-overlay">
+                                <p class="overlay-text">诸神皇冠辅助工具</p>
+                                <span class="visit-btn">点击前往</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm text-gray-400">© 2025 懒得推荐. 保留所有权利.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-weibo text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* 计算器计算器样式 */
+        .input-section {
+            padding: 20px;
+            background-color: #444;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        label {
+            width: 140px;
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        input[type="text"], input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1;
+            max-width: 500px;
+            background-color: #555;
+            color: #fff;
+        }
+        
+        .job-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            margin-left: 140px;
+            background-color: #555;
+        }
+        
+        .job-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 14px;
+            flex: 1;
+            max-width: 200px;
+            background-color: #555;
+            color: #fff;
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 140px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .output-section {
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            background-color: #555;
+        }
+        
+        .output-title {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .result-content {
+            line-height: 1.8;
+            color: #fff;
+            font-size: 14px;
+        }
+        
+        .result-item {
+            margin-bottom: 10px;
+        }
+        
+        .highlight {
+            color: #ff6347;
+            font-weight: 600;
+        }
+        
+        .min-level-tag {
+            display: inline-block;
+            background-color: #2ecc71;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        
+        .exact-value {
+            color: #ccc;
+            font-style: italic;
+        }
+        
+        .verify-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed #555;
+        }
+    </style>
+    
+    <script>
+        // 1. 全职业数据（预处理：null替换为0，顺序：力、技、敏、体、感、意）
+        const allJobs = [
+            { id: "recruit", name: "新兵", growth: [0.1212, 0.1212, 0.1212, 0.1212, 0, 0] },
+            { id: "apprentice-rider", name: "见习骑手", growth: [0.2263, 0.1616, 0.097, 0.1616, 0, 0] },
+            { id: "hunter", name: "猎人", growth: [0.1131, 0.2424, 0.1939, 0.097, 0, 0] },
+            { id: "light-infantry", name: "轻步兵", growth: [0.2101, 0.1131, 0.2263, 0.097, 0, 0] },
+            { id: "heavy-infantry", name: "重步兵", growth: [0.1939, 0.1616, 0.0646, 0.2263, 0, 0] },
+            { id: "self-taught-wizard", name: "自学巫师", growth: [0, 0.1616, 0.0323, 0.0646, 0.1939, 0.1939] },
+            { id: "light-cavalry", name: "轻骑兵", growth: [0.4364, 0.5455, 0.1455, 0.3273, 0, 0] },
+            { id: "heavy-cavalry", name: "重骑兵", growth: [0.5455, 0.2545, 0.1455, 0.5091, 0, 0] },
+            { id: "archer", name: "弓箭手", growth: [0.2545, 0.5818, 0.4727, 0.1455, 0, 0] },
+            { id: "crossbowman", name: "弩手", growth: [0.3273, 0.5455, 0.1455, 0.4364, 0, 0] },
+            { id: "warrior", name: "勇士", growth: [0.5818, 0.1455, 0.4, 0.3273, 0, 0] },
+            { id: "scout", name: "斥候", growth: [0.2545, 0.4, 0.5818, 0.2182, 0, 0] },
+            { id: "phalanx-infantry", name: "方阵步兵", growth: [0.3273, 0.4727, 0.1455, 0.5091, 0, 0] },
+            { id: "heavy-spearman", name: "重甲枪兵", growth: [0.4727, 0.2545, 0.1455, 0.5818, 0, 0] },
+            { id: "druid", name: "德鲁伊", growth: [0, 0, 0.0727, 0.2182, 0.7273, 0.4364] },
+            { id: "priest", name: "牧师", growth: [0, 0, 0.0727, 0.1455, 0.5091, 0.7273] },
+            { id: "royal-cavalry", name: "皇家骑兵", growth: [0.7758, 0.9697, 0.2586, 0.5818, 0, 0] },
+            { id: "raider-cavalry", name: "掠袭骑兵", growth: [0.7111, 0.3879, 0.9697, 0.5172, 0, 0] },
+            { id: "heavy-armor-cavalry", name: "重装骑兵", growth: [1.099, 0.3879, 0.1939, 0.9051, 0, 0] },
+            { id: "command-cavalry", name: "统御骑士", growth: [0.5818, 0.7758, 0.1293, 0.6465, 0, 0.4525] },
+            { id: "fear-cavalry", name: "恐惧骑士", growth: [1.0343, 0.2586, 0.5172, 0.7758, 0, 0] },
+            { id: "apocalypse-cavalry", name: "天启骑士", growth: [0, 0, 0, 0.8404, 0.4525, 1.2929] },
+            { id: "winged-cavalry", name: "翼骑兵", growth: [1.099, 0.1939, 0.2585, 1.0343, 0, 0] },
+            { id: "longbowman", name: "长弓手", growth: [0.8404, 1.099, 0.3879, 0.2586, 0, 0] },
+            { id: "ranger", name: "游侠", growth: [0.4525, 1.0343, 0.8404, 0.2586, 0, 0] },
+            { id: "shield-crossbowman", name: "盾弩手", growth: [0.5818, 0.9697, 0.2586, 0.7758, 0, 0] },
+            { id: "heavy-crossbowman", name: "重弩手", growth: [0.7111, 0.7758, 0.1939, 0.9051, 0, 0] },
+            { id: "jungle-hunter", name: "丛林猎手", growth: [0.52, 0.9, 0.97, 0.19, 0, 0] },
+            { id: "magic-archer", name: "魔弓手", growth: [0, 0, 0.2586, 0.1939, 1.2282, 0.9051] },
+            { id: "berserker", name: "狂战士", growth: [1.0343, 0.2586, 0.7111, 0.5818, 0, 0] },
+            { id: "great-swordsman", name: "大剑士", growth: [0.9697, 0.7758, 0.3232, 0.5172, 0, 0] },
+            { id: "assassin", name: "刺客", growth: [0.2586, 0.9697, 1.099, 0.2586, 0, 0] },
+            { id: "sword-saint", name: "剑圣", growth: [0.7758, 0.5818, 1.0343, 0.1939, 0, 0] },
+            { id: "gladiator", name: "决斗士", growth: [0.5818, 1.0343, 0.6465, 0.3232, 0, 0] },
+            { id: "shadow-swordsman", name: "暗影刀客", growth: [0.5818, 0, 0.6465, 0.2263, 1.1313, 0] },
+            { id: "royal-guard", name: "王室禁卫", growth: [0.5818, 0.8404, 0.1939, 0.9697, 0, 0] },
+            { id: "iron-armor-soldier", name: "铁甲军士", growth: [0.8404, 0.4525, 0.1939, 1.099, 0, 0] },
+            { id: "heavy-armor-monk", name: "重甲僧侣", growth: [0.3232, 0.1939, 0.1939, 0.8404, 0.3879, 0.6465] },
+            { id: "holy-guard", name: "圣堂铁卫", growth: [0.7758, 0.3232, 0.1939, 0.8404, 0, 0.4525] },
+            { id: "eagle-guard", name: "神鹰侍卫", growth: [0.4525, 0.9697, 0.4848, 0.6788, 0, 0] },
+            { id: "elite-warrior", name: "勇士精英", growth: [0.4525, 0.9697, 0.1939, 0.9697, 0, 0] },
+            { id: "great-druid", name: "大德鲁伊", growth: [0, 0, 0.3232, 0.1939, 1.2929, 0.7758] },
+            { id: "bishop", name: "主教", growth: [0, 0, 0.1293, 0.2586, 0.9051, 1.2929] },
+            { id: "alchemist", name: "炼金术师", growth: [0, 0.5818, 0.1939, 0.3879, 0.5172, 0.9051] },
+            { id: "bard", name: "吟游诗人", growth: [0, 0, 0.5818, 0.2586, 1.2929, 0.4525] },
+            { id: "imperial-envoy", name: "帝国密使", growth: [0, 0, 0, 0.3232, 1.1313, 1.1313] },
+            { id: "inner-sword-saint", name: "内宗剑圣", growth: [0, 0.9051, 1.0343, 0.1293, 0.5172, 0] }
+        ];
+        // 属性名称映射
+        const attrNames = ["力", "技", "敏", "体", "感", "意"];
+        // 案例关键职业ID
+        const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
+        // 传家宝装备-适配职业对照表（新增）
+        const equipJobMap = {
+            "单手剑": ["见习骑手","轻骑兵","皇家骑兵", "统御骑士", "翼骑兵", "曙光骑兵", "轻步兵", "勇士", "斥候", "剑圣", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "圣堂铁卫", "内宗剑圣", "新兵"],
+            "枪": ["皇家骑兵", "掠袭骑兵", "重装骑兵", "翼骑兵", "曙光骑兵", "重步兵", "方阵步兵", "重甲枪兵", "王室禁卫", "神鹰侍卫", "勇士精英", "铁甲军士", "新兵"],
+            "刀": ["掠袭骑兵", "翼骑兵", "剑圣", "暗影刀客", "内宗剑圣"],
+            "短弓": ["掠袭骑兵", "猎人", "弓箭手", "游侠", "丛林猎手", "魔弓手", "新兵"],
+            "骑枪": ["重装骑兵骑兵"],
+            "刺剑": ["统御骑士", "翼骑兵", "决斗士"],
+            "弩": ["统御骑士", "弩手", "盾弩手"],
+            "长柄": ["恐惧骑士", "重甲枪兵", "铁甲军士"],
+            "双手剑": ["恐惧骑士", "轻步兵", "勇士", "大剑士", "剑圣", "新兵"],
+            "单手斧": ["恐惧骑士", "轻步兵", "勇士", "斥候", "狂战士", "勇士精英", "新兵"],
+            "双手斧": ["恐惧骑士", "轻步兵", "勇士", "狂战士", "新兵"],
+            "权杖": ["天启骑士", "牧师", "主教", "重甲僧侣", "帝国密使"],
+            "单手锤": ["翼骑兵", "方阵步兵", "重甲枪兵", "勇士精英", "铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "链锤": ["铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "长弓": ["长弓手"],
+            "匕首": ["轻步兵", "斥候", "刺客", "决斗士", "暗影刀客", "自学巫师", "新兵"],
+            "双手杖": ["自学巫师", "德鲁伊", "大德鲁伊"],
+            "瓶子": ["炼金术士"],
+            "琴": ["吟游诗人"],
+            "链甲": ["皇家骑兵", "恐惧骑士", "曙光骑兵", "弩手", "盾弩手", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "勇士精英"],
+            "皮甲": [ "见习骑手","掠袭骑兵", "游侠", "魔弓手", "轻步兵", "勇士", "斥候", "狂战士", "大剑士", "刺客", "决斗士"],
+            "板甲": ["重装骑兵骑兵", "统御骑士", "天启骑士", "重甲枪兵", "铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "布甲": ["猎人", "弓箭手", "长弓手", "丛林猎手", "剑圣", "暗影刀客", "自学巫师", "德鲁伊", "牧师", "大德鲁伊", "主教", "炼金术士", "吟游诗人", "帝国密使", "内宗剑圣", "新兵"]
+        };
+
+        // 页面加载时生成职业多选框 + 初始化筛选
+        window.onload = function() {
+            const jobCheckboxesDom = document.getElementById("job-checkboxes");
+            allJobs.forEach(job => {
+                const isCaseJob = caseJobIds.includes(job.id);
+                const checkbox = document.createElement("div");
+                checkbox.className = "job-checkbox-item";
+                checkbox.innerHTML = `
+                    <input type="checkbox" id="job-${job.id}" value="${job.id}" ${isCaseJob ? "checked" : ""}>
+                    <label for="job-${job.id}">${job.name}</label>
+                `;
+                jobCheckboxesDom.appendChild(checkbox);
+            });
+            // 初始化筛选：显示所有职业
+            filterJobsByEquip();
+        };
+
+        // 根据选择的传家宝装备筛选职业（新增）
+        function filterJobsByEquip() {
+            const selectedEquip = document.getElementById("heirloom-equip").value;
+            const allJobCheckboxes = document.querySelectorAll("#job-checkboxes .job-checkbox-item");
+            
+            // 1. 无装备选择时：显示所有职业，保持默认选中状态（案例职业）
+            if (!selectedEquip) {
+                allJobCheckboxes.forEach(checkboxItem => {
+                    const jobName = checkboxItem.querySelector("label").textContent;
+                    const jobId = allJobs.find(job => job.name === jobName)?.id;
+                    const isCaseJob = caseJobIds.includes(jobId);
+                    // 显示职业，并勾选案例职业
+                    checkboxItem.style.display = "flex";
+                    checkboxItem.querySelector("input").checked = isCaseJob;
+                });
+                return;
+            }
+
+            // 2. 有装备选择时：只显示适配职业，取消所有勾选
+            const matchedJobs = equipJobMap[selectedEquip] || [];
+            allJobCheckboxes.forEach(checkboxItem => {
+                const jobName = checkboxItem.querySelector("label").textContent;
+                const isMatched = matchedJobs.includes(jobName);
+                // 显示适配职业，隐藏不适配职业，清空勾选
+                checkboxItem.style.display = isMatched ? "flex" : "none";
+                checkboxItem.querySelector("input").checked = false;
+            });
+        }
+
+        // 2. 核心计算逻辑：保证最大奖励→筛选最小升级次数
+        function calculateOptimalPlan() {
+            // 2.1 解析输入参数
+            const { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp } = parseInputParams();
+            const resultDom = document.getElementById("result-content");
+            const verifyResultDom = document.getElementById("verify-result");
+            // 参数验证
+            if (!personGrowth || !selectedJobs.length || maxAvailableLevelUp < 1) {
+                resultDom.innerHTML = `<p class="highlight">参数错误：请确保六维格式正确、至少选择1个职业、初始始等级≤89（可升≥1级）</p>`;
+                verifyResultDom.textContent = "参数错误，无法验证";
+                return;
+            }
+            // 2.2 遍历所有可能的升级次数（从1到最大可升级次数），记录每个次数的最优方案
+            const levelPlanRecords = []; // 存储格式：{ upgradeCount: 升级次数, maxReward: 最大奖励, bestPlan: 最优组合, bestInject: 注入值, reward2: 第2奖励, reward3: 第3奖励, reward2Exact: 第2精确值, reward3Exact: 第3精确值 }
+            for (let upgradeCount = 1; upgradeCount <= maxAvailableLevelUp; upgradeCount++) {
+                // 生成当前当前升级次数的所有组合
+                const levelCombinations = generateLevelCombinations(selectedJobs.length, upgradeCount);
+                let currentMaxReward = -1;
+                let currentBestPlan = null;
+                let currentBestInject = null;
+                let currentReward2 = 0;
+                let currentReward3 = 0;
+                let currentReward2Exact = 0;
+                let currentReward3Exact = 0;
+                // 遍历当前升级次数的所有组合
+                levelCombinations.forEach(combination => {
+                    // 计算注入值
+                    const injectValues = new Array(6).fill(0);
+                    combination.forEach((level, idx) => {
+                        const job = selectedJobs[idx];
+                        for (let i = 0; i < 6; i++) {
+                            injectValues[i] += (personGrowth[i] + job.growth[i]) * level;
+                        }
+                    });
+                    // 排序注入值（降序，保留索引）
+                    const sortedInjects = [...injectValues].map((val, idx) => ({ val, idx }))
+                        .sort((a, b) => b.val - a.val);
+                    // 跳过目标属性非第一高的组合
+                    if (sortedInjects[0].idx !== targetAttrIndex) return;
+                    // 计算奖励（含精确值）
+                    const S1 = sortedInjects[0].val;
+                    const S2 = sortedInjects[1].val;
+                    const S3 = sortedInjects[2].val;
+                    const denominator = S1 + S2 + S3;
+                    const reward2Exact = denominator === 0 ? 0 : (S2 / denominator) * 60;
+                    const reward3Exact = denominator === 0 ? 0 : (S3 / denominator) * 60;
+                    const reward2 = Math.floor(reward2Exact);
+                    const reward3 = Math.floor(reward3Exact);
+                    const reward1 = 60 - reward2 - reward3;
+                    // 更新当前升级次数的最优方案
+                    const targetInject = injectValues[targetAttrIndex];
+                    const currentBestInjectVal = currentBestInject ? currentBestInject[targetAttrIndex] : 0;
+                    if (reward1 > currentMaxReward || (reward1 === currentMaxReward && targetInject > currentBestInjectVal)) {
+                        currentMaxReward = reward1;
+                        currentBestPlan = combination;
+                        currentBestInject = injectValues;
+                        currentReward2 = reward2;
+                        currentReward3 = reward3;
+                        currentReward2Exact = reward2Exact;
+                        currentReward3Exact = reward3Exact;
+                    }
+                });
+                // 记录当前升级次数的有效方案（需存在有效组合）
+                if (currentMaxReward > -1) {
+                    levelPlanRecords.push({
+                        upgradeCount,
+                        maxReward: currentMaxReward,
+                        bestPlan: currentBestPlan,
+                        bestInject: currentBestInject,
+                        reward2: currentReward2,
+                        reward3: currentReward3,
+                        reward2Exact: currentReward2Exact,
+                        reward3Exact: currentReward3Exact
+                    });
+                }
+            }
+            // 2.3 筛选最优方案：先找全局最大奖励，再找最小升级次数
+            if (levelPlanRecords.length === 0) {
+                resultDom.innerHTML = `<p class="highlight">未找到有效方案（目标属性无法成为第一高）</p>`;
+                verifyResultDom.textContent = "未找到有效方案，无法验证";
+                return;
+            }
+            // 步骤1：找到全局最大奖励值
+            const globalMaxReward = Math.max(...levelPlanRecords.map(plan => plan.maxReward));
+            // 步骤2：筛选出所有能达到最大奖励的方案，按升级次数升序排序
+            const maxRewardPlans = levelPlanRecords.filter(plan => plan.maxReward === globalMaxReward)
+                .sort((a, b) => a.upgradeCount - b.upgradeCount);
+            // 步骤3：选择升级次数最小的方案（第一个）
+            const bestPlan = maxRewardPlans[0];
+            // 2.4 解析最优方案数据
+            const { upgradeCount: minUpgradeCount, bestPlan: minLevelCombination, bestInject: minLevelInjects, 
+                    reward2, reward3, reward2Exact, reward3Exact } = bestPlan;
+            const sortedInjects = [...minLevelInjects].map((val, idx) => ({ val, idx }))
+                .sort((a, b) => b.val - a.val);
+            const S1 = sortedInjects[0].val;
+            const S2 = sortedInjects[1].val;
+            const S3 = sortedInjects[2].val;
+            const finalLevel = initLevel + minUpgradeCount;
+            // 组装升级方案文本
+            let combinationText = "";
+            minLevelCombination.forEach((level, idx) => {
+                if (level > 0) {
+                    combinationText += `${level}级${selectedJobs[idx].name}、`;
+                }
+            });
+            combinationText = combinationText.slice(0, -1) || "无升级（异常）";
+            // 2.5 展示最优结果（标注最小升级次数）
+            resultDom.innerHTML = `
+                <div class="result-item"><strong>1. 核心结论：</strong>在保证目标属性奖励最大（${globalMaxReward}）的前提下，最小升级次数为${minUpgradeCount}次<span class="min-level-tag">最优</span></div>
+                <div class="result-item"><strong>2. 等级路径：</strong>初始等级${initLevel} → 最终等级${finalLevel}（仅需升级${minUpgradeCount}级）</div>
+                <div class="result-item"><strong>3. 最优转职方案：</strong>${combinationText}</div>
+                <div class="result-item"><strong>4. 各属性注入值：</strong></div>
+                <div class="result-item">${attrNames.map((name, i) => `${name}：${minLevelInjects[i].toFixed(4)}`).join(" | ")}</div>
+                <div class="result-item"><strong>5. 前三高注入值：</strong></div>
+                <div class="result-item">第1名：${attrNames[sortedInjects[0].idx]}（${S1.toFixed(4)}）| 第2名：${attrNames[sortedInjects[1].idx]}（${S2.toFixed(4)}）| 第3名：${attrNames[sortedInjects[2].idx]}（${S3.toFixed(4)}）</div>
+                <div class="result-item"><strong>6. 最终奖励（含精确值）：</strong></div>
+                <div class="result-item">目标属性（${attrNames[targetAttrIndex]}）奖励：<span class="highlight">${globalMaxReward}</span></div>
+                <div class="result-item">第2名属性奖励：${reward2} <span class="exact-value">（精确值：${reward2Exact.toFixed(4)}）</span></div>
+                <div class="result-item">第3名属性奖励：${reward3} <span class="exact-value">（精确值：${reward3Exact.toFixed(4)}）</span></div>
+            `;
+            // 2.6 验证特定案例（敏捷目标）
+            verifyCase(personGrowth, selectedJobs, initLevel, targetAttrIndex, maxRewardPlans, verifyResultDom);
+        }
+
+        // 3. 辅助函数：解析输入参数
+        function parseInputParams() {
+            // 人物六维（范围-0.2~2）
+            const growthStr = document.getElementById("person-growth").value.trim() || "0 0 0 0 0 0";
+            const personGrowth = growthStr.split(/\s+/).map(num => {
+                const val = parseFloat(num);
+                return isNaN(val) ? 0 : Math.max(-0.2, Math.min(2, val));
+            });
+            // 初始等级（1~89），最大可升级次数=90-初始等级
+            const initLevel = parseInt(document.getElementById("init-level").value) || 1;
+            const maxAvailableLevelUp = Math.max(1, 90 - initLevel);
+            // 可用职业
+            const selectedJobIds = [];
+            document.querySelectorAll("#job-checkboxes input[type='checkbox']:checked").forEach(checkbox => {
+                selectedJobIds.push(checkbox.value);
+            });
+            const selectedJobs = allJobs.filter(job => selectedJobIds.includes(job.id));
+            // 目标属性
+            const targetAttrIndex = parseInt(document.getElementById("target-attr").value) || 0;
+            return { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp };
+        }
+
+        // 4. 辅助函数：生成升级分配组合（n个非负整数和为sum）
+        function generateLevelCombinations(n, sum) {
+            const combinations = [];
+            // 递归生成所有分配方式，兼容sum=1的场景
+            function recursiveGenerate(current, remainingSum, depth) {
+                if (depth === n - 1) {
+                    combinations.push([...current, remainingSum]);
+                    return;
+                }
+                for (let i = 0; i <= remainingSum; i++) {
+                    current.push(i);
+                    recursiveGenerate(current, remainingSum - i, depth + 1);
+                    current.pop();
+                }
+            }
+            recursiveGenerate([], sum, 0);
+            return combinations;
+        }
+
+        // 5. 辅助函数：验证特定案例（敏捷目标）
+        function verifyCase(personGrowth, selectedJobs, initLevel, targetAttrIndex, maxRewardPlans, verifyResultDom) {
+            // 案例条件匹配：六维、职业、初始等级、目标属性
+            const caseGrowth = [-0.1385, 0.0775, 0.3655, -0.0636, 0.0049, 0];
+            const growthMatch = personGrowth.every((val, idx) => Math.abs(val - caseGrowth[idx]) < 0.0001);
+            const jobIds = selectedJobs.map(job => job.id);
+            const jobMatch = caseJobIds.every(id => jobIds.includes(id)) && jobIds.length === 3;
+            const levelMatch = initLevel === 75;
+            const targetMatch = targetAttrIndex === 2;
+            if (!growthMatch || !jobMatch || !levelMatch || !targetMatch) {
+                verifyResultDom.textContent = "当前输入参数与案例条件不符，无法验证";
+                return;
+            }
+            // 案例预期：最大奖励为43，找到最小升级次数及对应方案
+            const caseExpectedReward = 43;
+            const casePlans = maxRewardPlans.filter(plan => plan.maxReward === caseExpectedReward);
+            if (casePlans.length === 0) {
+                verifyResultDom.innerHTML = `<span class="highlight">验证失败：未找到奖励为43的方案</span>`;
+                return;
+            }
+            // 案例最小升级次数及方案
+            const caseBestPlan = casePlans[0];
+            const { upgradeCount: caseMinLevel, bestPlan: caseCombination } = caseBestPlan;
+            // 解析案例组合（轻步兵、见习骑手、斥候的升级次数）
+            let liLevel = 0, arLevel = 0, scLevel = 0;
+            selectedJobs.forEach((job, idx) => {
+                switch (job.id) {
+                    case "light-infantry": liLevel = caseCombination[idx]; break;
+                    case "apprentice-rider": arLevel = caseCombination[idx]; break;
+                    case "scout": scLevel = caseCombination[idx]; break;
+                }
+            });
+            // 输出案例验证结果
+            verifyResultDom.innerHTML = `
+                验证通过！<br>
+                案例最大奖励：${caseExpectedReward} | 最小升级次数：${caseMinLevel}次<br>
+                对应方案：${liLevel}级轻步兵 + ${arLevel}级见习骑手 + ${scLevel}级斥候<br>
+                等级路径：75级 → ${75 + caseMinLevel}级（仅需升级${caseMinLevel}级）
+            `;
+        }
+    </script>
+</body>
+</html>
