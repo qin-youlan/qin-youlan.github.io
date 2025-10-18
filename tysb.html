@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太阳之子发色识别</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        #fileInput {
+            margin: 20px 0;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>诸神皇冠 太阳之子发色识别</h1>
+    <div class="container">
+        <input type="file" id="fileInput" accept="image/*">
+        <div id="imageContainer"></div>
+        <div id="result"></div>
+    </div>
+
+    <!-- 引入face-api.js相关资源 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+
+    <script>
+        // 加载模型（人脸检测、人脸特征点检测）
+        Promise.all([
+            faceapi.nets.tinyFaceDetector.loadFromUri('https://justadudewhohacks.github.io/face-api.js/models'),
+            faceapi.nets.faceLandmark68Net.loadFromUri('https://justadudewhohacks.github.io/face-api.js/models')
+        ]).then(startDetection);
+
+        function startDetection() {
+            const fileInput = document.getElementById('fileInput');
+            const imageContainer = document.getElementById('imageContainer');
+            const result = document.getElementById('result');
+
+            fileInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                imageContainer.innerHTML = '';
+                imageContainer.appendChild(img);
+
+                // 等待图片加载完成
+                await new Promise(resolve => img.onload = resolve);
+
+                // 检测人脸和特征点
+                const detections = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions())
+                    .withFaceLandmarks();
+
+                if (detections.length === 0) {
+                    result.textContent = '未检测到人脸，请上传包含清晰人脸的图片';
+                    return;
+                }
+
+                // 提取头发区域（简化逻辑：基于人脸特征点定位头顶和两侧区域）
+                const landmarks = detections[0].landmarks;
+                const hairRegion = getHairRegion(landmarks, img);
+                const hairColor = analyzeHairColor(hairRegion);
+
+                // 判断是否为太阳之子发色（太阳之子为浅金色系，非太阳之子颜色偏深或有其他特征）
+                const isSunChild = isSunChildHairColor(hairColor);
+
+                result.textContent = isSunChild ? '识别结果：太阳之子' : '识别结果：非太阳之子';
+            });
+        }
+
+        // 模拟获取头发区域（实际可根据特征点更精确提取）
+        function getHairRegion(landmarks, img) {
+            // 简化处理：取头顶上方和两侧的区域像素
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+
+            // 基于人脸特征点大致确定头发区域（可根据实际需求调整坐标）
+            const topPoint = landmarks.positions[0]; // 头顶点
+            const leftPoint = landmarks.positions[1]; // 左鬓角
+            const rightPoint = landmarks.positions[15]; // 右鬓角
+            const bottomPoint = landmarks.positions[27]; // 鼻尖上方（大致头发下限）
+
+            // 提取该区域的像素数据
+            const imageData = ctx.getImageData(
+                leftPoint.x - 50, 
+                topPoint.y - 50, 
+                rightPoint.x - leftPoint.x + 100, 
+                bottomPoint.y - topPoint.y + 50
+            );
+            return imageData;
+        }
+
+        // 分析头发颜色（取区域内像素的平均RGB值）
+        function analyzeHairColor(imageData) {
+            let r = 0, g = 0, b = 0;
+            const pixelCount = imageData.data.length / 4;
+            for (let i = 0; i < imageData.data.length; i += 4) {
+                r += imageData.data[i];
+                g += imageData.data[i + 1];
+                b += imageData.data[i + 2];
+            }
+            r = Math.round(r / pixelCount);
+            g = Math.round(g / pixelCount);
+            b = Math.round(b / pixelCount);
+            return { r, g, b };
+        }
+
+        // 判断是否为太阳之子发色（太阳之子为浅金色，RGB大致范围：r≈230-255, g≈200-230, b≈150-200，可根据参考图微调）
+        function isSunChildHairColor(color) {
+            const { r, g, b } = color;
+            // 太阳之子发色偏浅金，非太阳之子颜色更深或有其他色调
+            return r >= 220 && r <= 255 && 
+                   g >= 190 && g <= 230 && 
+                   b >= 140 && b <= 200;
+        }
+    </script>
+</body>
+</html>
