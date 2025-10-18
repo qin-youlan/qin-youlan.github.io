@@ -30,6 +30,110 @@
             background-color: #333 !important;
             color: #fff !important;
         }
+        
+        /* 工具列表样式 */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+            list-style: none;
+            margin: 0;
+        }
+        
+        .software-tile {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .software-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tile-link {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            height: 100%;
+        }
+        
+        .tile-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .icon-container {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-container img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .tile-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+        }
+        
+        .category-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        .tile-overlay {
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: relative;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        
+        .software-tile:hover .tile-overlay {
+            opacity: 1;
+        }
+        
+        .overlay-text {
+            margin: 0 0 10px;
+            font-size: 0.9rem;
+            color: #eee;
+        }
+        
+        .visit-btn {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            align-self: flex-start;
+        }
+        
+        .visit-btn:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -48,9 +152,9 @@
                 <h2>懒得</h2>
                 <p>游戏辅助工具</p>
                 
-                <!-- 这里可以添加工具的详细信息 -->
+                <!-- 工具列表 -->
                 <div class="tool-content">
-                    <!-- 工具内容将在这里添加 -->
+                    <ul id="tool-list" class="tool-grid"></ul>
                 </div>
             </div>
         </section>
@@ -83,14 +187,14 @@
             {
                 name: '血脉',
                 category: '游戏辅助工具',
-                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/01ff3c446f704fa08ac980783b3fbdcc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=Svn%2FZfTjGNco9057av8oihDrvgM%3D',
+                icon: '/icons/audrey.png',
                 url: '/hx.html',
                 description: '血脉极限属性'
             },
             {
                 name: '传家宝',
                 category: '游戏辅助工具',
-                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/644eeb4f229049cb8512ee56450a9984.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=OV2D%2F4R9cC0n9xFwlSJ0%2BOX36H4%3D',
+                icon: '/icons/ring6.png',
                 url: '/cjb.html',
                 description: '传家宝极限方案'
             }
