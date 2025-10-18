@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>血脉极限</title>
@@ -14,7 +12,17 @@
         padding: 0;
         background-color: #333;
         color: #fff;
+        font-size: 14px; /* 统一基础字号 */
     }
+    
+    /* 统一文本字号样式 */
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 18px; }
+    .section-title { font-size: 16px; }
+    label { font-size: 14px; }
+    select, input, span, p { font-size: 14px; }
+    .god-feature-error { font-size: 13px; }
 
     header {
         display: flex;
@@ -254,7 +262,7 @@
         border-radius: 4px;
         background-color: #555;
         color: #fff;
-        width: 120px;
+        width: 200px;
         pointer-events: auto;
     }
 
@@ -372,8 +380,8 @@
         <!-- 血脉选择区域 -->
         <div class="mb-6">
           <div class="form-row">
-            <label for="mainBloodline">主血脉:</label>
-            <select id="mainBloodline" class="bloodline-select">
+            <label for="mainBloodline" style="width: 55px;">主血脉</label>
+            <select id="mainBloodline" class="bloodline-select" style="width: 55px;">
               <!-- 由JavaScript动态填充 -->
             </select>
             <span id="mainPercentage" class="percentage-display">100%</span>
@@ -385,10 +393,10 @@
           
           <div id="secondaryBloodlineContainer" class="form-row justify-end mt-2 hidden">
             <span id="secondaryPercentage" class="percentage-display mr-2">0%</span>
-            <select id="secondaryBloodline" class="bloodline-select">
+            <select id="secondaryBloodline" class="bloodline-select" style="width: 55px;">
               <!-- 由JavaScript动态填充 -->
             </select>
-            <label for="secondaryBloodline" class="ml-2">次血脉:</label>
+            <label for="secondaryBloodline" class="ml-2" style="width: 55px;">次血脉</label>
           </div>
         </div>
       </div>
@@ -398,23 +406,23 @@
         <h3 class="section-title">神血特性</h3>
         <div class="space-y-3">
           <div class="form-row">
-            <label for="godSkill">神子之技:</label>
+            <label for="godSkill">神子之技</label>
             <select id="godSkill" class="bloodline-select">
-              <option value="" selected>请选择</option>
+              <option value="" selected="">请选择</option>
             </select>
           </div>
           
           <div class="form-row">
-            <label for="godOther1">神血特性1:</label>
+            <label for="godOther1">神血特性1</label>
             <select id="godOther1" class="bloodline-select">
-              <option value="" selected>请选择</option>
+              <option value="" selected="">请选择</option>
             </select>
           </div>
           
           <div class="form-row">
-            <label for="godOther2">神血特性2:</label>
+            <label for="godOther2">神血特性2</label>
             <select id="godOther2" class="bloodline-select">
-              <option value="" selected>请选择</option>
+              <option value="" selected="">请选择</option>
             </select>
           </div>
           
@@ -493,7 +501,7 @@
   </main>
   
   <footer>
-    <p>血脉属性计算器 &copy; 2025</p>
+    <p>血脉属性计算器 © 2025</p>
   </footer>
   <script>
     // 1. 血脉基础属性数据
@@ -938,12 +946,26 @@
           for (const key in feature.growth) bonus[key] += feature.growth[key] || 0;
         }
       }
-      // 检查部位重复
-      if (other1Part && other2Part && other1Part === other2Part) {
+      // 检查部位重复并更新提示
+      if (other1Part && other2Part) {
+        if (other1Part === other2Part) {
+          godFeatureError.innerHTML = `<i class="fa fa-exclamation-circle mr-1"></i> 神血特性部位不能重复，当前选择了两个"${other1Part}"部位，请选择不同部位的特性`;
+          godFeatureError.classList.remove('hidden');
+          return { bonus: { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 }, error: true };
+        } else {
+          godFeatureError.innerHTML = `<i class="fa fa-info-circle mr-1"></i> 当前选择：神血特性1 ${other1Part}，神血特性2 ${other2Part}`;
+          godFeatureError.classList.remove('hidden');
+        }
+      } else if (other1Part || other2Part) {
+        // 当只选择了一个特性时
+        const selectedPart = other1Part || other2Part;
+        const selectedFeature = other1Part ? "神血特性1" : "神血特性2";
+        godFeatureError.innerHTML = `<i class="fa fa-info-circle mr-1"></i> 当前选择：${selectedFeature} ${selectedPart}`;
         godFeatureError.classList.remove('hidden');
-        return { bonus: { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 }, error: true };
+      } else {
+        // 当没有选择任何特性时，隐藏提示
+        godFeatureError.classList.add('hidden');
       }
-      godFeatureError.classList.add('hidden');
       return { bonus, error: false };
     }
     // 15. 绑定事件
@@ -1024,7 +1046,6 @@
       }
       // 神血特性加成
       const { bonus: featureBonus, error: featureError } = getGodFeatureBonus();
-      if (featureError) return;
       // 最终值
       const final = {
         "体": base["体"] + godBonus["体"] + featureBonus["体"],
@@ -1049,5 +1070,6 @@
     // 18. 页面加载初始化
     document.addEventListener('DOMContentLoaded', initialize);
   </script>
-</body>
-</html>
+
+
+</body></html>

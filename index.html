@@ -14,8 +14,8 @@
                 <h1>懒得推荐</h1>
             </a>
         </div>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="搜索软件...">
+        <div class="search-container" style="width: 50%;">
+            <input type="text" id="search-input" placeholder="搜索软件..." style="width: 100%;">
             <i class="fa fa-search search-icon"></i>
         </div>
     </header>
@@ -100,7 +100,7 @@
                                 <img src="${app.icon}" alt="${app.name}">
                             </div>
                             <h3>${app.name}</h3>
-                            <p class="url-text">${displayUrl}</p>
+                            ${app.name === '诸神工具' ? '' : `<p class="url-text">${displayUrl}</p>`}
                         </div>
                         <div class="tile-overlay">
                             <p class="overlay-text">${app.description}</p>
