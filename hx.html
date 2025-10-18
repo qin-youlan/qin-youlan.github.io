@@ -1,243 +1,1075 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>懒得工具</title>
-    <!-- Font Awesome Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* 基本页面样式 */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #333;
-            color: #fff;
-        }
+<html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>血脉极限</title>
+  <!-- Font Awesome Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>
+    /* 基本页面样式 */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #333;
+        color: #fff;
+        font-size: 14px; /* 统一基础字号 */
+    }
+    
+    /* 统一文本字号样式 */
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 18px; }
+    .section-title { font-size: 16px; }
+    label { font-size: 14px; }
+    select, input, span, p { font-size: 14px; }
+    .god-feature-error { font-size: 13px; }
 
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-        }
+    header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+    }
 
-        footer {
-            background-color: #333 !important;
-            color: #fff !important;
-        }
-        
-        /* 工具列表样式 */
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 20px 0;
-            list-style: none;
-            margin: 0;
-        }
-        
-        .software-tile {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .software-tile:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .tile-link {
-            display: block;
-            color: inherit;
-            text-decoration: none;
-            height: 100%;
-        }
-        
-        .tile-content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .icon-container {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-bottom: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .icon-container img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-        
-        .tile-content h3 {
-            margin: 0 0 10px;
-            font-size: 1.2rem;
-        }
-        
-        .category-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            color: #ccc;
-        }
-        
-        .tile-overlay {
-            padding: 20px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            position: relative;
-            height: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-        
-        .software-tile:hover .tile-overlay {
-            opacity: 1;
-        }
-        
-        .overlay-text {
-            margin: 0 0 10px;
-            font-size: 0.9rem;
-            color: #eee;
-        }
-        
-        .visit-btn {
-            background: #007bff;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            transition: background 0.3s ease;
-            align-self: flex-start;
-        }
-        
-        .visit-btn:hover {
-            background: #0056b3;
-        }
-    </style>
+    /* Logo和标题容器 */
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Logo与标题间距 */
+    .logo-container h1 {
+        margin-left: 15px;
+    }
+
+    /* Logo链接样式 */
+    .logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    #logo {
+        display: inline-block;
+        width: auto;
+        height: 2.2em;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 1.5em;
+        line-height: 1.5;
+    }
+
+    main {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    /* 血脉计算器样式 */
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #fff;
+    }
+
+    .card {
+        background-color: #444;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+
+    select, input[type="range"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #555;
+        border-radius: 4px;
+        background-color: #555;
+        color: #fff;
+    }
+
+    input[type="range"] {
+        padding: 8px 0;
+    }
+
+    .percentage-display {
+        display: inline-block;
+        padding: 2px 8px;
+        background-color: #555;
+        color: #fff;
+        border-radius: 12px;
+        font-size: 0.8em;
+        margin-left: 10px;
+    }
+
+    .attribute-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .attribute-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: #555;
+        border-radius: 4px;
+    }
+
+    .attribute-value {
+        font-weight: bold;
+        color: #ff6347;
+    }
+
+    .hexagon-chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        margin: 0 auto;
+        background-color: #222;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .gender-btn {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        text-indent: -9999px;
+    }
+
+    .gender-btn.male {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/670d76a4cec84d99995e5435fdc30762.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=hHK2z5UaLlaR794R32XP7BTJya0%3D');
+    }
+
+    .gender-btn.female {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/85f1acb581014009b88ef2457fe49cbc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=kyM6FQS9on2xSz26%2B4akuC6zYi4%3D');
+    }
+
+    .god-btn {
+        width: 64px;
+        height: 64px;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .god-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+    }
+
+    .god-btn span:first-child {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        margin-top: 4px;
+    }
+
+    .god-btn span:last-child {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        margin-bottom: 4px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 0 6px;
+        border-radius: 9999px;
+    }
+
+    .god-btn.palo {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/0a48cbb6a28a41df88ed77e1611fbb10.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=gDlm9W0TmEvMDZJXiIhwZR9vaYs%3D');
+    }
+
+    .god-btn.koneta {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/bdacf58ecfef4fdd8967061c922ad2a1.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=F6SySj2VNU8B3DzWMGZyZUKFUc0%3D');
+    }
+
+    .god-btn.sainan {
+        background-image: url('https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/f182f706a4db468fba259d11d99ab3fb.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251017000632AD1E790FAE3AF9B7EF26&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761235593&x-signature=Ttgwy4qM%2BfDWrY73JhyuCGRKxbs%3D');
+    }
+
+    .god-btn.level-0::before {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .god-btn.level-1::before {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .god-btn.level-2::before {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .bloodline-select {
+        padding: 8px;
+        border: 1px solid #555;
+        border-radius: 4px;
+        background-color: #555;
+        color: #fff;
+        width: 200px;
+        pointer-events: auto;
+    }
+
+    .slider-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .slider {
+        width: 100%;
+        height: 8px;
+        background-color: #555;
+        border-radius: 4px;
+        appearance: none;
+        cursor: pointer;
+    }
+
+    .slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ff6347;
+        cursor: pointer;
+    }
+
+    .radar-attr-text {
+        text-anchor: middle;
+        fill: #FFF;
+        font-size: 14px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .radar-value-text {
+        text-anchor: middle;
+        fill: #FFF;
+        font-size: 12px;
+        font-weight: bold;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .god-feature-error {
+        color: #ff6347;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
+
+    .btn-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .god-btn-group {
+        display: flex;
+        gap: 16px;
+    }
+
+    .section-title {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+        color: #fff;
+        border-bottom: 1px solid #555;
+        padding-bottom: 5px;
+    }
+
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .form-row label {
+        width: 100px;
+        margin-bottom: 0;
+    }
+
+    .form-row select {
+        flex: 1;
+    }
+
+    .error-message {
+        color: #ff6347;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #aaa;
+        font-size: 0.8em;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo-container" style="display: flex; align-items: center; width: 100%; justify-content: flex-end;">
-            <a href="index.html" class="logo-link">
-                <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
-                <h1>懒得工具</h1>
-            </a>
+  <header>
+    <div class="logo-container">
+      <a href="index.html" class="logo-link">
+        <img id="logo" src="/icons/lan.png" alt="Logo">
+        <h1>懒得工具</h1>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="title">
+        <h1>血脉极限</h1>
+        <p>血脉极限成长一览</p>
+      </div>
+      
+      <div class="card">
+        <!-- 血脉选择区域 -->
+        <div class="mb-6">
+          <div class="form-row">
+            <label for="mainBloodline" style="width: 55px;">主血脉</label>
+            <select id="mainBloodline" class="bloodline-select" style="width: 55px;">
+              <!-- 由JavaScript动态填充 -->
+            </select>
+            <span id="mainPercentage" class="percentage-display">100%</span>
+          </div>
+          
+          <div class="slider-container">
+            <input type="range" id="percentageSlider" class="slider" min="70" max="100" step="10" value="100">
+          </div>
+          
+          <div id="secondaryBloodlineContainer" class="form-row justify-end mt-2 hidden">
+            <span id="secondaryPercentage" class="percentage-display mr-2">0%</span>
+            <select id="secondaryBloodline" class="bloodline-select" style="width: 55px;">
+              <!-- 由JavaScript动态填充 -->
+            </select>
+            <label for="secondaryBloodline" class="ml-2" style="width: 55px;">次血脉</label>
+          </div>
         </div>
-    </header>
-
-    <main>
-        <section class="tool-detail">
-            <div class="container">
-                <h2>懒得</h2>
-                <p>游戏辅助工具</p>
-                
-                <!-- 工具列表 -->
-                <div class="tool-content">
-                    <ul id="tool-list" class="tool-grid"></ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-dark text-white py-6">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p class="text-sm text-gray-400">秦又懒© 2025</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-github text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-weibo text-xl"></i>
-                    </a>
-                </div>
-            </div>
+      </div>
+      
+      <div class="card">
+        <!-- 神血特性选择区域 -->
+        <h3 class="section-title">神血特性</h3>
+        <div class="space-y-3">
+          <div class="form-row">
+            <label for="godSkill">神子之技</label>
+            <select id="godSkill" class="bloodline-select">
+              <option value="" selected="">请选择</option>
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <label for="godOther1">神血特性1</label>
+            <select id="godOther1" class="bloodline-select">
+              <option value="" selected="">请选择</option>
+            </select>
+          </div>
+          
+          <div class="form-row">
+            <label for="godOther2">神血特性2</label>
+            <select id="godOther2" class="bloodline-select">
+              <option value="" selected="">请选择</option>
+            </select>
+          </div>
+          
+          <div id="godFeatureError" class="god-feature-error hidden">
+            <i class="fa fa-exclamation-circle mr-1"></i> 神血特性部位不能重复，请选择不同部位的特性
+          </div>
         </div>
-    </footer>
-
-    <script type="module">
-        // 工具数据
-        const toolList = [
-            {
-                name: '血脉',
-                category: '游戏辅助工具',
-                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/01ff3c446f704fa08ac980783b3fbdcc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=Svn%2FZfTjGNco9057av8oihDrvgM%3D',
-                url: '/hx.html',
-                description: '血脉极限属性'
-            },
-            {
-                name: '传家宝',
-                category: '游戏辅助工具',
-                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/644eeb4f229049cb8512ee56450a9984.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=OV2D%2F4R9cC0n9xFwlSJ0%2BOX36H4%3D',
-                url: '/cjb.html',
-                description: '传家宝极限方案'
-            }
-        ];
-
-        // 初始化页面
-        document.addEventListener('DOMContentLoaded', () => {
-            renderToolList(toolList);
+      </div>
+      
+      <div class="card">
+        <!-- 属性值显示区域 -->
+        <h3 class="section-title">属性值</h3>
+        <div class="attribute-container">
+          <div class="attribute-item">
+            <span>力量</span>
+            <span id="strengthValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item">
+            <span>体力</span>
+            <span id="bodyValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item">
+            <span>技巧</span>
+            <span id="skillValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item">
+            <span>感知</span>
+            <span id="perceptionValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item">
+            <span>敏捷</span>
+            <span id="agilityValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item">
+            <span>意志</span>
+            <span id="willValue" class="attribute-value">0.0</span>
+          </div>
+          <div class="attribute-item" style="grid-column: span 2;">
+            <span>总计:</span>
+            <span id="totalValue" class="attribute-value">0.0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <!-- 六角图显示区域（SVG雷达图） -->
+        <div class="hexagon-chart-container" id="radar-container">
+          <!-- SVG将由JavaScript动态生成 -->
+        </div>
+      </div>
+      
+      <div class="card">
+        <!-- 按钮区域 -->
+        <div class="btn-group">
+          <button id="genderToggle" class="gender-btn female">
+            <span>♀</span>
+          </button>
+          
+          <div class="god-btn-group">
+            <button id="paloBtn" class="god-btn palo level-0" data-god="palo">
+              <span>帕洛</span>
+              <span id="paloLevel">0</span>
+            </button>
+            <button id="konetaBtn" class="god-btn koneta level-0" data-god="koneta">
+              <span>科内塔</span>
+              <span id="konetaLevel">0</span>
+            </button>
+            <button id="sainanBtn" class="god-btn sainan level-0" data-god="sainan">
+              <span>赛南</span>
+              <span id="sainanLevel">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <footer>
+    <p>秦又懒 2025</p>
+  </footer>
+  <script>
+    // 1. 血脉基础属性数据
+    const bloodlineAttributes = {
+      "赛宁": {
+        "男": { "体": 0.8, "力": 1.0, "技": 1.0, "敏": 0.5, "感": 0.3, "意": 0.3, "总": 3.9 },
+        "女": { "体": 0.7, "力": 0.9, "技": 1.1, "敏": 0.6, "感": 0.4, "意": 0.2, "总": 3.9 }
+      },
+      "希尔": {
+        "男": { "体": 1.1, "力": 0.7, "技": 0.9, "敏": 0.3, "感": 0.3, "意": 0.3, "总": 3.6 },
+        "女": { "体": 1.0, "力": 0.6, "技": 1.0, "敏": 0.4, "感": 0.4, "意": 0.2, "总": 3.6 }
+      },
+      "佩尔": {
+        "男": { "体": 0.5, "力": 0.9, "技": 1.2, "敏": 0.3, "感": 0.7, "意": 0.3, "总": 3.9 },
+        "女": { "体": 0.4, "力": 0.8, "技": 1.3, "敏": 0.4, "感": 0.8, "意": 0.2, "总": 3.9 }
+      },
+      "切瓦": {
+        "男": { "体": 0.9, "力": 1.1, "技": 0.7, "敏": 0.3, "感": 0.3, "意": 0.3, "总": 3.6 },
+        "女": { "体": 0.8, "力": 1.0, "技": 0.8, "敏": 0.4, "感": 0.4, "意": 0.2, "总": 3.6 }
+      },
+      "牛头": {
+        "男": { "体": 1.2, "力": 1.0, "技": 0.5, "敏": 0.3, "感": 0.3, "意": 0.3, "总": 3.6 },
+        "女": { "体": 1.1, "力": 0.9, "技": 0.6, "敏": 0.4, "感": 0.4, "意": 0.2, "总": 3.6 }
+      },
+      "法拉": {
+        "男": { "体": 0.3, "力": 0.5, "技": 1.1, "敏": 0.9, "感": 0.6, "意": 0.3, "总": 3.7 },
+        "女": { "体": 0.2, "力": 0.4, "技": 1.2, "敏": 1.0, "感": 0.7, "意": 0.2, "总": 3.7 }
+      },
+      "古特": {
+        "男": { "体": 0.7, "力": 1.2, "技": 0.3, "敏": 0.9, "感": 0.3, "意": 0.5, "总": 3.9 },
+        "女": { "体": 0.6, "力": 1.1, "技": 0.4, "敏": 1.0, "感": 0.4, "意": 0.4, "总": 3.9 }
+      },
+      "玛夏": {
+        "男": { "体": 1.0, "力": 0.8, "技": 0.3, "敏": 0.3, "感": 0.3, "意": 1.2, "总": 3.9 },
+        "女": { "体": 0.9, "力": 0.7, "技": 0.4, "敏": 0.4, "感": 0.4, "意": 1.1, "总": 3.9 }
+      },
+      "瑞格": {
+        "男": { "体": 0.7, "力": 0.3, "技": 1.0, "敏": 1.0, "感": 0.3, "意": 0.6, "总": 3.9 },
+        "女": { "体": 0.6, "力": 0.2, "技": 1.1, "敏": 1.1, "感": 0.4, "意": 0.5, "总": 3.9 }
+      },
+      "瓦诺": {
+        "男": { "体": 0.5, "力": 0.3, "技": 0.8, "敏": 0.3, "感": 0.8, "意": 1.0, "总": 3.7 },
+        "女": { "体": 0.4, "力": 0.2, "技": 0.9, "敏": 0.4, "感": 0.9, "意": 0.9, "总": 3.7 }
+      },
+      "祖扎": {
+        "男": { "体": 0.8, "力": 0.3, "技": 0.7, "敏": 1.2, "感": 0.3, "意": 0.3, "总": 3.6 },
+        "女": { "体": 0.7, "力": 0.2, "技": 0.8, "敏": 1.3, "感": 0.4, "意": 0.2, "总": 3.6 }
+      },
+      "萨尼": {
+        "男": { "体": 0.8, "力": 0.9, "技": 0.3, "敏": 1.1, "感": 0.3, "意": 0.3, "总": 3.7 },
+        "女": { "体": 0.7, "力": 0.8, "技": 0.4, "敏": 1.2, "感": 0.4, "意": 0.2, "总": 3.7 }
+      },
+      "宏朝": {
+        "男": { "体": 0.3, "力": 0.7, "技": 1.0, "敏": 1.1, "感": 0.5, "意": 0.3, "总": 3.9 },
+        "女": { "体": 0.2, "力": 0.6, "技": 1.1, "敏": 1.2, "感": 0.6, "意": 0.2, "总": 3.9 }
+      },
+      "精灵": {
+        "男": { "体": 0.3, "力": 0.3, "技": 0.5, "敏": 0.7, "感": 1.2, "意": 0.9, "总": 3.9 },
+        "女": { "体": 0.2, "力": 0.2, "技": 0.6, "敏": 0.8, "感": 1.3, "意": 0.8, "总": 3.9 }
+      },
+      "黑精": {
+        "男": { "体": 0.5, "力": 0.8, "技": 0.3, "敏": 0.8, "感": 1.2, "意": 0.3, "总": 3.9 },
+        "女": { "体": 0.4, "力": 0.7, "技": 0.4, "敏": 0.9, "感": 1.3, "意": 0.2, "总": 3.9 }
+      }
+    };
+    // 2. 主血脉-神血特性映射表（寂灭余晖/白夜帷幕无前置）
+      const bloodlineGodFeatureMap = {
+          "赛宁": {
+              "skills": [
+                  {
+                      name: "赛宁之技",
+                      growth: { "力": 0.1, "体": 0.1, "意": 0.1 },
+                      life: "血统*2+30",
+                      prerequisite: "",
+                      "featureBonus": "1.6力量等级、1.5技巧等级、0.6体质等级"
+                  }
+              ],
+              "others": [
+                  { name: "真塞宁王族圣痕", 部位: "圣痕", growth: { "力": 0.1, "技": 0.2 }, life: 100, prerequisite: "", "featureBonus": "力量+20、技巧+20、体质+5、暴击+15%、经验获取+40%" },
+                  { name: "烈火镕金", 部位: "发色", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+10%、命中+15%、格挡+15%、对异性表白成功率提升" },
+                  { name: "不灭之志", 部位: "眼睛", growth: { "力": 0.1, "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、暴击+20%、攻击力+5、经验获取+25%" },
+                  { name: "引领者", 部位: "眉毛", growth: { "技": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+16、体质+24、最大生命+32、负重+40、对异性表白成功率提升" },
+                  { name: "无畏", 部位: "耳朵", growth: { "技": 0.1, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+5%、体质+5%、暴击+15%、命中率+25%" },
+                  { name: "苍白之血", 部位: "圣痕", growth: { "力": 0.2, "技": 0.1 }, life: 100, prerequisite: "", "featureBonus": "力量+22、技巧+22、攻击力+9、经验获取+40%" },
+                  { name: "褪色之眼", 部位: "眼睛", growth: { "力": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+16%、暴击+15%、攻击力+15" },
+                  { name: "寂灭余晖", 部位: "发色", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、技巧+5%、命中+35%、格挡+10%、对异性表白成功率提升" },
+                  { name: "白夜帷幕", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+24、技巧+16、最大生命+35、负重+40、对异性表白成功率大幅提升" }
+              ]
+          },
+          "佩尔": {
+              "skills": [
+                  { name: "佩尔之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.8技巧等级、1.2力量等级、0.6感知等级" },
+                  { name: "诅咒之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.8技巧等级、1.2力量等级、0.6感知等级" }
+              ],
+              "others": [
+                  { name: "科内塔的意志", 部位: "眉毛", growth: { "技": 0.2, "敏": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、命中率+20%、爆击率+25%" },
+                  { name: "野性", 部位: "嘴巴", growth: { "力": 0.1, "技": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+16、技巧+24、爆击率+35%" },
+                  { name: "真佩尔弗因圣痕", 部位: "圣痕", growth: { "力": 0.1, "技": 0.2 }, life: 90, prerequisite: "", "featureBonus": "力量+15、技巧+20、体质+10、暴击率+20%、经验获取+15%" },
+                  { name: "科内塔的洞察", 部位: "眼睛", growth: { "力": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、技巧+5%、命中率+25%" },
+                  { name: "灵觉", 部位: "耳朵", growth: { "技": 0.1, "感": 0.2 }, life: 130, prerequisite: "专注之眸", "featureBonus": "技巧+16、感知+24、命中率+30%、偏斜+20%" },
+                  { name: "日蚀之印", 部位: "圣痕", growth: { "力": 0.1, "技": 0.2 }, life: 90, prerequisite: "", "featureBonus": "力量+15、技巧+20、体质+10、暴击率+20%、经验获取+15%" },
+                  { name: "夜之吻", 部位: "嘴巴", growth: { "力": 0.1, "技": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+24、技巧+16、爆击率+20%、攻击力+9" },
+                  { name: "异色瞳", 部位: "眼睛", growth: { "力": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+10%、技巧+5%、攻击力+12" },
+                  { name: "夜之诱惑", 部位: "耳朵", growth: { "技": 0.1, "体": 0.2 }, life: 70, prerequisite: "海神诅咒", "featureBonus": "体质+10%、命中率+40%、偏斜+40%" }
+              ]
+          },
+          "希尔": {
+              "skills": [
+                  { name: "希尔之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.7体质等级、1.4力量等级、0.6技巧等级" }
+              ],
+              "others": [
+                  { name: "雪山之子", 部位: "脸型", growth: { "技": 0.1, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+5%、体质+10%、最大生命+30" },
+                  { name: "真希尔王族圣痕", 部位: "圣痕", growth: { "技": 0.1, "体": 0.2 }, life: 100, prerequisite: "", "featureBonus": "力量+10、技巧+15、体质+20、格挡+10%、经验获取+15%" },
+                  { name: "坚固意志", 部位: "嘴巴", growth: { "技": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+24、体质+16、最大生命+40、负重+40" },
+                  { name: "守护者", 部位: "鼻子", growth: { "力": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+16、体质+24、负重+50、近战命中+20%" },
+                  { name: "澄澈之眼", 部位: "眼睛", growth: { "技": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、格挡+20%、经验获取+20%" },
+                  { name: "瓦提肯的坚毅", 部位: "发色", growth: { "体": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "体质+10%、最大生命+15、负重+45、对异性表白成功率提升" },
+                  { name: "创造之赐", 部位: "发色", growth: { "体": 0.2 }, life: 80, prerequisite: "瓦斯提亚后裔", "featureBonus": "技巧+5%、体质+10%、最大生命+25、格挡+10%" },
+                  { name: "光明之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "太阳之子", "featureBonus": "力量+2%、技巧+10%、攻击力+9、近战命中+10%、经验获取+25%" },
+                  { name: "极星之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.2 }, life: 80, prerequisite: "鹰眉", "featureBonus": "力量+24、技巧+16、最大生命+35、负重+40、对异性表白成功率大幅提升" }
+              ]
+          },
+          "弗莱": {
+              "skills": [
+                  { name: "弗莱之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.8体质等级、1.4力量等级、0.5技巧等级" }
+              ],
+              "others": [
+                  { name: "瓦斯提亚血裔", 部位: "鼻子", growth: { "体": 0.1, "意": 0.1 }, life: 80, prerequisite: "", "featureBonus": "体质+10%、意志+5%、最大负重+40" },
+                  { name: "山川之子", 部位: "脸型", growth: { "力": 0.1, "体": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+24、体质+16、抗暴+10%、最大生命+40" },
+                  { name: "真·弗莱德里王族圣痕", 部位: "圣痕", growth: { "力": 0.1, "体": 0.2 }, life: 90, prerequisite: "", "featureBonus": "力量+15、体质+20、意志+10、最大生命+30、经验获取+15%" },
+                  { name: "威严", 部位: "嘴巴", growth: { "力": 0.2, "意": 0.1 }, life: 70, prerequisite: "", "featureBonus": "力量+16、意志+24、抗爆+40%" },
+                  { name: "索弗利夫的自信", 部位: "嘴巴", growth: { "力": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+10%、体质+5%、最大负重+30、格挡+5%" },
+                  { name: "太阳之眼", 部位: "眼睛", growth: { "力": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+16、体质+24、最大生命+40" },
+                  { name: "台地之王", 部位: "肤色", growth: { "力": 0.1, "技": 0.2 }, life: 120, prerequisite: "超人体格", "featureBonus": "体质+10%、最大生命+30、格挡+15%" },
+                  { name: "非凡", 部位: "脸型", growth: { "力": 0.1, "体": 0.2 }, life: 70, prerequisite: "高地人的自负", "featureBonus": "力量+24、体质+16、最大负重+50、格挡+15%" },
+                  { name: "危险嗅觉", 部位: "鼻子", growth: { "体": 0.1, "意": 0.1 }, life: 80, prerequisite: "审判之眼", "featureBonus": "体质+5%、意志+10%、抗爆+20%、经验获取+20%" }
+              ]
+          },
+          "法拉": {
+              "skills": [
+                  { name: "法拉之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.7技巧等级、1.5敏捷等级、0.5力量等级" }
+              ],
+              "others": [
+                  { name: "席卷之风", 部位: "眉毛", growth: { "敏": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、敏捷+5%、命中+10%、偏斜+40%" },
+                  { name: "巧技", 部位: "眼睛", growth: { "技": 0.2, "敏": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+24、敏捷+16、偏斜+20%、爆击+20%、经验获取+15%" },
+                  { name: "森林后裔", 部位: "发色", growth: { "技": 0.2, "敏": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+10、技巧+20、敏捷+15、攻击力+9、经验获取+30%" },
+                  { name: "林中鸟", 部位: "脸型", growth: { "技": 0.2, "敏": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、命中+40%、暴击+10%" },
+                  { name: "舞蹈者", 部位: "眉毛", growth: { "敏": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+5%、敏捷+10%、爆击+25%" },
+                  { name: "自然之子", 部位: "嘴巴", growth: { "敏": 0.1, "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+10、技巧+30、爆击+20%、攻击力+9" },
+                  { name: "真知之眼", 部位: "眼睛", growth: { "技": 0.2, "敏": 0.1 }, life: 100, prerequisite: "神秘气质", "featureBonus": "技巧+20、敏捷+15、感知+10、远程命中+50%、远程偏斜+20%、经验获取+30%" },
+                  { name: "杀戮", 部位: "耳朵", growth: { "力": 0.2, "敏": 0.1 }, life: 120, prerequisite: "自然密码", "featureBonus": "力量+16、敏捷+24、命中+20%、攻击力+12" },
+                  { name: "意动", 部位: "鼻子", growth: { "力": 0.1, "感": 0.1 }, life: 120, prerequisite: "死亡讯息", "featureBonus": "力量+5%、感知+10%、偏斜+40%、攻击力+3" }
+              ]
+          },
+          "切瓦": {
+              "skills": [
+                  { name: "切瓦之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.7力量等级、0.6技巧等级、1.4体质等级" },
+                  { name: "海族之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.7力量等级、0.6技巧等级、1.4体质等级" }
+              ],
+              "others": [
+                  { name: "波涛之子", 部位: "脸型", growth: { "力": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、爆击+20%、攻击力+5" },
+                  { name: "幻语感应", 部位: "耳朵", growth: { "技": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+24、体质+16、命中+30%、偏斜+30%" },
+                  { name: "贵族气度", 部位: "鼻子", growth: { "力": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+16、体质+24、最大生命+35、负重+20" },
+                  { name: "真·切瓦利王族圣痕", 部位: "圣痕", growth: { "力": 0.2, "体": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、技巧+15、体质+15、攻击力+12、经验获取+15%" },
+                  { name: "隐秘之眼", 部位: "眼睛", growth: { "力": 0.1, "体": 0.1 }, life: 80, prerequisite: "瓦斯提亚后裔（弗莱德里痕鼻子）", "featureBonus": "力量+5%、体质+10%、最大生命+20、负重+30" },
+                  { name: "海之一族", 部位: "圣痕", growth: { "力": 0.2,"体": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、技巧+15、体质+10、攻击力+12、经验获取+15%" },
+                  { name: "水之灵", 部位: "耳朵", growth: { "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+10%、命中+20%、爆击+15%" },
+                  { name: "浪潮之涡", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "同类相食（古特嘴巴）", "featureBonus": "力量+16、体质+24、攻击力+18、最大生命+10" },
+                  { name: "魅蓝之影", 部位: "发色", growth: { "力": 0.1, "体": 0.1 }, life: 80, prerequisite: "邪神之血", "featureBonus": "力量+5%、体质+10%、爆击+20%" }
+              ]
+          },
+          "古特": {
+              "skills": [
+                  { name: "古特之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "1.8力量等级、0.4体质等级、1.4敏捷等级" }
+              ],
+              "others": [
+                  { name: "獠牙", 部位: "嘴巴", growth: { "力": 0.1, "敏": 0.1 }, life: 70, prerequisite: "", "featureBonus": "力量+10%、敏捷+5%、最大生命+20、经验获取+15%" },
+                  { name: "北境征服者", 部位: "脸型", growth: { "力": 0.2, "敏": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、敏捷+15、体质+10、偏斜+35%、经验获取+30%" },
+                  { name: "蜥蜴皮肤", 部位: "肤色", growth: { "力": 0.1, "体": 0.1 }, life: 70, prerequisite: "", "featureBonus": "力量+5%、体质+10%、攻击力+12" },
+                  { name: "鲨之眼", 部位: "眼睛", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "", "featureBonus": "力量+10%、暴击+35%" },
+                  { name: "古特之王", 部位: "鼻子", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "", "featureBonus": "力量+24、敏捷+16、最大生命+30、远程偏斜+50%" },
+                  { name: "北地之子", 部位: "眉毛", growth: { "敏": 0.1, "体": 0.1 }, life: 70, prerequisite: "", "featureBonus": "敏捷+10%、体质+5%、近战命中+20%、远程偏斜+30%、经验获取+20%" },
+                  { name: "远方的思念", 部位: "发色", growth: { "敏": 0.1, "体": 0.2 }, life: 70, prerequisite: "高地人的耐力", "featureBonus": "敏捷+16、体质+24、最大生命+35" },
+                  { name: "恶魔之眼", 部位: "眼睛", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "雄狮之力", "featureBonus": "力量+10%、偏斜+10%、攻击力+18" },
+                  { name: "复仇烈焰", 部位: "鼻子", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "欧里克的神力", "featureBonus": "力量+24、敏捷+16、攻击力+9、最大生命+30" }
+              ]
+          },
+          "默认": {
+              "skills": [],
+              "others": []
+          }
+      };
+    // 3. 神像加成数据
+    const godBonuses = {
+      "palo": { "1": { "体": 0.05, "力": 0.05 }, "2": { "体": 0.1, "力": 0.1 } },
+      "koneta": { "1": { "技": 0.05, "敏": 0.05 }, "2": { "技": 0.1, "敏": 0.1 } },
+      "sainan": { "1": { "感": 0.05, "意": 0.05 }, "2": { "感": 0.1, "意": 0.1 } }
+    };
+    // 4. 全局变量
+    let currentGender = '女';
+    let currentMainBloodline = '赛宁';
+    let currentSecondaryBloodline = '古特';
+    let currentMainPercentage = 100;
+    let currentSecondaryPercentage = 0;
+    let currentGodLevels = { "palo": 0, "koneta": 0, "sainan": 0 };
+    let radarSvg = null;
+    // 5. 雷达图配置
+    const radarConfig = [
+      { name: '感知', angle: 0 },
+      { name: '体力', angle: Math.PI/3 },
+      { name: '力量', angle: 2*Math.PI/3 },
+      { name: '技巧', angle: Math.PI },
+      { name: '敏捷', angle: 4*Math.PI/3 },
+      { name: '意志', angle: 5*Math.PI/3 }
+    ];
+    const radarCenterX = 200;
+    const radarCenterY = 200;
+    const radarMaxRadius = 150;
+    const radarTextRadius = 175;
+    // 6. DOM元素
+    const mainBloodlineSelect = document.getElementById('mainBloodline');
+    const secondaryBloodlineSelect = document.getElementById('secondaryBloodline');
+    const percentageSlider = document.getElementById('percentageSlider');
+    const mainPercentageDisplay = document.getElementById('mainPercentage');
+    const secondaryPercentageDisplay = document.getElementById('secondaryPercentage');
+    const secondaryBloodlineContainer = document.getElementById('secondaryBloodlineContainer');
+    const genderToggle = document.getElementById('genderToggle');
+    const paloBtn = document.getElementById('paloBtn');
+    const konetaBtn = document.getElementById('konetaBtn');
+    const sainanBtn = document.getElementById('sainanBtn');
+    const paloLevelDisplay = document.getElementById('paloLevel');
+    const konetaLevelDisplay = document.getElementById('konetaLevel');
+    const sainanLevelDisplay = document.getElementById('sainanLevel');
+    const radarContainer = document.getElementById('radar-container');
+    const godSkillSelect = document.getElementById('godSkill');
+    const godOther1Select = document.getElementById('godOther1');
+    const godOther2Select = document.getElementById('godOther2');
+    const godFeatureError = document.getElementById('godFeatureError');
+    // 属性显示元素
+    const bodyValueDisplay = document.getElementById('bodyValue');
+    const strengthValueDisplay = document.getElementById('strengthValue');
+    const skillValueDisplay = document.getElementById('skillValue');
+    const agilityValueDisplay = document.getElementById('agilityValue');
+    const perceptionValueDisplay = document.getElementById('perceptionValue');
+    const willValueDisplay = document.getElementById('willValue');
+    const totalValueDisplay = document.getElementById('totalValue');
+    // 7. 初始化函数
+    function initialize() {
+      populateBloodlineSelects(); // 优先填充下拉框选项
+      updateGodFeatureOptions(); 
+      initializeSvgRadar();      
+      calculateAttributes();     
+      addEventListeners();        // 绑定所有交互事件
+    }
+    // 8. 填充主/次血脉下拉框
+    function populateBloodlineSelects() {
+      const bloodlines = Object.keys(bloodlineAttributes);
+      mainBloodlineSelect.innerHTML = '';
+      secondaryBloodlineSelect.innerHTML = '';
+      // 主血脉
+      bloodlines.forEach(bloodline => {
+        const option = document.createElement('option');
+        option.value = bloodline;
+        option.textContent = bloodline;
+        if (bloodline === currentMainBloodline) option.selected = true;
+        mainBloodlineSelect.appendChild(option);
+      });
+      // 次血脉
+      bloodlines.forEach(bloodline => {
+        const option = document.createElement('option');
+        option.value = bloodline;
+        option.textContent = bloodline;
+        if (bloodline === currentSecondaryBloodline) option.selected = true;
+        secondaryBloodlineSelect.appendChild(option);
+      });
+    }
+    // 9. 按主血脉更新神血特性选项
+    function updateGodFeatureOptions() {
+      const featureConfig = bloodlineGodFeatureMap[currentMainBloodline] || bloodlineGodFeatureMap["默认"];
+      const { skills, others } = featureConfig;
+      // 神子之技
+      godSkillSelect.innerHTML = '<option value="" selected>请选择</option>';
+      skills.forEach(skill => {
+        const option = document.createElement('option');
+        option.value = skill.name;
+        option.textContent = skill.name;
+        godSkillSelect.appendChild(option);
+      });
+      // 神血特性1
+      godOther1Select.innerHTML = '<option value="" selected>请选择</option>';
+      others.forEach(feature => {
+        const option = document.createElement('option');
+        option.value = `${feature.name}-${feature.部位}`;
+        option.textContent = feature.name;
+        godOther1Select.appendChild(option);
+      });
+      // 神血特性2
+      godOther2Select.innerHTML = '<option value="" selected>请选择</option>';
+      others.forEach(feature => {
+        const option = document.createElement('option');
+        option.value = `${feature.name}-${feature.部位}`;
+        option.textContent = feature.name;
+        godOther2Select.appendChild(option);
+      });
+      godFeatureError.classList.add('hidden');
+    }
+    // 10. 初始化SVG雷达图
+    function initializeSvgRadar() {
+      radarContainer.innerHTML = '';
+      radarSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      radarSvg.setAttribute('width', '100%');
+      radarSvg.setAttribute('height', '100%');
+      radarSvg.setAttribute('viewBox', '0 0 400 400');
+      radarContainer.appendChild(radarSvg);
+      // 六边形背景
+      const hexPoints = radarConfig.map(item => {
+        const x = radarCenterX + radarMaxRadius * Math.cos(item.angle);
+        const y = radarCenterY - radarMaxRadius * Math.sin(item.angle);
+        return `${x},${y}`;
+      }).join(' ');
+      const hexBg = createSvgElement('polygon', {
+        points: hexPoints,
+        stroke: 'rgba(255,255,255,0.8)',
+        'stroke-width': '1',
+        fill: 'none'
+      });
+      radarSvg.appendChild(hexBg);
+      // 射线
+      radarConfig.forEach(item => {
+        const x = radarCenterX + radarMaxRadius * Math.cos(item.angle);
+        const y = radarCenterY - radarMaxRadius * Math.sin(item.angle);
+        const line = createSvgElement('line', {
+          x1: radarCenterX,
+          y1: radarCenterY,
+          x2: x,
+          y2: y,
+          stroke: 'rgba(255,255,255,0.3)',
+          'stroke-width': '0.5'
         });
-
-        // 渲染工具列表
-        function renderToolList(tools) {
-            const toolListElement = document.getElementById('tool-list');
-            
-            // 清空列表
-            toolListElement.innerHTML = '';
-            
-            // 添加工具卡片
-            tools.forEach(tool => {
-                const li = document.createElement('li');
-                li.className = 'software-tile';
-                
-                // 处理链接目标
-                const target = tool.url.startsWith('http') ? '_blank' : '_self';
-                
-                li.innerHTML = `
-                    <a href="${tool.url}" target="${target}" class="tile-link">
-                        <div class="tile-content">
-                            <div class="icon-container">
-                                <img src="${tool.icon}" alt="${tool.name}">
-                            </div>
-                            <h3>${tool.name}</h3>
-                            <span class="category-tag">${tool.category}</span>
-                        </div>
-                        <div class="tile-overlay">
-                            <p class="overlay-text">${tool.description}</p>
-                            <span class="visit-btn">点击前往</span>
-                        </div>
-                    </a>
-                `;
-                toolListElement.appendChild(li);
-            });
+        radarSvg.appendChild(line);
+      });
+    }
+    // 11. SVG工具函数
+    function createSvgElement(tag, attrs) {
+      const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      for (const key in attrs) elem.setAttribute(key, attrs[key]);
+      return elem;
+    }
+    // 12. 数值映射函数
+    function mapValueToPoint(value, angle) {
+      let ratio = 0;
+      const isOverMax = value > 1.5;
+      if (value > 0 && value <= 1.5) ratio = value / 1.5;
+      else if (isOverMax) ratio = 1;
+      return {
+        x: radarCenterX + radarMaxRadius * ratio * Math.cos(angle),
+        y: radarCenterY - radarMaxRadius * ratio * Math.sin(angle),
+        isOverMax
+      };
+    }
+    // 13. 更新雷达图
+    function updateSvgRadar(attributes) {
+      if (!radarSvg) return;
+      const oldDataLayers = radarSvg.querySelectorAll('.data-layer');
+      oldDataLayers.forEach(layer => layer.remove());
+      const pointData = radarConfig.map((item, index) => {
+        const value = attributes[index];
+        const { x, y, isOverMax } = mapValueToPoint(value, item.angle);
+        return { x, y, isOverMax, name: item.name, value };
+      });
+      // 基础填充
+      const baseFillPoints = pointData.map(p => `${p.x},${p.y}`).join(' ');
+      const baseFill = createSvgElement('polygon', {
+        points: baseFillPoints,
+        fill: 'rgba(255, 215, 0, 0.6)',
+        stroke: 'rgba(255, 215, 0, 1)',
+        'stroke-width': '1',
+        class: 'data-layer'
+      });
+      radarSvg.appendChild(baseFill);
+      // 特殊填充
+      const hasOverMax = pointData.some(p => p.isOverMax);
+      if (hasOverMax) {
+        const specialPoints = pointData.map(p => {
+          const ratio = p.isOverMax ? 1/1.5 : 0.1/1.5;
+          const x = radarCenterX + radarMaxRadius * ratio * Math.cos(radarConfig[pointData.indexOf(p)].angle);
+          const y = radarCenterY - radarMaxRadius * ratio * Math.sin(radarConfig[pointData.indexOf(p)].angle);
+          return `${x},${y}`;
+        }).join(' ');
+        const specialFill = createSvgElement('polygon', {
+          points: specialPoints,
+          fill: '#FFD700',
+          stroke: 'rgba(255, 204, 0, 1)',
+          'stroke-width': '1',
+          class: 'data-layer'
+        });
+        radarSvg.appendChild(specialFill);
+      }
+      // 文本标签
+      pointData.forEach(p => {
+        const textX = radarCenterX + radarTextRadius * Math.cos(radarConfig[pointData.indexOf(p)].angle);
+        const textY = radarCenterY - radarTextRadius * Math.sin(radarConfig[pointData.indexOf(p)].angle);
+        const nameText = createSvgElement('text', { x: textX, y: textY - 5, class: 'radar-attr-text data-layer' });
+        nameText.textContent = p.name;
+        radarSvg.appendChild(nameText);
+        const valueText = createSvgElement('text', { x: textX, y: textY + 15, class: 'radar-value-text data-layer' });
+        valueText.textContent = p.value.toFixed(2);
+        radarSvg.appendChild(valueText);
+      });
+    }
+    // 14. 解析神血特性加成
+    function getGodFeatureBonus() {
+      const bonus = { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 };
+      const featureConfig = bloodlineGodFeatureMap[currentMainBloodline] || bloodlineGodFeatureMap["默认"];
+      let other1Part = '';
+      let other2Part = '';
+      // 神子之技加成
+      const skillName = godSkillSelect.value;
+      if (skillName) {
+        const skill = featureConfig.skills.find(s => s.name === skillName);
+        if (skill?.growth) {
+          for (const key in skill.growth) bonus[key] += skill.growth[key] || 0;
         }
-    </script>
-</body>
-</html>
+      }
+      // 神血特性1加成
+      const other1Value = godOther1Select.value;
+      if (other1Value) {
+        const [name, part] = other1Value.split('-');
+        other1Part = part;
+        const feature = featureConfig.others.find(f => f.name === name);
+        if (feature?.growth) {
+          for (const key in feature.growth) bonus[key] += feature.growth[key] || 0;
+        }
+      }
+      // 神血特性2加成
+      const other2Value = godOther2Select.value;
+      if (other2Value) {
+        const [name, part] = other2Value.split('-');
+        other2Part = part;
+        const feature = featureConfig.others.find(f => f.name === name);
+        if (feature?.growth) {
+          for (const key in feature.growth) bonus[key] += feature.growth[key] || 0;
+        }
+      }
+      // 检查部位重复并更新提示
+      if (other1Part && other2Part) {
+        if (other1Part === other2Part) {
+          godFeatureError.innerHTML = `<i class="fa fa-exclamation-circle mr-1"></i> 神血特性部位不能重复，当前选择了两个"${other1Part}"部位，请选择不同部位的特性`;
+          godFeatureError.classList.remove('hidden');
+          return { bonus: { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 }, error: true };
+        } else {
+          godFeatureError.innerHTML = `<i class="fa fa-info-circle mr-1"></i> 当前选择：神血特性1 ${other1Part}，神血特性2 ${other2Part}`;
+          godFeatureError.classList.remove('hidden');
+        }
+      } else if (other1Part || other2Part) {
+        // 当只选择了一个特性时
+        const selectedPart = other1Part || other2Part;
+        const selectedFeature = other1Part ? "神血特性1" : "神血特性2";
+        godFeatureError.innerHTML = `<i class="fa fa-info-circle mr-1"></i> 当前选择：${selectedFeature} ${selectedPart}`;
+        godFeatureError.classList.remove('hidden');
+      } else {
+        // 当没有选择任何特性时，隐藏提示
+        godFeatureError.classList.add('hidden');
+      }
+      return { bonus, error: false };
+    }
+    // 15. 绑定事件
+    function addEventListeners() {
+      // 主血脉变化
+      mainBloodlineSelect.addEventListener('change', function() {
+        currentMainBloodline = this.value;
+        updateGodFeatureOptions();
+        calculateAttributes();
+      });
+      // 次血脉变化
+      secondaryBloodlineSelect.addEventListener('change', function() {
+        currentSecondaryBloodline = this.value;
+        calculateAttributes();
+      });
+      // 百分比滑块
+      percentageSlider.addEventListener('input', function() {
+        currentMainPercentage = parseInt(this.value);
+        currentSecondaryPercentage = 100 - currentMainPercentage;
+        mainPercentageDisplay.textContent = `${currentMainPercentage}%`;
+        secondaryPercentageDisplay.textContent = `${currentSecondaryPercentage}%`;
+        secondaryBloodlineContainer.classList.toggle('hidden', currentMainPercentage === 100);
+        calculateAttributes();
+      });
+      // 性别切换
+      genderToggle.addEventListener('click', function() {
+        currentGender = currentGender === '男' ? '女' : '男';
+        this.classList.toggle('male', currentGender === '男');
+        this.classList.toggle('female', currentGender === '女');
+        this.innerHTML = `<span>${currentGender === '男' ? '♂' : '♀'}</span>`;
+        calculateAttributes();
+      });
+      // 神像按钮
+      paloBtn.addEventListener('click', () => toggleGodLevel('palo', paloBtn, paloLevelDisplay));
+      konetaBtn.addEventListener('click', () => toggleGodLevel('koneta', konetaBtn, konetaLevelDisplay));
+      sainanBtn.addEventListener('click', () => toggleGodLevel('sainan', sainanBtn, sainanLevelDisplay));
+      // 神血特性变化
+      godSkillSelect.addEventListener('change', calculateAttributes);
+      godOther1Select.addEventListener('change', calculateAttributes);
+      godOther2Select.addEventListener('change', calculateAttributes);
+    }
+    // 16. 切换神像等级
+    function toggleGodLevel(god, button, levelDisplay) {
+      currentGodLevels[god] = (currentGodLevels[god] + 1) % 3;
+      button.classList.remove('level-0', 'level-1', 'level-2');
+      button.classList.add(`level-${currentGodLevels[god]}`);
+      levelDisplay.textContent = currentGodLevels[god];
+      calculateAttributes();
+    }
+    // 17. 计算属性值
+    function calculateAttributes() {
+      // 血脉基础值
+      const mainAttr = bloodlineAttributes[currentMainBloodline][currentGender];
+      const secondaryAttr = currentSecondaryPercentage > 0 
+        ? bloodlineAttributes[currentSecondaryBloodline][currentGender] 
+        : { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 };
+      const base = {
+        "体": mainAttr["体"]*(currentMainPercentage/100) + secondaryAttr["体"]*(currentSecondaryPercentage/100),
+        "力": mainAttr["力"]*(currentMainPercentage/100) + secondaryAttr["力"]*(currentSecondaryPercentage/100),
+        "技": mainAttr["技"]*(currentMainPercentage/100) + secondaryAttr["技"]*(currentSecondaryPercentage/100),
+        "敏": mainAttr["敏"]*(currentMainPercentage/100) + secondaryAttr["敏"]*(currentSecondaryPercentage/100),
+        "感": mainAttr["感"]*(currentMainPercentage/100) + secondaryAttr["感"]*(currentSecondaryPercentage/100),
+        "意": mainAttr["意"]*(currentMainPercentage/100) + secondaryAttr["意"]*(currentSecondaryPercentage/100)
+      };
+      // 神像加成
+      const godBonus = { "体": 0, "力": 0, "技": 0, "敏": 0, "感": 0, "意": 0 };
+      for (const god in currentGodLevels) {
+        const level = currentGodLevels[god];
+        if (level > 0 && godBonuses[god][level]) {
+          const b = godBonuses[god][level];
+          godBonus["体"] += b["体"] || 0;
+          godBonus["力"] += b["力"] || 0;
+          godBonus["技"] += b["技"] || 0;
+          godBonus["敏"] += b["敏"] || 0;
+          godBonus["感"] += b["感"] || 0;
+          godBonus["意"] += b["意"] || 0;
+        }
+      }
+      // 神血特性加成
+      const { bonus: featureBonus, error: featureError } = getGodFeatureBonus();
+      // 最终值
+      const final = {
+        "体": base["体"] + godBonus["体"] + featureBonus["体"],
+        "力": base["力"] + godBonus["力"] + featureBonus["力"],
+        "技": base["技"] + godBonus["技"] + featureBonus["技"],
+        "敏": base["敏"] + godBonus["敏"] + featureBonus["敏"],
+        "感": base["感"] + godBonus["感"] + featureBonus["感"],
+        "意": base["意"] + godBonus["意"] + featureBonus["意"]
+      };
+      const total = Object.values(final).reduce((sum, val) => sum + val, 0);
+      // 更新显示
+      bodyValueDisplay.textContent = final["体"].toFixed(2);
+      strengthValueDisplay.textContent = final["力"].toFixed(2);
+      skillValueDisplay.textContent = final["技"].toFixed(2);
+      agilityValueDisplay.textContent = final["敏"].toFixed(2);
+      perceptionValueDisplay.textContent = final["感"].toFixed(2);
+      willValueDisplay.textContent = final["意"].toFixed(2);
+      totalValueDisplay.textContent = total.toFixed(2);
+      // 更新雷达图
+      updateSvgRadar([final["感"], final["体"], final["力"], final["技"], final["敏"], final["意"]]);
+    }
+    // 18. 页面加载初始化
+    document.addEventListener('DOMContentLoaded', initialize);
+  </script>
+
+
+</body></html>
