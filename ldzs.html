@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>诸神工具 - 懒得推荐</title>
+    <title>懒得工具</title>
     <!-- Font Awesome Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -34,10 +34,10 @@
 </head>
 <body>
     <header>
-        <div class="logo-container">
+        <div class="logo-container" style="display: flex; align-items: center; width: 100%; justify-content: flex-end;">
             <a href="index.html" class="logo-link">
                 <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
-                <h1>懒得推荐</h1>
+                <h1>懒得工具</h1>
             </a>
         </div>
     </header>
@@ -45,8 +45,8 @@
     <main>
         <section class="tool-detail">
             <div class="container">
-                <h2>诸神工具</h2>
-                <p>诸神皇冠辅助工具</p>
+                <h2>懒得</h2>
+                <p>游戏辅助工具</p>
                 
                 <!-- 这里可以添加工具的详细信息 -->
                 <div class="tool-content">
@@ -60,7 +60,7 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
-                    <p class="text-sm text-gray-400">© 2025 懒得推荐. 保留所有权利.</p>
+                    <p class="text-sm text-gray-400">秦又懒© 2025</p>
                 </div>
                 <div class="flex space-x-4">
                     <a href="#" class="text-gray-400 hover:text-white transition-colors">
@@ -78,10 +78,62 @@
     </footer>
 
     <script type="module">
-        // 这里可以添加JavaScript代码
+        // 工具数据
+        const toolList = [
+            {
+                name: '血脉',
+                category: '游戏辅助工具',
+                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/01ff3c446f704fa08ac980783b3fbdcc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=Svn%2FZfTjGNco9057av8oihDrvgM%3D',
+                url: '/hx.html',
+                description: '血脉极限属性'
+            },
+            {
+                name: '传家宝',
+                category: '游戏辅助工具',
+                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/644eeb4f229049cb8512ee56450a9984.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=OV2D%2F4R9cC0n9xFwlSJ0%2BOX36H4%3D',
+                url: '/cjb.html',
+                description: '传家宝极限方案'
+            }
+        ];
+
+        // 初始化页面
         document.addEventListener('DOMContentLoaded', () => {
-            // 页面加载完成后的初始化代码
+            renderToolList(toolList);
         });
+
+        // 渲染工具列表
+        function renderToolList(tools) {
+            const toolListElement = document.getElementById('tool-list');
+            
+            // 清空列表
+            toolListElement.innerHTML = '';
+            
+            // 添加工具卡片
+            tools.forEach(tool => {
+                const li = document.createElement('li');
+                li.className = 'software-tile';
+                
+                // 处理链接目标
+                const target = tool.url.startsWith('http') ? '_blank' : '_self';
+                
+                li.innerHTML = `
+                    <a href="${tool.url}" target="${target}" class="tile-link">
+                        <div class="tile-content">
+                            <div class="icon-container">
+                                <img src="${tool.icon}" alt="${tool.name}">
+                            </div>
+                            <h3>${tool.name}</h3>
+                            <span class="category-tag">${tool.category}</span>
+                        </div>
+                        <div class="tile-overlay">
+                            <p class="overlay-text">${tool.description}</p>
+                            <span class="visit-btn">点击前往</span>
+                        </div>
+                    </a>
+                `;
+                toolListElement.appendChild(li);
+            });
+        }
     </script>
 </body>
 </html>
