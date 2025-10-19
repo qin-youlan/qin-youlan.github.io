@@ -227,7 +227,12 @@
             transition: all 0.3s;
             margin: 5px;
             text-align: center;
-            white-space: nowrap;
+            white-space: nowrap; /* 不换行 */
+            /* 新增固定宽度相关样式 */
+            width: 120px; /* 固定宽度（根据需求调整数值） */
+            box-sizing: border-box; /* 让width包含padding和border，避免总宽度超出预期 */
+            overflow: hidden; /* 隐藏溢出内容 */
+            text-overflow: ellipsis; /* 溢出文本显示省略号 */
         }
 
             .job-tag:hover {
