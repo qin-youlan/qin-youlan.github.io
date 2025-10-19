@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>懒得工具</title>
+    <title>懒得工具 - 更多工具</title>
     <!-- Font Awesome Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -31,12 +31,12 @@
             color: #fff !important;
         }
         
-        /* 工具列表样式 */
+        /* 工具列表样式 - 已修复宽度问题 */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            padding: 20px 0;
+            padding: 20px;
             list-style: none;
             margin: 0;
         }
@@ -134,6 +134,49 @@
         .visit-btn:hover {
             background: #0056b3;
         }
+        
+        /* 搜索框样式 */
+        .search-container {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .search-input {
+            padding: 10px 15px;
+            width: 100%;
+            max-width: 600px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .tool-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .tool-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -152,9 +195,16 @@
                 <h2>懒得</h2>
                 <p>游戏辅助工具</p>
                 
-                <!-- 工具列表 -->
+                <!-- 搜索框 -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="搜索工具...">
+                </div>
+                
+                <!-- 工具列表 - 已修复宽度问题 -->
                 <div class="tool-content">
-                    <ul id="tool-list" class="tool-grid"></ul>
+                    <ul id="software-list" class="tool-grid">
+                        <!-- 工具列表将通过JavaScript动态生成 -->
+                    </ul>
                 </div>
             </div>
         </section>
@@ -162,21 +212,8 @@
 
     <footer class="bg-dark text-white py-6">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p class="text-sm text-gray-400">秦又懒© 2025</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-github text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-twitter text-xl"></i>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                        <i class="fa fa-weibo text-xl"></i>
-                    </a>
-                </div>
+            <div class="text-center py-4">
+                <p class="text-sm text-gray-400">秦又懒© 2025</p>
             </div>
         </div>
     </footer>
@@ -187,14 +224,14 @@
             {
                 name: '血脉',
                 category: '游戏辅助工具',
-                icon: '/icons/audrey.png',
+                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/01ff3c446f704fa08ac980783b3fbdcc.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=Svn%2FZfTjGNco9057av8oihDrvgM%3D',
                 url: '/hx.html',
                 description: '血脉极限属性'
             },
             {
                 name: '传家宝',
                 category: '游戏辅助工具',
-                icon: '/icons/ring6.png',
+                icon: 'https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/644eeb4f229049cb8512ee56450a9984.png~tplv-a9rns2rl98-24:720:720.png?rcl=20251018230013E91D84754068C3CEBAA6&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404413&x-signature=OV2D%2F4R9cC0n9xFwlSJ0%2BOX36H4%3D',
                 url: '/cjb.html',
                 description: '传家宝极限方案'
             }
@@ -203,14 +240,34 @@
         // 初始化页面
         document.addEventListener('DOMContentLoaded', () => {
             renderToolList(toolList);
+            
+            // 添加搜索功能
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredTools = toolList.filter(tool => 
+                    tool.name.toLowerCase().includes(searchTerm) || 
+                    tool.description.toLowerCase().includes(searchTerm) ||
+                    tool.category.toLowerCase().includes(searchTerm)
+                );
+                renderToolList(filteredTools);
+            });
         });
 
         // 渲染工具列表
         function renderToolList(tools) {
-            const toolListElement = document.getElementById('tool-list');
+            const toolListElement = document.getElementById('software-list');
             
             // 清空列表
             toolListElement.innerHTML = '';
+            
+            if (tools.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'no-results';
+                li.textContent = '没有找到匹配的工具';
+                toolListElement.appendChild(li);
+                return;
+            }
             
             // 添加工具卡片
             tools.forEach(tool => {
