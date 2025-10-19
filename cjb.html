@@ -525,7 +525,7 @@
                 return;
             }
 
-            // 收集所有有效方案（第一属性最大的方案）
+            // 收集所有有效方案（第一属性为目标属性的方案）
             const allValidPlans = [];
             try {
                 for (let upgradeCount = 1; upgradeCount <= maxAvailableLevelUp; upgradeCount++) {
@@ -567,9 +567,9 @@
                             injectValues,
                             sortedInjects,
                             combination,
-                            secondAttrIdx: sortedInjects[1].idx,
+                            secondAttrIdx: sortedInjects[1].idx,  // reward2对应的属性索引
                             secondAttrVal: S2,
-                            thirdAttrIdx: sortedInjects[2].idx,
+                            thirdAttrIdx: sortedInjects[2].idx,   // reward3对应的属性索引
                             thirdAttrVal: S3,
                             reward2: Math.floor(reward2Exact),
                             reward3: Math.floor(reward3Exact),
@@ -590,65 +590,66 @@
                 return;
             }
 
-            // 筛选第一属性最大的方案
+            // 第一步：筛选出reward1最大的方案集合（第一优先级）
             const maxReward1 = Math.max(...allValidPlans.map(plan => plan.reward1));
             const firstAttrMaxPlans = allValidPlans.filter(plan => plan.reward1 === maxReward1);
 
-            // 根据是否选择第二属性处理不同逻辑
+            // 第二步：按第二优先级排序（处理用户指定的第二目标属性）
             const secondTarget = secondTargetAttrIndex !== null ? parseInt(secondTargetAttrIndex) : null;
-            let finalPlans = [];
+            firstAttrMaxPlans.sort((a, b) => {
+                // 第二优先级：若指定了第二目标，优先匹配并最大化对应奖励
+                if (secondTarget !== null) {
+                    // 判断a方案中第二目标对应的奖励类型（reward2还是reward3）
+                    const aIsReward2 = a.secondAttrIdx === secondTarget;
+                    const aIsReward3 = a.thirdAttrIdx === secondTarget;
+                    const bIsReward2 = b.secondAttrIdx === secondTarget;
+                    const bIsReward3 = b.thirdAttrIdx === secondTarget;
 
-            if (secondTarget !== null && secondTarget !== targetAttrIndex) {
-                // 场景1：指定了第二属性（且与第一属性不同）
-                // 筛选出第二属性为目标第二属性的方案
-                const validSecondAttrPlans = firstAttrMaxPlans;
-
-                if (validSecondAttrPlans.length > 0) {
-                    // 排序：第二属性值降序 → 升级次数升序
-                    validSecondAttrPlans.sort((a, b) => {
-                        if (b.injectValues[secondTarget] !== a.injectValues[secondTarget]) {
-                            return b.injectValues[secondTarget] - a.injectValues[secondTarget];
-                        }
-                        return a.upgradeCount - b.upgradeCount;
-                    });
-                    finalPlans = [validSecondAttrPlans[0]];
-                } else {
-                    // 没有符合第二属性的方案，退回到第一属性最大+升级次数最少
-                    firstAttrMaxPlans.sort((a, b) => a.upgradeCount - b.upgradeCount);
-                    finalPlans = [firstAttrMaxPlans[0]];
-                }
-            } else {
-                // 场景2：未指定第二属性，需要生成三个方案
-                // 方案1：第一属性最大 + 升级次数最少
-                const plan1Candidates = [...firstAttrMaxPlans].sort((a, b) => a.upgradeCount - b.upgradeCount);
-                const plan1 = plan1Candidates[0];
-
-                // 方案2：第一属性最大 + 第二属性值最大 + 升级次数最少
-                const plan2Candidates = [...firstAttrMaxPlans].sort((a, b) => {
-                    if (b.secondAttrVal !== a.secondAttrVal) {
-                        return b.secondAttrVal - a.secondAttrVal;
+                    // 优先处理同时匹配的情况
+                    if (aIsReward2 && bIsReward2) {
+                        return b.reward2 - a.reward2; // 都匹配reward2，最大化reward2
                     }
+                    if (aIsReward3 && bIsReward3) {
+                        return b.reward3 - a.reward3; // 都匹配reward3，最大化reward3
+                    }
+                    // 一方匹配reward2，另一方匹配reward3时，reward2优先级高于reward3
+                    if (aIsReward2 && !bIsReward2 && !bIsReward3) return -1;
+                    if (bIsReward2 && !aIsReward2 && !aIsReward3) return 1;
+                    if (aIsReward3 && !bIsReward2 && !bIsReward3) return -1;
+                    if (bIsReward3 && !aIsReward2 && !aIsReward3) return 1;
+                }
+                // 第三优先级：升级次数最少
+                return a.upgradeCount - b.upgradeCount;
+            });
+
+            // 第三步：提取最终方案
+            const finalPlans = [];
+
+            // 方案一：reward1最大且升级次数最少
+            const plan1Candidates = [...firstAttrMaxPlans].sort((a, b) => a.upgradeCount - b.upgradeCount);
+            finalPlans.push(plan1Candidates[0]);
+
+            // 方案二：reward1最大前提下，reward2最大的方案
+            const plan2Candidates = [...firstAttrMaxPlans].sort((a, b) => {
+                if (b.reward2 !== a.reward2) return b.reward2 - a.reward2;
+                return a.upgradeCount - b.upgradeCount; // reward2相同则取升级次数少的
+            });
+            finalPlans.push(plan2Candidates[0]);
+
+            // 其他方案：reward1最大前提下，reward2为非方案二属性且reward2最大且升级次数最少
+            const plan2SecondAttrIdx = plan2Candidates[0].secondAttrIdx;
+            const otherCandidates = [...firstAttrMaxPlans]
+                .filter(plan => plan.secondAttrIdx !== plan2SecondAttrIdx); // 排除方案二的第二属性
+
+            if (otherCandidates.length > 0) {
+                otherCandidates.sort((a, b) => {
+                    if (b.reward2 !== a.reward2) return b.reward2 - a.reward2;
                     return a.upgradeCount - b.upgradeCount;
                 });
-                const plan2 = plan2Candidates[0];
-
-                // 方案3：第一属性最大 + 第二属性与方案2不同 + 该第二属性值最大 + 升级次数最少
-                const excludeAttr = plan2.secondAttrIdx;
-                const plan3Candidates = [...firstAttrMaxPlans]
-                    .filter(plan => plan.secondAttrIdx !== excludeAttr)
-                    .sort((a, b) => {
-                        if (b.secondAttrVal !== a.secondAttrVal) {
-                            return b.secondAttrVal - a.secondAttrVal;
-                        }
-                        return a.upgradeCount - b.upgradeCount;
-                    });
-                const plan3 = plan3Candidates.length > 0 ? plan3Candidates[0] : null;
-
-                finalPlans = [plan1, plan2];
-                if (plan3) finalPlans.push(plan3);
+                finalPlans.push(otherCandidates[0]);
             }
 
-            // 展示结果（传入selectedJobs参数）
+            // 展示结果
             displayResults(finalPlans, initLevel, targetAttrIndex, secondTarget, selectedJobs);
         }
 
