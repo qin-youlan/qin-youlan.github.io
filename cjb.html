@@ -1,10 +1,10 @@
-<html lang="zh"><head>
+<html lang="zh">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>传家宝计算 - 懒得工具</title>
     <!-- Font Awesome Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
@@ -14,104 +14,107 @@
                 <h1>懒得工具</h1>
             </a>
         </div>
-        <!-- 搜索框样式 -->
-        <div class="search-container" style="display: none;">
-            <input type="text" id="search-input" placeholder="搜索软件...">
-            <i class="fa fa-search search-icon"></i>
-        </div>
     </header>
 
     <main>
         <section class="tool-detail">
-            <div class="container">
-                
-                <div class="card">
-                    <h3 class="text-xl font-bold mb-4">传家宝转职方案计算</h3>
-                    
-                    <!-- 输入区域 -->
-                    <div class="input-section">
-                        <!-- 人物六维输入 -->
-                        <div class="input-group">
-                            <div class="form-item">
-                                <label>人物六维：</label>
-                                <input type="text" id="person-growth" value="0 0 0 0 0 0" placeholder="输入力技敏体感意，空格分隔，范围-0.2~2">
-                            </div>
-                        </div>
-                        <!-- 初始等级输入（最大89，支持1级升级） -->
-                        <div class="input-group">
-                            <div class="form-item">
-                                <label>初始等级：</label>
-                                <input type="number" id="init-level" value="1" min="1" max="89" placeholder="默认1，最高89（可升1~89级）">
-                            </div>
-                        </div>
-                        <!-- 传家宝装备选择（新增） -->
-                        <div class="input-group">
-                            <div class="form-item">
-                                <label>初始装备：</label>
-                                <select id="heirloom-equip" onchange="filterJobsByEquip()">
-                                    <option value="">-- 请选择传家宝装备 --</option>
-                                    <option value="单手剑">单手剑</option>
-                                    <option value="枪">枪</option>
-                                    <option value="刀">刀</option>
-                                    <option value="短弓">短弓</option>
-                                    <option value="骑枪">骑枪</option>
-                                    <option value="刺剑">刺剑</option>
-                                    <option value="弩">弩</option>
-                                    <option value="长柄">长柄</option>
-                                    <option value="双手剑">双手剑</option>
-                                    <option value="单手斧">单手斧</option>
-                                    <option value="双手斧">双手斧</option>
-                                    <option value="权杖">权杖</option>
-                                    <option value="单手锤">单手锤</option>
-                                    <option value="链锤">链锤</option>
-                                    <option value="长弓">长弓</option>
-                                    <option value="匕首">匕首</option>
-                                    <option value="双手杖">双手杖</option>
-                                    <option value="瓶子">瓶子</option>
-                                    <option value="琴">琴</option>
-                                    <option value="链甲">链甲</option>
-                                    <option value="皮甲">皮甲</option>
-                                    <option value="板甲">板甲</option>
-                                    <option value="布甲">布甲</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- 可用职业选择（移动端友好的多选标签） -->
-                        <div class="input-group">
-                            <div class="form-item">
-                                <label>可用职业：</label>
-                                <div id="job-tags-container" class="flex flex-wrap gap-2 mt-2">
-                                    <!-- 职业标签动态生成 -->
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 目标属性选择 -->
-                        <div class="input-group">
-                            <div class="form-item">
-                                <label>目标第一属性：</label>
-                                <select id="target-attr">
-                                    <option value="0">力</option>
-                                    <option value="1">技</option>
-                                    <option value="2" selected="">敏</option>
-                                    <option value="3">体</option>
-                                    <option value="4">感</option>
-                                    <option value="5">意</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- 计算按钮 -->
-                        <button class="btn" onclick="calculateOptimalPlan()">计算最优方案</button>
-                    </div>
-                    
-                    <!-- 输出区域 -->
-                    <div class="output-section mt-6">
-                        <div class="output-title">计算结果</div>
-                        <div class="result-content" id="result-content">
-                            <p>请输入参数并点击计算按钮，获取最优方案</p>
-                        </div>
-                    </div>
-                    
+            <h3 class="text-xl font-bold mb-4">传家宝转职方案计算</h3>
 
+            <!-- 输入区域 -->
+            <div class="input-section">
+                <!-- 人物六维输入 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>人物六维：</label>
+                        <input type="text" id="person-growth" value="0 0 0 0 0 0" placeholder="输入力技敏体感意，空格分隔，范围-0.2~2">
+                    </div>
+                </div>
+                <!-- 初始等级输入 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>初始等级：</label>
+                        <input type="number" id="init-level" value="1" min="1" max="89" placeholder="默认1，最高89（可升1~89级）">
+                    </div>
+                </div>
+                <!-- 传家宝装备选择 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>初始装备：</label>
+                        <select id="heirloom-equip" onchange="filterJobsByEquip()">
+                            <option value="">-- 请选择传家宝装备 --</option>
+                            <option value="单手剑">单手剑</option>
+                            <option value="枪">枪</option>
+                            <option value="刀">刀</option>
+                            <option value="短弓">短弓</option>
+                            <option value="骑枪">骑枪</option>
+                            <option value="刺剑">刺剑</option>
+                            <option value="弩">弩</option>
+                            <option value="长柄">长柄</option>
+                            <option value="双手剑">双手剑</option>
+                            <option value="单手斧">单手斧</option>
+                            <option value="双手斧">双手斧</option>
+                            <option value="权杖">权杖</option>
+                            <option value="单手锤">单手锤</option>
+                            <option value="链锤">链锤</option>
+                            <option value="长弓">长弓</option>
+                            <option value="匕首">匕首</option>
+                            <option value="双手杖">双手杖</option>
+                            <option value="瓶子">瓶子</option>
+                            <option value="琴">琴</option>
+                            <option value="链甲">链甲</option>
+                            <option value="皮甲">皮甲</option>
+                            <option value="板甲">板甲</option>
+                            <option value="布甲">布甲</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 可用职业选择 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>可用职业：</label>
+                        <div id="job-tags-container">
+                            <!-- 职业标签动态生成 -->
+                        </div>
+                    </div>
+                </div>
+                <!-- 目标属性选择 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>目标第一属性：</label>
+                        <select id="target-attr">
+                            <option value="0">力</option>
+                            <option value="1">技</option>
+                            <option value="2">敏</option>
+                            <option value="3">体</option>
+                            <option value="4">感</option>
+                            <option value="5" selected="">意</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 第二属性选择 -->
+                <div class="input-group">
+                    <div class="form-item">
+                        <label>目标第二属性（可选）：</label>
+                        <select id="second-target-attr">
+                            <option value="">-- 不指定第二属性 --</option>
+                            <option value="0">力</option>
+                            <option value="1">技</option>
+                            <option value="2">敏</option>
+                            <option value="3">体</option>
+                            <option value="4">感</option>
+                            <option value="5">意</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 计算按钮 -->
+                <button class="btn" onclick="calculateOptimalPlan()">计算最优方案</button>
+            </div>
+
+            <!-- 输出区域 -->
+            <div class="output-section mt-6">
+                <div class="output-title">计算结果</div>
+                <div class="result-content" id="result-content">
+                    <p>请输入参数并点击计算按钮，获取最优方案</p>
                 </div>
             </div>
         </section>
@@ -127,10 +130,10 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #333 !important;
+            background-color: #333;
             color: #fff;
         }
-        
+
         header {
             display: flex;
             align-items: center;
@@ -139,26 +142,23 @@
             color: #fff;
             padding: 10px 20px;
         }
-        
-        /* Logo和标题容器 */
+
         .logo-container {
             display: flex;
             align-items: center;
         }
-        
-        /* Logo与标题间距 */
-        .logo-container h1 {
-            margin-left: 15px;
-        }
-        
-        /* Logo链接样式 */
+
+            .logo-container h1 {
+                margin-left: 15px;
+            }
+
         .logo-link {
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #fff;
         }
-        
+
         #logo {
             display: inline-block;
             width: auto;
@@ -166,116 +166,105 @@
             margin-right: 10px;
             vertical-align: middle;
         }
-        
+
         header h1 {
             margin: 0;
             font-size: 1.5em;
             line-height: 1.5;
         }
-        
+
         main {
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
         }
-        
-        /* 计算器计算器样式 */
-        .card {
-            background-color: #444;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
+
         .input-section {
             padding: 20px;
             background-color: #555;
             border-radius: 8px;
             margin-bottom: 20px;
         }
-        
+
         .input-group {
             margin-bottom: 20px;
         }
-        
+
         .form-item {
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
         }
-        
+
         label {
             display: block;
             margin-bottom: 5px;
             color: #fff;
             font-weight: 500;
+            min-width: 140px;
         }
-        
+
         input[type="text"], input[type="number"] {
             padding: 8px 12px;
-            border: 1px solid #555;
+            border: 1px solid #666;
             border-radius: 4px;
             font-size: 14px;
             flex: 1;
             max-width: 500px;
-            background-color: #555;
+            background-color: #444;
             color: #fff;
         }
-        
+
         .job-tag {
             padding: 6px 12px;
-            border: 1px solid #555;
+            border: 1px solid #666;
             border-radius: 20px;
             font-size: 14px;
-            background-color: #555;
+            background-color: #444;
             color: #fff;
             cursor: pointer;
             transition: all 0.3s;
-            margin-left: 0;
-            width: 100px;
+            margin: 5px;
             text-align: center;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
-        
-        .job-tag:hover {
-            background-color: #666;
-        }
-        
-        .job-tag.selected {
-            background-color: #ff6347;
-            border-color: #ff6347;
-        }
-        
+
+            .job-tag:hover {
+                background-color: #666;
+            }
+
+            .job-tag.selected {
+                background-color: #ff9b37;
+                border-color: #ff9b37;
+            }
+
         .flex.flex-wrap {
             display: flex;
             flex-wrap: wrap;
         }
-        
+
         .gap-2 {
             gap: 8px;
         }
-        
+
         .mt-2 {
             margin-top: 8px;
         }
-        
+
         select {
             padding: 8px 12px;
-            border: 1px solid #555;
+            border: 1px solid #666;
             border-radius: 4px;
             font-size: 14px;
             flex: 1;
             max-width: 200px;
-            background-color: #555;
+            background-color: #444;
             color: #fff;
         }
-        
+
         .btn {
-            background-color: #ff6347;
+            background-color: #ff9b37;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -284,44 +273,40 @@
             cursor: pointer;
             transition: background 0.3s;
             margin-left: 140px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
         }
-        
-        .btn:hover {
-            background-color: #e5533d;
-        }
-        
+
+            .btn:hover {
+                background-color: #e5533d;
+            }
+
         .output-section {
             padding: 20px;
             border-radius: 8px;
             background-color: #555;
         }
-        
+
         .output-title {
             font-size: 18px;
             color: #fff;
             margin-bottom: 15px;
             font-weight: 600;
         }
-        
+
         .result-content {
             line-height: 1.8;
             color: #fff;
             font-size: 14px;
         }
-        
+
         .result-item {
             margin-bottom: 10px;
         }
-        
+
         .highlight {
-            color: #ff6347;
+            color: #ff9b37;
             font-weight: 600;
         }
-        
+
         .min-level-tag {
             display: inline-block;
             background-color: #2ecc71;
@@ -331,18 +316,25 @@
             font-size: 12px;
             margin-left: 8px;
         }
-        
+
         .exact-value {
             color: #ccc;
             font-style: italic;
         }
-        
-        .verify-section {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px dashed #555;
+
+        .plan-container {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #666;
         }
-        
+
+        .plan-title {
+            font-size: 16px;
+            color: #ff9b37;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
         footer {
             text-align: center;
             margin-top: 30px;
@@ -350,9 +342,9 @@
             font-size: 0.8em;
         }
     </style>
-    
+
     <script>
-        // 1. 全职业数据（预处理：null替换为0，顺序：力、技、敏、体、感、意）
+        // 全职业数据
         const allJobs = [
             { id: "recruit", name: "新兵", growth: [0.1212, 0.1212, 0.1212, 0.1212, 0, 0] },
             { id: "apprentice-rider", name: "见习骑手", growth: [0.2263, 0.1616, 0.097, 0.1616, 0, 0] },
@@ -402,17 +394,18 @@
             { id: "imperial-envoy", name: "帝国密使", growth: [0, 0, 0, 0.3232, 1.1313, 1.1313] },
             { id: "inner-sword-saint", name: "内宗剑圣", growth: [0, 0.9051, 1.0343, 0.1293, 0.5172, 0] }
         ];
+
         // 属性名称映射
         const attrNames = ["力", "技", "敏", "体", "感", "意"];
         // 案例关键职业ID
-        const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
-        // 传家宝装备-适配职业对照表（新增）
+        //const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
+        // 修复装备-职业映射表中的错误（主要是"重装骑兵骑兵"的笔误）
         const equipJobMap = {
-            "单手剑": ["见习骑手","轻骑兵","皇家骑兵", "统御骑士", "翼骑兵", "曙光骑兵", "轻步兵", "勇士", "斥候", "剑圣", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "圣堂铁卫", "内宗剑圣", "新兵"],
+            "单手剑": ["见习骑手", "轻骑兵", "皇家骑兵", "统御骑士", "翼骑兵", "曙光骑兵", "轻步兵", "勇士", "斥候", "剑圣", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "圣堂铁卫", "内宗剑圣", "新兵"],
             "枪": ["皇家骑兵", "掠袭骑兵", "重装骑兵", "翼骑兵", "曙光骑兵", "重步兵", "方阵步兵", "重甲枪兵", "王室禁卫", "神鹰侍卫", "勇士精英", "铁甲军士", "新兵"],
             "刀": ["掠袭骑兵", "翼骑兵", "剑圣", "暗影刀客", "内宗剑圣"],
             "短弓": ["掠袭骑兵", "猎人", "弓箭手", "游侠", "丛林猎手", "魔弓手", "新兵"],
-            "骑枪": ["重装骑兵骑兵"],
+            "骑枪": ["重装骑兵"],  // 修复笔误
             "刺剑": ["统御骑士", "翼骑兵", "决斗士"],
             "弩": ["统御骑士", "弩手", "盾弩手"],
             "长柄": ["恐惧骑士", "重甲枪兵", "铁甲军士"],
@@ -428,42 +421,38 @@
             "瓶子": ["炼金术士"],
             "琴": ["吟游诗人"],
             "链甲": ["皇家骑兵", "恐惧骑士", "曙光骑兵", "弩手", "盾弩手", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "勇士精英"],
-            "皮甲": [ "见习骑手","掠袭骑兵", "游侠", "魔弓手", "轻步兵", "勇士", "斥候", "狂战士", "大剑士", "刺客", "决斗士"],
-            "板甲": ["重装骑兵骑兵", "统御骑士", "天启骑士", "重甲枪兵", "铁甲军士", "圣堂铁卫", "重甲僧侣"],
+            "皮甲": ["见习骑手", "掠袭骑兵", "游侠", "魔弓手", "轻步兵", "勇士", "斥候", "狂战士", "大剑士", "刺客", "决斗士"],
+            "板甲": ["重装骑兵", "统御骑士", "天启骑士", "重甲枪兵", "铁甲军士", "圣堂铁卫", "重甲僧侣"],  // 修复笔误
             "布甲": ["猎人", "弓箭手", "长弓手", "丛林猎手", "剑圣", "暗影刀客", "自学巫师", "德鲁伊", "牧师", "大德鲁伊", "主教", "炼金术士", "吟游诗人", "帝国密使", "内宗剑圣", "新兵"]
         };
 
-        // 页面加载时生成职业多选标签 + 初始化筛选
-        window.onload = function() {
-            // 生成所有职业标签
+        // 页面加载时初始化
+        window.onload = function () {
             generateJobTags();
-            // 初始化筛选：显示所有职业
             filterJobsByEquip();
-            // 默认案例职业
             selectCaseJobs();
         };
-        
+
         // 生成职业标签
         function generateJobTags() {
             const tagsContainer = document.getElementById("job-tags-container");
             tagsContainer.innerHTML = "";
-            
+
             allJobs.forEach(job => {
                 const tag = document.createElement("div");
                 tag.className = "job-tag";
                 tag.dataset.jobId = job.id;
                 tag.dataset.jobName = job.name;
                 tag.textContent = job.name;
-                
-                // 添加点击事件
-                tag.addEventListener("click", function() {
+
+                tag.addEventListener("click", function () {
                     toggleJobSelection(job.id);
                 });
-                
+
                 tagsContainer.appendChild(tag);
             });
         }
-        
+
         // 切换职业选择状态
         function toggleJobSelection(jobId) {
             const tag = document.querySelector(`.job-tag[data-job-id="${jobId}"]`);
@@ -471,197 +460,280 @@
                 tag.classList.toggle("selected");
             }
         }
-        
-        // 选择案例职业（轻步兵、见习骑手、斥候）
-        function selectCaseJobs() {
-            // 先清除所有选择
-            document.querySelectorAll(".job-tag.selected").forEach(tag => {
-                tag.classList.remove("selected");
-            });
-            
-            // 选择案例职业
-            caseJobIds.forEach(jobId => {
-                const tag = document.querySelector(`.job-tag[data-job-id="${jobId}"]`);
-                if (tag) {
-                    tag.classList.add("selected");
-                }
-            });
-        }
-        
 
+        // 选择案例职业
+        
+        //function selectCaseJobs() {
+        //    document.querySelectorAll(".job-tag.selected").forEach(tag => {
+        //        tag.classList.remove("selected");
+        //    });
+        //
+        //    caseJobIds.forEach(jobId => {
+        //        const tag = document.querySelector(`.job-tag[data-job-id="${jobId}"]`);
+        //        if (tag) {
+        //            tag.classList.add("selected");
+        //        }
+        //    });
+        //}
 
-        // 根据选择的传家宝装备筛选职业（新增）
+        // 根据选择的传家宝装备筛选职业
         function filterJobsByEquip() {
             const selectedEquip = document.getElementById("heirloom-equip").value;
             const jobTags = document.querySelectorAll(".job-tag");
-            
-            // 1. 无装备选择时：显示所有职业，保持默认选中状态（案例职业）
+
             if (!selectedEquip) {
                 jobTags.forEach(tag => {
                     tag.style.display = "inline-block";
                 });
-                // 重新选择案例职业
                 selectCaseJobs();
                 return;
             }
 
-            // 2. 有装备选择时：只显示适配职业，取消所有勾选
             const matchedJobs = equipJobMap[selectedEquip] || [];
             jobTags.forEach(tag => {
                 const jobName = tag.dataset.jobName;
                 const isMatched = matchedJobs.includes(jobName);
                 tag.style.display = isMatched ? "inline-block" : "none";
-                tag.classList.remove("selected");
             });
         }
 
-        // 2. 核心计算逻辑：保证最大奖励→筛选最小升级次数
+        // 核心计算逻辑
         function calculateOptimalPlan() {
-            // 2.1 解析输入参数
-            const { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp } = parseInputParams();
+            // 解析输入参数
+            const params = parseInputParams();
+            const { personGrowth, initLevel, selectedJobs, targetAttrIndex, secondTargetAttrIndex, maxAvailableLevelUp } = params;
             const resultDom = document.getElementById("result-content");
-            const verifyResultDom = document.getElementById("verify-result");
-            // 参数验证
-            if (!personGrowth || !selectedJobs.length || maxAvailableLevelUp < 1) {
-                resultDom.innerHTML = `<p class="highlight">参数错误：请确保六维格式正确、至少选择1个职业、初始始等级≤89（可升≥1级）</p>`;
-                verifyResultDom.textContent = "参数错误，无法验证";
+
+            // 参数验证增强版
+            if (!personGrowth || personGrowth.length !== 6) {
+                resultDom.innerHTML = `<p class="highlight">参数错误：请输入正确格式的六维属性（6个数字，空格分隔）</p>`;
                 return;
             }
-            // 2.2 遍历所有可能的升级次数（从1到最大可升级次数），记录每个次数的最优方案
-            const levelPlanRecords = []; // 存储格式：{ upgradeCount: 升级次数, maxReward: 最大奖励, bestPlan: 最优组合, bestInject: 注入值, reward2: 第2奖励, reward3: 第3奖励, reward2Exact: 第2精确值, reward3Exact: 第3精确值 }
-            for (let upgradeCount = 1; upgradeCount <= maxAvailableLevelUp; upgradeCount++) {
-                // 生成当前当前升级次数的所有组合
-                const levelCombinations = generateLevelCombinations(selectedJobs.length, upgradeCount);
-                let currentMaxReward = -1;
-                let currentBestPlan = null;
-                let currentBestInject = null;
-                let currentReward2 = 0;
-                let currentReward3 = 0;
-                let currentReward2Exact = 0;
-                let currentReward3Exact = 0;
-                // 遍历当前升级次数的所有组合
-                levelCombinations.forEach(combination => {
-                    // 计算注入值
-                    const injectValues = new Array(6).fill(0);
-                    combination.forEach((level, idx) => {
-                        const job = selectedJobs[idx];
-                        for (let i = 0; i < 6; i++) {
-                            injectValues[i] += (personGrowth[i] + job.growth[i]) * level;
-                        }
+
+            if (!selectedJobs || selectedJobs.length === 0) {
+                resultDom.innerHTML = `<p class="highlight">参数错误：请至少选择1个可用职业</p>`;
+                return;
+            }
+
+            if (maxAvailableLevelUp < 1) {
+                resultDom.innerHTML = `<p class="highlight">参数错误：初始等级必须≤89（以保证至少可升级1级）</p>`;
+                return;
+            }
+
+            // 收集所有有效方案（第一属性最大的方案）
+            const allValidPlans = [];
+            try {
+                for (let upgradeCount = 1; upgradeCount <= maxAvailableLevelUp; upgradeCount++) {
+                    // 限制最大升级次数为20（防止组合爆炸）
+                    if (upgradeCount > 20) break;
+
+                    const levelCombinations = generateLevelCombinations(selectedJobs.length, upgradeCount);
+
+                    levelCombinations.forEach(combination => {
+                        // 计算注入值
+                        const injectValues = new Array(6).fill(0);
+                        combination.forEach((level, idx) => {
+                            const job = selectedJobs[idx];
+                            for (let i = 0; i < 6; i++) {
+                                injectValues[i] += (personGrowth[i] + job.growth[i]) * level;
+                            }
+                        });
+
+                        // 排序注入值（降序，保留索引）
+                        const sortedInjects = [...injectValues].map((val, idx) => ({ val, idx }))
+                            .sort((a, b) => b.val - a.val);
+
+                        // 只保留第一属性为目标属性的方案
+                        if (sortedInjects[0].idx !== targetAttrIndex) return;
+
+                        // 计算奖励值
+                        const S1 = sortedInjects[0].val;
+                        const S2 = sortedInjects[1].val;
+                        const S3 = sortedInjects[2].val;
+                        const denominator = S1 + S2 + S3;
+                        const reward2Exact = denominator === 0 ? 0 : (S2 / denominator) * 60;
+                        const reward3Exact = denominator === 0 ? 0 : (S3 / denominator) * 60;
+                        const reward1 = 60 - Math.floor(reward2Exact) - Math.floor(reward3Exact);
+
+                        // 记录方案详情
+                        allValidPlans.push({
+                            upgradeCount,
+                            reward1,
+                            injectValues,
+                            sortedInjects,
+                            combination,
+                            secondAttrIdx: sortedInjects[1].idx,
+                            secondAttrVal: S2,
+                            thirdAttrIdx: sortedInjects[2].idx,
+                            thirdAttrVal: S3,
+                            reward2: Math.floor(reward2Exact),
+                            reward3: Math.floor(reward3Exact),
+                            reward2Exact,
+                            reward3Exact
+                        });
                     });
-                    // 排序注入值（降序，保留索引）
-                    const sortedInjects = [...injectValues].map((val, idx) => ({ val, idx }))
-                        .sort((a, b) => b.val - a.val);
-                    // 跳过目标属性非第一高的组合
-                    if (sortedInjects[0].idx !== targetAttrIndex) return;
-                    // 计算奖励（含精确值）
-                    const S1 = sortedInjects[0].val;
-                    const S2 = sortedInjects[1].val;
-                    const S3 = sortedInjects[2].val;
-                    const denominator = S1 + S2 + S3;
-                    const reward2Exact = denominator === 0 ? 0 : (S2 / denominator) * 60;
-                    const reward3Exact = denominator === 0 ? 0 : (S3 / denominator) * 60;
-                    const reward2 = Math.floor(reward2Exact);
-                    const reward3 = Math.floor(reward3Exact);
-                    const reward1 = 60 - reward2 - reward3;
-                    // 更新当前升级次数的最优方案
-                    const targetInject = injectValues[targetAttrIndex];
-                    const currentBestInjectVal = currentBestInject ? currentBestInject[targetAttrIndex] : 0;
-                    if (reward1 > currentMaxReward || (reward1 === currentMaxReward && targetInject > currentBestInjectVal)) {
-                        currentMaxReward = reward1;
-                        currentBestPlan = combination;
-                        currentBestInject = injectValues;
-                        currentReward2 = reward2;
-                        currentReward3 = reward3;
-                        currentReward2Exact = reward2Exact;
-                        currentReward3Exact = reward3Exact;
+                }
+            } catch (e) {
+                resultDom.innerHTML = `<p class="highlight">计算过程出错：${e.message}</p>`;
+                console.error("计算错误:", e);
+                return;
+            }
+
+            // 没有有效方案
+            if (allValidPlans.length === 0) {
+                resultDom.innerHTML = `<p class="highlight">未找到有效方案（目标属性无法成为第一高）</p>`;
+                return;
+            }
+
+            // 筛选第一属性最大的方案
+            const maxReward1 = Math.max(...allValidPlans.map(plan => plan.reward1));
+            const firstAttrMaxPlans = allValidPlans.filter(plan => plan.reward1 === maxReward1);
+
+            // 根据是否选择第二属性处理不同逻辑
+            const secondTarget = secondTargetAttrIndex !== null ? parseInt(secondTargetAttrIndex) : null;
+            let finalPlans = [];
+
+            if (secondTarget !== null && secondTarget !== targetAttrIndex) {
+                // 场景1：指定了第二属性（且与第一属性不同）
+                // 筛选出第二属性为目标第二属性的方案
+                const validSecondAttrPlans = firstAttrMaxPlans;
+
+                if (validSecondAttrPlans.length > 0) {
+                    // 排序：第二属性值降序 → 升级次数升序
+                    validSecondAttrPlans.sort((a, b) => {
+                        if (b.injectValues[secondTarget] !== a.injectValues[secondTarget]) {
+                            return b.injectValues[secondTarget] - a.injectValues[secondTarget];
+                        }
+                        return a.upgradeCount - b.upgradeCount;
+                    });
+                    finalPlans = [validSecondAttrPlans[0]];
+                } else {
+                    // 没有符合第二属性的方案，退回到第一属性最大+升级次数最少
+                    firstAttrMaxPlans.sort((a, b) => a.upgradeCount - b.upgradeCount);
+                    finalPlans = [firstAttrMaxPlans[0]];
+                }
+            } else {
+                // 场景2：未指定第二属性，需要生成三个方案
+                // 方案1：第一属性最大 + 升级次数最少
+                const plan1Candidates = [...firstAttrMaxPlans].sort((a, b) => a.upgradeCount - b.upgradeCount);
+                const plan1 = plan1Candidates[0];
+
+                // 方案2：第一属性最大 + 第二属性值最大 + 升级次数最少
+                const plan2Candidates = [...firstAttrMaxPlans].sort((a, b) => {
+                    if (b.secondAttrVal !== a.secondAttrVal) {
+                        return b.secondAttrVal - a.secondAttrVal;
+                    }
+                    return a.upgradeCount - b.upgradeCount;
+                });
+                const plan2 = plan2Candidates[0];
+
+                // 方案3：第一属性最大 + 第二属性与方案2不同 + 该第二属性值最大 + 升级次数最少
+                const excludeAttr = plan2.secondAttrIdx;
+                const plan3Candidates = [...firstAttrMaxPlans]
+                    .filter(plan => plan.secondAttrIdx !== excludeAttr)
+                    .sort((a, b) => {
+                        if (b.secondAttrVal !== a.secondAttrVal) {
+                            return b.secondAttrVal - a.secondAttrVal;
+                        }
+                        return a.upgradeCount - b.upgradeCount;
+                    });
+                const plan3 = plan3Candidates.length > 0 ? plan3Candidates[0] : null;
+
+                finalPlans = [plan1, plan2];
+                if (plan3) finalPlans.push(plan3);
+            }
+
+            // 展示结果（传入selectedJobs参数）
+            displayResults(finalPlans, initLevel, targetAttrIndex, secondTarget, selectedJobs);
+        }
+
+        // 展示结果（增加selectedJobs参数）
+        function displayResults(plans, initLevel, targetAttrIndex, secondTarget, selectedJobs) {
+            const resultDom = document.getElementById("result-content");
+            let html = "";
+
+            // 生成方案标题
+            const planTitles = secondTarget !== null ?
+                ["最优方案（指定第二属性）"] :
+                ["方案一：升级次数最少", "方案二：第二属性最大", "方案三：不同第二属性最大"];
+
+            plans.forEach((plan, index) => {
+                if (!plan) return;
+
+                const { upgradeCount, reward1, injectValues, sortedInjects, combination,
+                    reward2, reward3, reward2Exact, reward3Exact } = plan;
+                const finalLevel = initLevel + upgradeCount;
+                const S1 = sortedInjects[0].val;
+                const S2 = sortedInjects[1].val;
+                const S3 = sortedInjects[2].val;
+
+                // 组装升级方案文本（使用传入的selectedJobs参数）
+                let combinationText = "";
+                combination.forEach((level, idx) => {
+                    if (level > 0 && selectedJobs[idx]) {
+                        combinationText += `${level}级${selectedJobs[idx].name}、`;
                     }
                 });
-                // 记录当前升级次数的有效方案（需存在有效组合）
-                if (currentMaxReward > -1) {
-                    levelPlanRecords.push({
-                        upgradeCount,
-                        maxReward: currentMaxReward,
-                        bestPlan: currentBestPlan,
-                        bestInject: currentBestInject,
-                        reward2: currentReward2,
-                        reward3: currentReward3,
-                        reward2Exact: currentReward2Exact,
-                        reward3Exact: currentReward3Exact
-                    });
-                }
-            }
-            // 2.3 筛选最优方案：先找全局最大奖励，再找最小升级次数
-            if (levelPlanRecords.length === 0) {
-                resultDom.innerHTML = `<p class="highlight">未找到有效方案（目标属性无法成为第一高）</p>`;
-                verifyResultDom.textContent = "未找到有效方案，无法验证";
-                return;
-            }
-            // 步骤1：找到全局最大奖励值
-            const globalMaxReward = Math.max(...levelPlanRecords.map(plan => plan.maxReward));
-            // 步骤2：筛选出所有能达到最大奖励的方案，按升级次数升序排序
-            const maxRewardPlans = levelPlanRecords.filter(plan => plan.maxReward === globalMaxReward)
-                .sort((a, b) => a.upgradeCount - b.upgradeCount);
-            // 步骤3：选择升级次数最小的方案（第一个）
-            const bestPlan = maxRewardPlans[0];
-            // 2.4 解析最优方案数据
-            const { upgradeCount: minUpgradeCount, bestPlan: minLevelCombination, bestInject: minLevelInjects, 
-                    reward2, reward3, reward2Exact, reward3Exact } = bestPlan;
-            const sortedInjects = [...minLevelInjects].map((val, idx) => ({ val, idx }))
-                .sort((a, b) => b.val - a.val);
-            const S1 = sortedInjects[0].val;
-            const S2 = sortedInjects[1].val;
-            const S3 = sortedInjects[2].val;
-            const finalLevel = initLevel + minUpgradeCount;
-            // 组装升级方案文本
-            let combinationText = "";
-            minLevelCombination.forEach((level, idx) => {
-                if (level > 0) {
-                    combinationText += `${level}级${selectedJobs[idx].name}、`;
-                }
+                combinationText = combinationText.slice(0, -1) || "无升级（异常）";
+
+                // 方案HTML
+                html += `
+                    <div class="plan-container">
+                        <div class="plan-title">${planTitles[index]}</div>
+                        <div class="result-item"><strong>1. 核心结论：</strong>第一属性${reward1}，升级${upgradeCount}次${index === 0 && secondTarget === null ? '<span class="min-level-tag">最少升级次数</span>' : ''}</div>
+                        <div class="result-item"><strong>2. 推荐转职方案：</strong>${combinationText}</div>
+                        <div class="result-item"><strong>3. 各属性注入值：</strong></div>
+                        <div class="result-item">${attrNames.map((name, i) => `${name}：${injectValues[i].toFixed(4)}`).join(" | ")}</div>
+                        <div class="result-item"><strong>4. 前三高注入值：</strong></div>
+                        <div class="result-item">第1：${attrNames[sortedInjects[0].idx]}（${S1.toFixed(4)}）| 第2：${attrNames[sortedInjects[1].idx]}（${S2.toFixed(4)}）| 第3：${attrNames[sortedInjects[2].idx]}（${S3.toFixed(4)}）</div>
+                        <div class="result-item"><strong>5. 最终奖励（含精确值）：</strong></div>
+                        <div class="result-item">目标属性（${attrNames[targetAttrIndex]}）：<span class="highlight">${reward1}</span></div>
+                        <div class="result-item">第2属性：${reward2} <span class="exact-value">（精确值：${reward2Exact.toFixed(4)}）</span></div>
+                        <div class="result-item">第3属性：${reward3} <span class="exact-value">（精确值：${reward3Exact.toFixed(4)}）</span></div>
+                    </div>`;
             });
-            combinationText = combinationText.slice(0, -1) || "无升级（异常）";
-            // 2.5 展示最优结果（标注最小升级次数）
-            resultDom.innerHTML = `
-                <div class="result-item"><strong>1. 核心结论：</strong>在保证目标属性奖励最大（${globalMaxReward}）的前提下，最小升级次数为${minUpgradeCount}次<span class="min-level-tag">最优</span></div>
-                <div class="result-item"><strong>2. 等级路径：</strong>初始等级${initLevel} → 最终等级${finalLevel}（仅需升级${minUpgradeCount}级）</div>
-                <div class="result-item"><strong>3. 最优转职方案：</strong>${combinationText}</div>
-                <div class="result-item"><strong>4. 各属性注入值：</strong></div>
-                <div class="result-item">${attrNames.map((name, i) => `${name}：${minLevelInjects[i].toFixed(4)}`).join(" | ")}</div>
-                <div class="result-item"><strong>5. 前三高注入值：</strong></div>
-                <div class="result-item">第1名：${attrNames[sortedInjects[0].idx]}（${S1.toFixed(4)}）| 第2名：${attrNames[sortedInjects[1].idx]}（${S2.toFixed(4)}）| 第3名：${attrNames[sortedInjects[2].idx]}（${S3.toFixed(4)}）</div>
-                <div class="result-item"><strong>6. 最终奖励（含精确值）：</strong></div>
-                <div class="result-item">目标属性（${attrNames[targetAttrIndex]}）奖励：<span class="highlight">${globalMaxReward}</span></div>
-                <div class="result-item">第2名属性奖励：${reward2} <span class="exact-value">（精确值：${reward2Exact.toFixed(4)}）</span></div>
-                <div class="result-item">第3名属性奖励：${reward3} <span class="exact-value">（精确值：${reward3Exact.toFixed(4)}）</span></div>
-            `;
+
+            resultDom.innerHTML = html;
         }
 
-        // 3. 辅助函数：解析输入参数
+        // 解析输入参数
         function parseInputParams() {
-            // 人物六维（范围-0.2~2）
+            // 人物六维
             const growthStr = document.getElementById("person-growth").value.trim() || "0 0 0 0 0 0";
             const personGrowth = growthStr.split(/\s+/).map(num => {
                 const val = parseFloat(num);
                 return isNaN(val) ? 0 : Math.max(-0.2, Math.min(2, val));
             });
-            // 初始等级（1~89），最大可升级次数=90-初始等级
+
+            // 初始等级
             const initLevel = parseInt(document.getElementById("init-level").value) || 1;
             const maxAvailableLevelUp = Math.max(1, 90 - initLevel);
+
             // 可用职业
             const selectedTags = document.querySelectorAll(".job-tag.selected");
             const selectedJobIds = Array.from(selectedTags).map(tag => tag.dataset.jobId);
             const selectedJobs = allJobs.filter(job => selectedJobIds.includes(job.id));
+
             // 目标属性
             const targetAttrIndex = parseInt(document.getElementById("target-attr").value) || 0;
-            return { personGrowth, initLevel, selectedJobs, targetAttrIndex, maxAvailableLevelUp };
+
+            // 第二目标属性（可选）
+            const secondTargetAttr = document.getElementById("second-target-attr").value;
+            const secondTargetAttrIndex = secondTargetAttr ? parseInt(secondTargetAttr) : null;
+
+            return { personGrowth, initLevel, selectedJobs, targetAttrIndex, secondTargetAttrIndex, maxAvailableLevelUp };
         }
 
-        // 4. 辅助函数：生成升级分配组合（n个非负整数和为sum）
+        // 生成升级分配组合（限制最大组合数防止浏览器崩溃）
         function generateLevelCombinations(n, sum) {
             const combinations = [];
-            // 递归生成所有分配方式，兼容sum=1的场景
+            // 限制最大组合数为10000，防止过多组合导致浏览器卡顿
+            const maxCombinations = 10000;
+
             function recursiveGenerate(current, remainingSum, depth) {
+                // 超过最大组合数则停止
+                if (combinations.length >= maxCombinations) return;
+
                 if (depth === n - 1) {
                     combinations.push([...current, remainingSum]);
                     return;
@@ -670,14 +742,15 @@
                     current.push(i);
                     recursiveGenerate(current, remainingSum - i, depth + 1);
                     current.pop();
+
+                    // 超过最大组合数则停止
+                    if (combinations.length >= maxCombinations) break;
                 }
             }
+
             recursiveGenerate([], sum, 0);
             return combinations;
         }
-
-        
     </script>
-
-
-</body></html>
+</body>
+</html>
