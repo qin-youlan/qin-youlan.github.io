@@ -2,28 +2,30 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>太阳之子发色识别</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { max-width: 800px; margin: 20px auto; font-family: "Arial", sans-serif; text-align: center; padding: 0 15px; }
-        h1 { color: #333; margin-bottom: 30px; font-size: 24px; }
+        body { max-width: 800px; margin: 20px auto; font-family: Arial, sans-serif; text-align: center; padding: 0 15px; }
+        h1 { color: #333; margin-bottom: 25px; font-size: 22px; }
         
         /* 模型加载区域 */
         #modelProgress { 
             background: #f8f9fa; 
-            padding: 20px; 
-            border-radius: 8px; 
+            padding: 15px; 
+            border-radius: 6px; 
             margin-bottom: 20px; 
+            border: 1px solid #eee; 
         }
-        .progress-title { color: #333; font-size: 16px; margin-bottom: 10px; }
+        .progress-title { color: #333; font-size: 15px; margin-bottom: 8px; }
+        .progress-desc { color: #666; font-size: 13px; margin-bottom: 12px; line-height: 1.4; }
         .progress-bar { 
             width: 100%; 
             height: 8px; 
             background: #e9ecef; 
             border-radius: 4px; 
             overflow: hidden; 
-            margin: 15px 0; 
+            margin: 10px 0; 
         }
         .progress-fill { 
             height: 100%; 
@@ -34,52 +36,77 @@
         .progress-status { 
             display: flex; 
             justify-content: space-between; 
-            font-size: 14px; 
+            font-size: 13px; 
             color: #666; 
         }
         .loader { 
-            border: 5px solid #f3f3f3; 
-            border-top: 5px solid #3498db; 
+            border: 4px solid #f3f3f3; 
+            border-top: 4px solid #3498db; 
             border-radius: 50%; 
-            width: 40px; 
-            height: 40px; 
+            width: 35px; 
+            height: 35px; 
             animation: spin 1s linear infinite; 
-            margin: 15px auto; 
+            margin: 12px auto; 
             display: none; 
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .error { color: #e74c3c; font-size: 14px; margin-top: 10px; padding: 10px; background: #fef0f0; border-radius: 4px; text-align: left; display: none; }
-        
-        /* 功能区域 */
-        #fileInput { 
-            padding: 8px 12px; 
-            border: 1px solid #ddd; 
+        .error { 
+            color: #e74c3c; 
+            font-size: 13px; 
+            margin-top: 10px; 
+            padding: 8px; 
+            background: #fef0f0; 
             border-radius: 4px; 
-            margin-bottom: 20px; 
-            cursor: pointer; 
+            text-align: left; 
+            display: none; 
         }
-        .btn-group { margin-bottom: 20px; display: none; }
-        .mode-btn { 
-            padding: 8px 16px; 
-            margin: 0 8px; 
+        .retry-btn { 
+            margin-top: 10px; 
+            padding: 6px 12px; 
             background: #3498db; 
             color: #fff; 
             border: none; 
             border-radius: 4px; 
             cursor: pointer; 
+            font-size: 13px; 
+            display: none; 
+        }
+        .retry-btn:hover { background: #2980b9; }
+        
+        /* 功能区域 */
+        #fileInput { 
+            padding: 7px 10px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            margin-bottom: 15px; 
+            cursor: pointer; 
+            width: 90%; 
+            max-width: 300px; 
+        }
+        .btn-group { margin-bottom: 15px; display: none; }
+        .mode-btn { 
+            padding: 7px 14px; 
+            margin: 0 6px; 
+            background: #3498db; 
+            color: #fff; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 13px; 
             transition: background 0.2s; 
         }
         .mode-btn:hover { background: #2980b9; }
-        .mode-tip { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .mode-tip { color: #666; font-size: 13px; margin-bottom: 15px; }
         
         /* 图片区域 */
         #imageWrap { 
             position: relative; 
             max-width: 100%; 
-            margin: 0 auto 20px; 
+            margin: 0 auto 15px; 
             border: 1px solid #eee; 
-            border-radius: 8px; 
-            padding: 10px; 
+            border-radius: 6px; 
+            padding: 8px; 
+            background: #fff; 
         }
         #targetImg { 
             max-width: 100%; 
@@ -101,13 +128,13 @@
         }
         .face-mark span { 
             position: absolute; 
-            top: -25px; 
+            top: -22px; 
             left: 50%; 
             transform: translateX(-50%); 
             background: #2ecc71; 
             color: #fff; 
-            font-size: 14px; 
-            padding: 2px 8px; 
+            font-size: 12px; 
+            padding: 2px 6px; 
             border-radius: 3px; 
             white-space: nowrap; 
         }
@@ -123,28 +150,34 @@
         /* 结果区域 */
         #mainLoader { display: none; }
         #result { 
-            font-size: 18px; 
+            font-size: 16px; 
             font-weight: bold; 
             color: #333; 
-            min-height: 24px; 
+            min-height: 22px; 
+            margin: 15px 0; 
         }
     </style>
 </head>
 <body>
     <h1>诸神皇冠 太阳之子发色识别</h1>
 
-    <!-- 模型加载提示 -->
+    <!-- 模型加载区域（含超时重试） -->
     <div id="modelProgress">
-        <div class="progress-title">本地模型加载中（无需联网）</div>
+        <div class="progress-title">模型加载中</div>
+        <div class="progress-desc">
+            首次加载约5-25秒（WiFi更快），后续打开无需重新加载<br>
+            加载进度：<span id="progressText">初始化连接...</span>
+        </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="progress-status">
-            <span id="progressText">初始化模型...</span>
+            <span id="progressDetail">正在连接模型服务器...</span>
             <span id="progressPercent">0%</span>
         </div>
         <div class="loader" id="modelLoader"></div>
-        <div class="error" id="modelError">请检查是否已在同级目录创建 "model" 文件夹，并放入2个模型子文件夹</div>
+        <div class="error" id="modelError">加载超时，请检查网络后重试</div>
+        <button class="retry-btn" id="retryBtn">重新加载模型</button>
     </div>
 
     <!-- 功能区域 -->
@@ -153,7 +186,7 @@
         <button class="mode-btn" id="autoBtn">自动识别模式</button>
         <button class="mode-btn" id="manualBtn">手动框选模式</button>
     </div>
-    <p class="mode-tip" id="modeTip">当前：自动识别模式（上传图片后点击人脸标记框分析发色）</p>
+    <p class="mode-tip" id="modeTip">当前：自动识别模式（上传图片后点击人脸分析）</p>
 
     <!-- 图片显示区域 -->
     <div id="imageWrap">
@@ -165,124 +198,170 @@
     <div class="loader" id="mainLoader"></div>
     <div id="result"></div>
 
-    <!-- 引入本地核心库（与index.html同级） -->
+    <!-- 关键：调用本地库文件（与HTML同文件夹） -->
     <script src="./tf.min.js"></script>
     <script src="./face-api.min.js"></script>
 
     <script>
-        // 状态管理：存储当前模式、图片缩放比例等
+        // 状态管理
         const state = {
-            isManualMode: false,    // 是否手动框选模式
-            isSelecting: false,     // 是否正在手动框选
-            imgScale: 1,            // 图片显示缩放比例（解决触摸偏移）
-            faceList: [],           // 检测到的人脸列表
-            selectStartX: 0,        // 手动框选起始X坐标
-            selectStartY: 0         // 手动框选起始Y坐标
+            isManualMode: false,
+            isSelecting: false,
+            imgScale: 1,
+            faceList: [],
+            selectStartX: 0,
+            selectStartY: 0,
+            loadRetryCount: 0, // 加载重试次数
+            maxRetryCount: 2   // 最大重试次数
         };
 
-        // DOM元素缓存：避免重复查询DOM
+        // DOM元素缓存
         const dom = {
             // 模型加载相关
+            modelProgress: document.getElementById('modelProgress'),
             progressFill: document.getElementById('progressFill'),
             progressText: document.getElementById('progressText'),
+            progressDetail: document.getElementById('progressDetail'),
             progressPercent: document.getElementById('progressPercent'),
             modelLoader: document.getElementById('modelLoader'),
             modelError: document.getElementById('modelError'),
-            // 功能按钮相关
+            retryBtn: document.getElementById('retryBtn'),
+            // 功能相关
             fileInput: document.getElementById('fileInput'),
             btnGroup: document.getElementById('btnGroup'),
             autoBtn: document.getElementById('autoBtn'),
             manualBtn: document.getElementById('manualBtn'),
             modeTip: document.getElementById('modeTip'),
-            // 图片区域相关
             targetImg: document.getElementById('targetImg'),
             imageWrap: document.getElementById('imageWrap'),
             selectBox: document.getElementById('selectBox'),
-            // 结果区域相关
             mainLoader: document.getElementById('mainLoader'),
             result: document.getElementById('result')
         };
 
-        // 初始化函数：加载本地模型+绑定基础事件
-        async function init() {
-            // 1. 禁用图片长按选图（避免浏览器默认行为）
+        // 初始化：加载模型（含超时重试）
+        init();
+        function init() {
+            // 禁用长按选图
             dom.targetImg.addEventListener('contextmenu', e => e.preventDefault());
             dom.targetImg.addEventListener('touchstart', e => {
-                if (state.isManualMode) e.preventDefault(); // 手动模式下阻止默认触摸
+                if (state.isManualMode) e.preventDefault();
             }, { passive: false });
 
+            // 绑定重试按钮事件
+            dom.retryBtn.addEventListener('click', () => loadModel());
+
+            // 首次加载模型
+            loadModel();
+        }
+
+        // 加载模型（调用本地库，模型从CDN获取）
+        async function loadModel() {
+            // 重置加载状态
+            dom.modelLoader.style.display = 'block';
+            dom.modelError.style.display = 'none';
+            dom.retryBtn.style.display = 'none';
+            dom.progressFill.style.width = '0%';
+            dom.progressPercent.textContent = '0%';
+            dom.progressDetail.textContent = state.loadRetryCount > 0 
+                ? `第${state.loadRetryCount+1}次重试加载...` 
+                : '正在连接模型服务器...';
+
             try {
-                // 2. 监听模型加载进度（给用户可视化反馈）
+                // 设置30秒加载超时
+                const loadTimeout = new Promise((_, reject) => {
+                    setTimeout(() => reject(new Error('加载超时（超过30秒）')), 30000);
+                });
+
+                // 监听模型加载进度
                 const updateProgress = (modelName, progress) => {
                     const percent = Math.round(progress * 100);
                     dom.progressFill.style.width = `${percent}%`;
                     dom.progressPercent.textContent = `${percent}%`;
                     dom.progressText.textContent = `加载${modelName}（${percent}%）`;
+                    dom.progressDetail.textContent = `${modelName}已加载${percent}%`;
                 };
 
-                // 3. 加载本地模型（关键：模型文件夹与index.html同级）
-                await Promise.all([
-                    // 加载人脸检测模型（tiny模型：轻量、适配二次元）
-                    faceapi.nets.tinyFaceDetector.load('./model/', {
-                        onProgress: (p) => updateProgress('人脸检测模型', p)
-                    }),
-                    // 加载人脸特征点模型（68点：用于定位头发区域）
-                    faceapi.nets.faceLandmark68Net.load('./model/', {
-                        onProgress: (p) => updateProgress('人脸特征点模型', p)
-                    })
+                // 并行加载CDN模型（本地库已加载，直接调用库功能）
+                await Promise.race([
+                    Promise.all([
+                        // 人脸检测模型（CDN）
+                        faceapi.nets.tinyFaceDetector.load(
+                            'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/',
+                            { onProgress: (p) => updateProgress('人脸检测模型', p) }
+                        ),
+                        // 人脸特征点模型（CDN）
+                        faceapi.nets.faceLandmark68Net.load(
+                            'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/',
+                            { onProgress: (p) => updateProgress('人脸特征点模型', p) }
+                        )
+                    ]),
+                    loadTimeout
                 ]);
 
-                // 4. 模型加载成功：隐藏加载区域，显示功能按钮
+                // 模型加载成功：显示功能按钮
                 dom.modelProgress.style.display = 'none';
                 dom.btnGroup.style.display = 'inline-block';
-                bindAllEvents(); // 绑定所有交互事件
+                bindAllEvents();
+                state.loadRetryCount = 0;
             } catch (error) {
-                // 5. 模型加载失败：显示错误提示（仅可能是路径错误）
+                // 加载失败处理
                 dom.modelLoader.style.display = 'none';
                 dom.modelError.style.display = 'block';
-                bindBasicUploadEvent(); // 即使加载失败，也能上传显示图片
+                dom.modelError.textContent = `加载失败：${error.message}（建议切换WiFi重试）`;
+                
+                // 重试逻辑
+                if (state.loadRetryCount < state.maxRetryCount) {
+                    dom.retryBtn.style.display = 'inline-block';
+                    state.loadRetryCount++;
+                } else {
+                    dom.retryBtn.style.display = 'none';
+                    dom.modelError.textContent += '（已超过最大重试次数，请稍后再试）';
+                }
+
+                // 绑定基础上传事件，至少能显示图片
+                bindBasicUploadEvent();
             }
         }
 
-        // 绑定所有交互事件（模型加载成功后调用）
+        // 绑定所有交互事件
         function bindAllEvents() {
-            bindBasicUploadEvent(); // 图片上传事件
-            bindModeSwitchEvent();  // 自动/手动模式切换事件
+            bindBasicUploadEvent();
+            bindModeSwitchEvent();
         }
 
-        // 图片上传事件：处理图片选择、显示、加载完成逻辑
+        // 图片上传事件
         function bindBasicUploadEvent() {
             dom.fileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
-                // 验证是否为图片文件
+                // 验证图片格式
                 if (!file || !file.type.startsWith('image/')) {
-                    dom.result.textContent = '请选择JPG、PNG格式的图片文件';
+                    dom.result.textContent = '请选择JPG、PNG格式的图片';
                     return;
                 }
 
-                // 重置状态与UI
+                // 重置状态
                 state.faceList = [];
-                clearFaceMarks(); // 清除之前的人脸标记
+                clearFaceMarks();
                 dom.targetImg.style.display = 'block';
                 dom.mainLoader.style.display = 'block';
                 dom.result.textContent = '正在处理图片...';
 
-                // 显示图片（使用ObjectURL避免跨域）
+                // 显示图片
                 const imgUrl = URL.createObjectURL(file);
                 dom.targetImg.src = imgUrl;
 
-                // 图片加载完成后执行后续逻辑（避免尺寸未就绪）
+                // 图片加载完成后处理
                 dom.targetImg.onload = () => {
-                    // 计算图片缩放比例：显示宽度 / 原始宽度（解决触摸偏移）
                     state.imgScale = dom.targetImg.offsetWidth / dom.targetImg.naturalWidth;
                     dom.mainLoader.style.display = 'none';
 
-                    // 自动模式：直接识别人脸；手动模式：提示框选
+                    // 自动模式识别人脸，手动模式提示框选
                     if (!state.isManualMode) {
                         detectFaces();
                     } else {
-                        dom.result.textContent = '请按住图片拖动，选择头发区域';
-                        bindManualSelectEvents(); // 绑定手动框选事件
+                        dom.result.textContent = '按住图片拖动，选择头发区域';
+                        bindManualSelectEvents();
                     }
                 };
 
@@ -290,20 +369,20 @@
                 dom.targetImg.onerror = () => {
                     dom.mainLoader.style.display = 'none';
                     dom.targetImg.style.display = 'none';
-                    dom.result.textContent = '图片加载失败，请重新上传或更换图片';
+                    dom.result.textContent = '图片加载失败，请重新上传';
                 };
             });
         }
 
-        // 模式切换事件：处理自动/手动模式切换
+        // 自动/手动模式切换
         function bindModeSwitchEvent() {
             // 切换到自动模式
             dom.autoBtn.addEventListener('click', () => {
                 state.isManualMode = false;
-                dom.modeTip.textContent = '当前：自动识别模式（上传图片后点击人脸标记框分析发色）';
-                dom.selectBox.style.display = 'none'; // 隐藏手动框选框
-                clearFaceMarks(); // 清除人脸标记
-                // 若已有图片，自动识别人脸
+                dom.modeTip.textContent = '当前：自动识别模式（上传图片后点击人脸分析）';
+                dom.selectBox.style.display = 'none';
+                clearFaceMarks();
+                // 已有图片则重新识别人脸
                 if (dom.targetImg.src) {
                     dom.mainLoader.style.display = 'block';
                     detectFaces().finally(() => dom.mainLoader.style.display = 'none');
@@ -313,67 +392,39 @@
             // 切换到手动模式
             dom.manualBtn.addEventListener('click', () => {
                 state.isManualMode = true;
-                dom.modeTip.textContent = '当前：手动框选模式（按住图片拖动选择头发区域，滑动页面先松开手指）';
-                clearFaceMarks(); // 清除人脸标记
-                // 若已有图片，绑定框选事件并提示
+                dom.modeTip.textContent = '当前：手动框选模式（按住图片拖动选择头发区域）';
+                clearFaceMarks();
+                bindManualSelectEvents();
+                // 已有图片则提示框选
                 if (dom.targetImg.src) {
-                    dom.result.textContent = '请按住图片拖动，选择头发区域';
-                    bindManualSelectEvents();
+                    dom.result.textContent = '按住图片拖动，选择头发区域';
                 }
             });
         }
 
-        // 自动识别人脸：适配二次元人脸，返回人脸列表
+        // 自动识别人脸（适配二次元）
         async function detectFaces() {
             try {
-                dom.result.textContent = '正在识别图片中的人脸...';
-                // 二次元人脸优化参数：增大输入尺寸+降低置信度阈值（避免漏检）
+                dom.result.textContent = '正在识别人脸...';
+                // 二次元人脸优化参数（降低阈值避免漏检）
                 const detectOptions = new faceapi.TinyFaceDetectorOptions({
-                    inputSize: 640,        // 输入尺寸：越大识别越准（但稍慢）
-                    scoreThreshold: 0.3    // 置信度阈值：越低越容易检测（避免漏检二次元）
+                    inputSize: 640,
+                    scoreThreshold: 0.3
                 });
 
-                // 检测人脸+提取68个特征点（用于后续定位头发）
+                // 检测人脸+提取68个特征点（调用本地库功能）
                 const faceResult = await faceapi.detectAllFaces(dom.targetImg, detectOptions)
                     .withFaceLandmarks();
 
-                // 无人脸检测结果处理
+                // 无人脸处理
                 if (faceResult.length === 0) {
-                    dom.result.textContent = '未检测到人脸，请上传更清晰的二次元头像（避免过度抽象/遮挡）';
+                    dom.result.textContent = '未检测到人脸，请上传更清晰的二次元头像';
                     return;
                 }
 
                 // 保存人脸列表并绘制标记框
                 state.faceList = faceResult;
                 drawFaceMarks();
-                dom.result.textContent = `共检测到${faceResult.length}个人脸，请点击人脸标记框分析发色`;
+                dom.result.textContent = `检测到${faceResult.length}个人脸，点击标记框分析发色`;
             } catch (error) {
-                dom.result.textContent = `人脸识别失败：${error.message}`;
-            }
-        }
-
-        // 绘制人脸标记框：给每个检测到的人脸画框+编号
-        function drawFaceMarks() {
-            clearFaceMarks(); // 先清除之前的标记
-            state.faceList.forEach((face, index) => {
-                const faceBox = face.detection.box; // 人脸位置信息
-                // 创建标记框元素
-                const markElement = document.createElement('div');
-                markElement.className = 'face-mark';
-                // 按缩放比例计算显示位置（解决图片缩放导致的偏移）
-                markElement.style.left = `${faceBox.x * state.imgScale}px`;
-                markElement.style.top = `${faceBox.y * state.imgScale}px`;
-                markElement.style.width = `${faceBox.width * state.imgScale}px`;
-                markElement.style.height = `${faceBox.height * state.imgScale}px`;
-                markElement.innerHTML = `<span>人物 ${index + 1}</span>`;
-
-                // 点击标记框：分析该人脸的发色
-                markElement.addEventListener('click', () => {
-                    // 高亮选中的人脸
-                    document.querySelectorAll('.face-mark').forEach(mark => {
-                        mark.classList.remove('active');
-                    });
-                    markElement.classList.add('active');
-                    // 分析发色
-                    analyzeHairColor(index);
-                });
+                dom.result
