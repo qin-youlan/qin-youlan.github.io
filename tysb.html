@@ -163,16 +163,16 @@
 
     <!-- 模型加载区域（含超时重试） -->
     <div id="modelProgress">
-        <div class="progress-title">模型加载中</div>
+        <div class="progress-title">模型加载中（阿里云CDN）</div>
         <div class="progress-desc">
-            首次加载约5-25秒（WiFi更快），后续打开无需重新加载<br>
+            首次加载约3-15秒（国内网络适配），后续打开无需重新加载<br>
             加载进度：<span id="progressText">初始化连接...</span>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="progress-status">
-            <span id="progressDetail">正在连接模型服务器...</span>
+            <span id="progressDetail">正在连接阿里云服务器...</span>
             <span id="progressPercent">0%</span>
         </div>
         <div class="loader" id="modelLoader"></div>
@@ -198,7 +198,7 @@
     <div class="loader" id="mainLoader"></div>
     <div id="result"></div>
 
-    <!-- 关键：调用本地库文件（与HTML同文件夹） -->
+    <!-- 调用本地库文件（与HTML同文件夹） -->
     <script src="./tf.min.js"></script>
     <script src="./face-api.min.js"></script>
 
@@ -255,7 +255,7 @@
             loadModel();
         }
 
-        // 加载模型（调用本地库，模型从CDN获取）
+        // 核心修改：使用阿里云CDN加载模型（适配国内网络）
         async function loadModel() {
             // 重置加载状态
             dom.modelLoader.style.display = 'block';
@@ -265,7 +265,7 @@
             dom.progressPercent.textContent = '0%';
             dom.progressDetail.textContent = state.loadRetryCount > 0 
                 ? `第${state.loadRetryCount+1}次重试加载...` 
-                : '正在连接模型服务器...';
+                : '正在连接阿里云服务器...';
 
             try {
                 // 设置30秒加载超时
@@ -282,19 +282,18 @@
                     dom.progressDetail.textContent = `${modelName}已加载${percent}%`;
                 };
 
-                // 并行加载CDN模型（本地库已加载，直接调用库功能）
+                // 关键：阿里云CDN模型路径（国内访问更快，替换原CDN链接）
+                const aliyunCdnPath = 'https://cdn.aliyuncs.com/@vladmandic/face-api/model/';
                 await Promise.race([
                     Promise.all([
-                        // 人脸检测模型（CDN）
-                        faceapi.nets.tinyFaceDetector.load(
-                            'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/',
-                            { onProgress: (p) => updateProgress('人脸检测模型', p) }
-                        ),
-                        // 人脸特征点模型（CDN）
-                        faceapi.nets.faceLandmark68Net.load(
-                            'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/',
-                            { onProgress: (p) => updateProgress('人脸特征点模型', p) }
-                        )
+                        // 人脸检测模型（阿里云CDN）
+                        faceapi.nets.tinyFaceDetector.load(aliyunCdnPath, {
+                            onProgress: (p) => updateProgress('人脸检测模型', p)
+                        }),
+                        // 人脸特征点模型（阿里云CDN）
+                        faceapi.nets.faceLandmark68Net.load(aliyunCdnPath, {
+                            onProgress: (p) => updateProgress('人脸特征点模型', p)
+                        })
                     ]),
                     loadTimeout
                 ]);
@@ -427,4 +426,3 @@
                 drawFaceMarks();
                 dom.result.textContent = `检测到${faceResult.length}个人脸，点击标记框分析发色`;
             } catch (error) {
-                dom.result
