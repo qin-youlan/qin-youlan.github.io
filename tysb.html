@@ -161,23 +161,23 @@
 <body>
     <h1>诸神皇冠 太阳之子发色识别</h1>
 
-    <!-- 模型加载区域（含超时重试） -->
+    <!-- 模型加载区域（含多节点切换提示） -->
     <div id="modelProgress">
-        <div class="progress-title">模型加载中（阿里云CDN）</div>
+        <div class="progress-title">模型加载中（多备用节点）</div>
         <div class="progress-desc">
-            首次加载约3-15秒（国内网络适配），后续打开无需重新加载<br>
+            自动切换节点适配网络，首次加载约3-15秒，后续无需重新加载<br>
             加载进度：<span id="progressText">初始化连接...</span>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
         <div class="progress-status">
-            <span id="progressDetail">正在连接阿里云服务器...</span>
+            <span id="progressDetail">正在连接阿里云节点1...</span>
             <span id="progressPercent">0%</span>
         </div>
         <div class="loader" id="modelLoader"></div>
-        <div class="error" id="modelError">加载超时，请检查网络后重试</div>
-        <button class="retry-btn" id="retryBtn">重新加载模型</button>
+        <div class="error" id="modelError">加载超时，自动切换节点重试中...</div>
+        <button class="retry-btn" id="retryBtn">手动切换节点重试</button>
     </div>
 
     <!-- 功能区域 -->
@@ -198,12 +198,12 @@
     <div class="loader" id="mainLoader"></div>
     <div id="result"></div>
 
-    <!-- 调用本地库文件（与HTML同文件夹） -->
+    <!-- 本地库文件引用（需与HTML同文件夹部署） -->
     <script src="./tf.min.js"></script>
     <script src="./face-api.min.js"></script>
 
     <script>
-        // 状态管理
+        // 状态管理：新增当前使用的CDN节点索引
         const state = {
             isManualMode: false,
             isSelecting: false,
@@ -211,13 +211,32 @@
             faceList: [],
             selectStartX: 0,
             selectStartY: 0,
-            loadRetryCount: 0, // 加载重试次数
-            maxRetryCount: 2   // 最大重试次数
+            loadRetryCount: 0,
+            maxRetryCount: 3, // 增加重试次数，适配多节点切换
+            currentCdnIndex: 0 // 当前使用的CDN节点索引
         };
+
+        // 核心优化：阿里云多备用CDN节点（含具体模型子路径，避免路径跳转）
+        const cdnNodes = [
+            {
+                name: "阿里云节点1",
+                tinyPath: "https://cdn.aliyuncs.com/@vladmandic/face-api/model/tiny_face_detector/",
+                landmarkPath: "https://cdn.aliyuncs.com/@vladmandic/face-api/model/face_landmark_68/"
+            },
+            {
+                name: "阿里云节点2",
+                tinyPath: "https://cdn.aliyuncs.com/vladmandic/face-api/model/tiny_face_detector/",
+                landmarkPath: "https://cdn.aliyuncs.com/vladmandic/face-api/model/face_landmark_68/"
+            },
+            {
+                name: "阿里云节点3",
+                tinyPath: "https://cdn.aliyuncs.com/tensorflow-face-api/model/tiny_face_detector/",
+                landmarkPath: "https://cdn.aliyuncs.com/tensorflow-face-api/model/face_landmark_68/"
+            }
+        ];
 
         // DOM元素缓存
         const dom = {
-            // 模型加载相关
             modelProgress: document.getElementById('modelProgress'),
             progressFill: document.getElementById('progressFill'),
             progressText: document.getElementById('progressText'),
@@ -226,7 +245,6 @@
             modelLoader: document.getElementById('modelLoader'),
             modelError: document.getElementById('modelError'),
             retryBtn: document.getElementById('retryBtn'),
-            // 功能相关
             fileInput: document.getElementById('fileInput'),
             btnGroup: document.getElementById('btnGroup'),
             autoBtn: document.getElementById('autoBtn'),
@@ -239,7 +257,7 @@
             result: document.getElementById('result')
         };
 
-        // 初始化：加载模型（含超时重试）
+        // 初始化：绑定重试按钮+启动加载
         init();
         function init() {
             // 禁用长按选图
@@ -248,74 +266,84 @@
                 if (state.isManualMode) e.preventDefault();
             }, { passive: false });
 
-            // 绑定重试按钮事件
-            dom.retryBtn.addEventListener('click', () => loadModel());
+            // 手动重试按钮：切换到下一个节点
+            dom.retryBtn.addEventListener('click', () => {
+                state.currentCdnIndex = (state.currentCdnIndex + 1) % cdnNodes.length;
+                loadModel();
+            });
 
             // 首次加载模型
             loadModel();
         }
 
-        // 核心修改：使用阿里云CDN加载模型（适配国内网络）
+        // 核心功能：多节点自动切换加载模型
         async function loadModel() {
+            // 获取当前要使用的CDN节点
+            const currentNode = cdnNodes[state.currentCdnIndex];
             // 重置加载状态
             dom.modelLoader.style.display = 'block';
             dom.modelError.style.display = 'none';
             dom.retryBtn.style.display = 'none';
             dom.progressFill.style.width = '0%';
             dom.progressPercent.textContent = '0%';
-            dom.progressDetail.textContent = state.loadRetryCount > 0 
-                ? `第${state.loadRetryCount+1}次重试加载...` 
-                : '正在连接阿里云服务器...';
+            dom.progressDetail.textContent = `正在连接${currentNode.name}...`;
 
             try {
-                // 设置30秒加载超时
+                // 30秒超时限制
                 const loadTimeout = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error('加载超时（超过30秒）')), 30000);
+                    setTimeout(() => {
+                        reject(new Error(`连接${currentNode.name}超时`));
+                    }, 30000);
                 });
 
-                // 监听模型加载进度
+                // 监听加载进度
                 const updateProgress = (modelName, progress) => {
                     const percent = Math.round(progress * 100);
                     dom.progressFill.style.width = `${percent}%`;
                     dom.progressPercent.textContent = `${percent}%`;
                     dom.progressText.textContent = `加载${modelName}（${percent}%）`;
-                    dom.progressDetail.textContent = `${modelName}已加载${percent}%`;
+                    dom.progressDetail.textContent = `${currentNode.name}：${modelName}已加载${percent}%`;
                 };
 
-                // 关键：阿里云CDN模型路径（国内访问更快，替换原CDN链接）
-                const aliyunCdnPath = 'https://cdn.aliyuncs.com/@vladmandic/face-api/model/';
+                // 加载当前节点的模型（使用具体子路径，避免根路径跳转）
                 await Promise.race([
                     Promise.all([
-                        // 人脸检测模型（阿里云CDN）
-                        faceapi.nets.tinyFaceDetector.load(aliyunCdnPath, {
+                        // 人脸检测模型
+                        faceapi.nets.tinyFaceDetector.load(currentNode.tinyPath, {
                             onProgress: (p) => updateProgress('人脸检测模型', p)
                         }),
-                        // 人脸特征点模型（阿里云CDN）
-                        faceapi.nets.faceLandmark68Net.load(aliyunCdnPath, {
+                        // 人脸特征点模型
+                        faceapi.nets.faceLandmark68Net.load(currentNode.landmarkPath, {
                             onProgress: (p) => updateProgress('人脸特征点模型', p)
                         })
                     ]),
                     loadTimeout
                 ]);
 
-                // 模型加载成功：显示功能按钮
+                // 加载成功：隐藏加载区，显示功能按钮
                 dom.modelProgress.style.display = 'none';
                 dom.btnGroup.style.display = 'inline-block';
                 bindAllEvents();
-                state.loadRetryCount = 0;
+                state.loadRetryCount = 0; // 重置重试次数
             } catch (error) {
-                // 加载失败处理
+                // 加载失败：切换到下一个节点重试
                 dom.modelLoader.style.display = 'none';
                 dom.modelError.style.display = 'block';
-                dom.modelError.textContent = `加载失败：${error.message}（建议切换WiFi重试）`;
-                
-                // 重试逻辑
+                dom.modelError.textContent = `[${currentNode.name}]${error.message}，自动切换节点...`;
+                dom.retryBtn.style.display = 'inline-block';
+                dom.retryBtn.textContent = `手动切换到${cdnNodes[(state.currentCdnIndex+1)%cdnNodes.length].name}`;
+
+                // 重试逻辑：未超过最大次数则自动切换节点
+                state.loadRetryCount++;
                 if (state.loadRetryCount < state.maxRetryCount) {
-                    dom.retryBtn.style.display = 'inline-block';
-                    state.loadRetryCount++;
+                    // 1秒后切换到下一个节点
+                    setTimeout(() => {
+                        state.currentCdnIndex = (state.currentCdnIndex + 1) % cdnNodes.length;
+                        loadModel();
+                    }, 1500);
                 } else {
-                    dom.retryBtn.style.display = 'none';
-                    dom.modelError.textContent += '（已超过最大重试次数，请稍后再试）';
+                    // 超过最大次数：提示手动重试
+                    dom.modelError.textContent = '所有节点加载失败，请检查网络后点击"手动切换节点重试"';
                 }
 
                 // 绑定基础上传事件，至少能显示图片
@@ -333,7 +361,6 @@
         function bindBasicUploadEvent() {
             dom.fileInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
-                // 验证图片格式
                 if (!file || !file.type.startsWith('image/')) {
                     dom.result.textContent = '请选择JPG、PNG格式的图片';
                     return;
@@ -350,21 +377,19 @@
                 const imgUrl = URL.createObjectURL(file);
                 dom.targetImg.src = imgUrl;
 
-                // 图片加载完成后处理
+                // 图片加载完成
                 dom.targetImg.onload = () => {
                     state.imgScale = dom.targetImg.offsetWidth / dom.targetImg.naturalWidth;
                     dom.mainLoader.style.display = 'none';
 
-                    // 自动模式识别人脸，手动模式提示框选
-                    if (!state.isManualMode) {
-                        detectFaces();
-                    } else {
+                    if (!state.isManualMode) detectFaces();
+                    else {
                         dom.result.textContent = '按住图片拖动，选择头发区域';
                         bindManualSelectEvents();
                     }
                 };
 
-                // 图片加载失败处理
+                // 图片加载失败
                 dom.targetImg.onerror = () => {
                     dom.mainLoader.style.display = 'none';
                     dom.targetImg.style.display = 'none';
@@ -375,54 +400,17 @@
 
         // 自动/手动模式切换
         function bindModeSwitchEvent() {
-            // 切换到自动模式
+            // 自动模式
             dom.autoBtn.addEventListener('click', () => {
                 state.isManualMode = false;
                 dom.modeTip.textContent = '当前：自动识别模式（上传图片后点击人脸分析）';
                 dom.selectBox.style.display = 'none';
                 clearFaceMarks();
-                // 已有图片则重新识别人脸
                 if (dom.targetImg.src) {
                     dom.mainLoader.style.display = 'block';
                     detectFaces().finally(() => dom.mainLoader.style.display = 'none');
                 }
             });
 
-            // 切换到手动模式
-            dom.manualBtn.addEventListener('click', () => {
-                state.isManualMode = true;
-                dom.modeTip.textContent = '当前：手动框选模式（按住图片拖动选择头发区域）';
-                clearFaceMarks();
-                bindManualSelectEvents();
-                // 已有图片则提示框选
-                if (dom.targetImg.src) {
-                    dom.result.textContent = '按住图片拖动，选择头发区域';
-                }
-            });
-        }
-
-        // 自动识别人脸（适配二次元）
-        async function detectFaces() {
-            try {
-                dom.result.textContent = '正在识别人脸...';
-                // 二次元人脸优化参数（降低阈值避免漏检）
-                const detectOptions = new faceapi.TinyFaceDetectorOptions({
-                    inputSize: 640,
-                    scoreThreshold: 0.3
-                });
-
-                // 检测人脸+提取68个特征点（调用本地库功能）
-                const faceResult = await faceapi.detectAllFaces(dom.targetImg, detectOptions)
-                    .withFaceLandmarks();
-
-                // 无人脸处理
-                if (faceResult.length === 0) {
-                    dom.result.textContent = '未检测到人脸，请上传更清晰的二次元头像';
-                    return;
-                }
-
-                // 保存人脸列表并绘制标记框
-                state.faceList = faceResult;
-                drawFaceMarks();
-                dom.result.textContent = `检测到${faceResult.length}个人脸，点击标记框分析发色`;
-            } catch (error) {
+            // 手动模式
+            dom.manual
