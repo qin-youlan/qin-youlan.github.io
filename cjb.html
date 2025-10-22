@@ -540,9 +540,8 @@
                         combination.forEach((level, idx) => {
                             const job = selectedJobs[idx];
 for (let i = 0; i < 6; i++) {
-    const sumGrowth = personGrowth[i] + job.growth[i];
-    injectValues[i] += sumGrowth >= 0 ? sumGrowth * level : 0;
-}
+                                injectValues[i] += (personGrowth[i] + job.growth[i]) * level ;
+                            }
                         });
 
                         // 排序注入值（降序，保留索引）
@@ -762,4 +761,5 @@ for (let i = 0; i < 6; i++) {
 </body>
 
 </html>
+
 
