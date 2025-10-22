@@ -228,11 +228,6 @@
             margin: 5px;
             text-align: center;
             white-space: nowrap; /* 不换行 */
-            /* 新增固定宽度相关样式 */
-            width: 120px; /* 固定宽度（根据需求调整数值） */
-            box-sizing: border-box; /* 让width包含padding和border，避免总宽度超出预期 */
-            overflow: hidden; /* 隐藏溢出内容 */
-            text-overflow: ellipsis; /* 溢出文本显示省略号 */
         }
 
             .job-tag:hover {
@@ -485,6 +480,11 @@
         function filterJobsByEquip() {
             const selectedEquip = document.getElementById("heirloom-equip").value;
             const jobTags = document.querySelectorAll(".job-tag");
+            
+            // 清空所有职业选择
+            jobTags.forEach(tag => {
+                tag.classList.remove("selected");
+            });
 
             if (!selectedEquip) {
                 jobTags.forEach(tag => {
@@ -539,8 +539,10 @@
                         const injectValues = new Array(6).fill(0);
                         combination.forEach((level, idx) => {
                             const job = selectedJobs[idx];
-for (let i = 0; i < 6; i++) {
-                                injectValues[i] += (personGrowth[i] + job.growth[i]) * level ;
+                            for (let i = 0; i < 6; i++) {
+                                // 当职业成长与人物成长的和为负值时，注入值按0计算
+                                const growthSum = personGrowth[i] + job.growth[i];
+                                injectValues[i] += Math.max(0, growthSum) * level;
                             }
                         });
 
@@ -634,7 +636,12 @@ for (let i = 0; i < 6; i++) {
                 if (b.reward2 !== a.reward2) return b.reward2 - a.reward2;
                 return a.upgradeCount - b.upgradeCount; // reward2相同则取升级次数少的
             });
-            finalPlans.push(plan2Candidates[0]);
+            
+            // 判断方案一和方案二是否相同，如果不同才添加方案二
+            const isPlan1AndPlan2Same = arePlansSame(plan1Candidates[0], plan2Candidates[0]);
+            if (!isPlan1AndPlan2Same) {
+                finalPlans.push(plan2Candidates[0]);
+            }
 
             // 其他方案：reward1最大前提下，reward2为非方案二属性且reward2最大且升级次数最少
             const plan2SecondAttrIdx = plan2Candidates[0].secondAttrIdx;
@@ -730,6 +737,30 @@ for (let i = 0; i < 6; i++) {
             return { personGrowth, initLevel, selectedJobs, targetAttrIndex, secondTargetAttrIndex, maxAvailableLevelUp };
         }
 
+        // 判断两个方案是否相同
+        function arePlansSame(plan1, plan2) {
+            if (!plan1 || !plan2) return false;
+            
+            // 比较关键属性
+            if (plan1.upgradeCount !== plan2.upgradeCount) return false;
+            if (plan1.reward1 !== plan2.reward1) return false;
+            if (plan1.reward2 !== plan2.reward2) return false;
+            if (plan1.reward3 !== plan2.reward3) return false;
+            
+            // 比较注入值
+            for (let i = 0; i < 6; i++) {
+                if (Math.abs(plan1.injectValues[i] - plan2.injectValues[i]) > 0.0001) return false;
+            }
+            
+            // 比较组合
+            if (plan1.combination.length !== plan2.combination.length) return false;
+            for (let i = 0; i < plan1.combination.length; i++) {
+                if (plan1.combination[i] !== plan2.combination[i]) return false;
+            }
+            
+            return true;
+        }
+        
         // 生成升级分配组合（限制最大组合数防止浏览器崩溃）
         function generateLevelCombinations(n, sum) {
             const combinations = [];
@@ -759,7 +790,4 @@ for (let i = 0; i < 6; i++) {
         }
     </script>
 </body>
-
 </html>
-
-
