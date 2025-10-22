@@ -540,7 +540,7 @@
                         combination.forEach((level, idx) => {
                             const job = selectedJobs[idx];
                             for (let i = 0; i < 6; i++) {
-                                injectValues[i] += (personGrowth[i] + job.growth[i]) * level;
+                                injectValues[i] += (personGrowth[i] + job.growth[i]) >= 0 ? (personGrowth[i] + job.growth[i]) * level : 0;
                             }
                         });
 
@@ -759,4 +759,5 @@
         }
     </script>
 </body>
+
 </html>
