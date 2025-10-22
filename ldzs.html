@@ -208,21 +208,29 @@
     </footer>
 
     <script type="module">
-        // 工具数据
+        // 工具数据（新增了指向/tysb.html的磁贴，复用传家宝的图标）
         const toolList = [
             {
-                name: '血脉',
+                name: '澄澈之瞳',
                 category: '游戏辅助工具',
                 icon: '/icons/audrey.png',
                 url: '/hx.html',
                 description: '血脉极限属性'
             },
             {
-                name: '传家宝',
+                name: '专注之眸',
                 category: '游戏辅助工具',
                 icon: '/icons/ring6.png',
                 url: '/cjb.html',
                 description: '传家宝极限方案'
+            },
+            // 新增的磁贴，复用传家宝的图标（/icons/ring6.png）
+            {
+                name: '太阳之眼', // 可根据实际功能修改名称
+                category: '游戏辅助工具',
+                icon: '/icons/audrey.png', // 复用传家宝的图标
+                url: '/tysb.html', // 目标页面
+                description: '太阳之眼识别' // 可根据实际功能修改描述
             }
         ];
 
@@ -267,25 +275,23 @@
                 const target = tool.url.startsWith('http') ? '_blank' : '_self';
 
                 li.innerHTML = `
-                        <a href="${tool.url}" target="${target}" class="tile-link">
-                            <div class="tile-content">
-                                <div class="icon-container">
-                                    <img src="${tool.icon}" alt="${tool.name}">
+                            <a href="${tool.url}" target="${target}" class="tile-link">
+                                <div class="tile-content">
+                                    <div class="icon-container">
+                                        <img src="${tool.icon}" alt="${tool.name}">
+                                    </div>
+                                    <h3>${tool.name}</h3>
+                                    <span class="category-tag">${tool.category}</span>
                                 </div>
-                                <h3>${tool.name}</h3>
-                                <span class="category-tag">${tool.category}</span>
-                            </div>
-                            <div class="tile-overlay">
-                                <p class="overlay-text">${tool.description}</p>
-                                <span class="visit-btn">点击前往</span>
-                            </div>
-                        </a>
-                    `;
+                                <div class="tile-overlay">
+                                    <p class="overlay-text">${tool.description}</p>
+                                    <span class="visit-btn">点击前往</span>
+                                </div>
+                            </a>
+                        `;
                 toolListElement.appendChild(li);
             });
         }
     </script>
 </body>
 </html>
-
-
