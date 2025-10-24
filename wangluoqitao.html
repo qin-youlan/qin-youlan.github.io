@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支持作者 - 打赏页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff9b37',
+                        secondary: '#ff6b00',
+                        dark: '#333333',
+                        darker: '#222222',
+                        light: '#555555',
+                        highlight: '#ffcc99'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 12px rgba(0, 0, 0, 0.15)',
+                        'hover': '0 6px 16px rgba(0, 0, 0, 0.2)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .transition-all-300 {
+                transition: all 0.3s ease;
+            }
+            .bg-gradient {
+                background: linear-gradient(135deg, #333333 0%, #222222 100%);
+            }
+            .border-glow {
+                box-shadow: 0 0 5px rgba(255, 155, 55, 0.5);
+            }
+            .donate-card {
+                transition: all 0.3s ease;
+            }
+            .donate-card:hover {
+                transform: translateY(-5px);
+            }
+            .payment-method {
+                transition: all 0.2s ease;
+            }
+            .payment-method.selected {
+                border-color: theme('colors.primary');
+                background-color: rgba(255, 155, 55, 0.1);
+            }
+            .payment-method:hover:not(.selected) {
+                border-color: theme('colors.light');
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark text-white min-h-screen flex flex-col">
+    <header class="bg-darker py-4 px-6 shadow-md">
+        <div class="container mx-auto mx-auto-4">
+            <div class="flex items-center justify-between items-center">
+                <div class="flex items-center">
+                    <a href="dashang.html" class="flex items-center">
+                <img id="logo" src="/icons/lan.png" alt="Qinyoulan">
+                <h1>懒得打赏</h1>
+                    </a>
+                </div>
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="/index.html" class="hover:text-primary transition-all-300">首页</a></li>
+                        <li><a href="/ldgj.html" class="hover:text-primary transition-all-300">懒得工具</a></li>
+                        <li><a href="/ldtj.html" class="hover:text-primary transition-all-300">懒得推荐</a></li>
+                        <li><a href="/wangluoqitao" class="text-primary font-medium transition-all-300">打赏</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <!-- 页面标题 -->
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-primary mb-2">支持作者</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">您的支持是我持续更新和维护内容的动力，如果觉得对您有帮助，欢迎打赏支持！</p>
+            <img id="logo" src="/icons/skm.jpg" alt="图片加载失败，请刷新页面重试">
+        </div>
+
+        
+    <footer class="bg-darker py-4 px-6">
+        <div class="container mx-auto text-center text-gray-400 text-sm">
+            <p></p>
+        </div>
+    </footer>
+</body>
+</html>
