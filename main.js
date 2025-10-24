@@ -8,11 +8,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const listItem = document.createElement('li');
         listItem.className = 'software-tile';
         const content = `
-            <img src="${software.icon}" alt="${software.name}">
-            <h3>${software.name}</h3>
-            <p>${software.category}</p>
-            <p class="url"><a href="${software.url}" target="_blank" rel="noopener noreferrer">${software.url}</a></p>
-            <p class="recommend-text">${software.recommendText}</p>
+            <a href="${software.url}" class="tile-link" target="_blank" rel="noopener noreferrer">
+                <div class="tile-content">
+                    <div class="icon-container">
+                        <img src="${software.icon}" alt="${software.name}">
+                    </div>
+                    <h3>${software.name}</h3>
+                    <p class="category-text">${software.category}</p>
+                </div>
+                <div class="tile-overlay">
+                    <p class="overlay-text">${software.recommendText}</p>
+                    <a href="${software.url}" class="visit-btn" target="_blank" rel="noopener noreferrer">访问</a>
+                </div>
+            </a>
         `;
         listItem.innerHTML = content;
         softwareListElement.appendChild(listItem);

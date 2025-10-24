@@ -3,7 +3,7 @@ export const softwareList = [
         name: '诸神工具',
         category: '游戏辅助工具',
         icon: 'https://p11-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/81b375e1133349889e90a439080d55c2.png~tplv-a9rns2rl98-24:720:720.png?rcl=202510182304409CC5BC0D155843F79DA5&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761404680&x-signature=XDk26f2c1cxtxgFZTEmgeuxSk3g%3D',
-        url: '/ldzs.html',
+        url: '/ldgj.html',
         recommendText: '诸神皇冠辅助工具'
     },
  {

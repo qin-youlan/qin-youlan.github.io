@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>懒得工具 - 诸神皇冠工具</title>
+    <!-- Font Awesome Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <header>
+        <div class="container">
+            <div>
+                <div>
+                    <a href="index.html">
+                        <img id="logo" src="icons/lan.png" alt="Lande">
+                        <h1>懒得工具</h1>
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="ldtj.html">懒得推荐</a></li>
+                        <li><a href="wangluoqitao.html" style="color: white;">打赏</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="search-container full-width">
+            <input type="text" id="search-input" placeholder="搜索工具...">
+            <i class="fa fa-search search-icon"></i>
+        </div>
+        <section id="recommendations">
+            <ul id="software-list">
+                <!-- 工具磁贴将在这里动态生成 -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>秦又懒 © 2025</p>
+    </footer>
+
+    <script type="module">
+        // 工具数据
+        const toolList = [
+            {
+                name: '澄澈之瞳',
+                category: '游戏辅助工具',
+                icon: 'icons/audrey.png',
+                url: 'hx.html',
+                recommendText: '血脉极限属性'
+            },
+            {
+                name: '专注之眸',
+                category: '游戏辅助工具',
+                icon: 'icons/ring6.png',
+                url: 'cjb.html',
+                recommendText: '传家宝极限方案'
+            },
+            {
+                name: '太阳之眼',
+                category: '游戏辅助工具',
+                icon: 'icons/audrey.png',
+                url: 'tysb.html',
+                recommendText: '太阳之眼识别'
+            }
+        ];
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderToolList(toolList);
+
+            // 添加搜索功能
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredTools = toolList.filter(tool =>
+                    tool.name.toLowerCase().includes(searchTerm) ||
+                    tool.recommendText.toLowerCase().includes(searchTerm) ||
+                    tool.category.toLowerCase().includes(searchTerm)
+                );
+                renderToolList(filteredTools);
+            });
+        });
+
+        // 渲染工具列表
+        function renderToolList(tools) {
+            const toolListElement = document.getElementById('software-list');
+
+            // 清空列表
+            toolListElement.innerHTML = '';
+
+            if (tools.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'no-results';
+                li.textContent = '没有找到匹配的工具';
+                toolListElement.appendChild(li);
+                return;
+            }
+
+            // 添加工具卡片，使用与index页面一致的磁贴结构
+            tools.forEach(tool => {
+                const listItem = document.createElement('li');
+                listItem.className = 'software-tile';
+                const content = `
+                    <a href="${tool.url}" class="tile-link" target="_self" rel="noopener noreferrer">
+                        <div class="tile-content">
+                            <div class="icon-container">
+                                <img src="${tool.icon}" alt="${tool.name}">
+                            </div>
+                            <h3>${tool.name}</h3>
+                            <p class="url-text">${tool.category}</p>
+                        </div>
+                        <div class="tile-overlay">
+                            <p class="overlay-text">${tool.recommendText}</p>
+                            <a href="${tool.url}" class="visit-btn" target="_self" rel="noopener noreferrer">访问</a>
+                        </div>
+                    </a>
+                `;
+                listItem.innerHTML = content;
+                toolListElement.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>

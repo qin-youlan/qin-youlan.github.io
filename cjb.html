@@ -5,19 +5,29 @@
     <title>传家宝计算 - 懒得工具</title>
     <!-- Font Awesome Awesome -->
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <div class="logo-container">
-            <a href="index.html" class="logo-link">
-                <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
-                <h1>懒得工具</h1>
-            </a>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="index.html">
+            <img id="logo" src="icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
         </div>
-    </header>
+        <nav>
+          <ul>
+      <li><a href="wangluoqitao.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
 
     <main>
-        <section class="tool-detail">
+
             <h3 class="text-xl font-bold mb-4">传家宝转职方案计算</h3>
 
             <!-- 输入区域 -->
@@ -70,7 +80,7 @@
                 </div>
                 <!-- 可用职业选择 -->
                 <div class="input-group">
-                    <div class="form-item">
+                    <div class="form-item-job">
                         <label>可用职业：</label>
                         <div id="job-tags-container">
                             <!-- 职业标签动态生成 -->
@@ -107,7 +117,9 @@
                     </div>
                 </div>
                 <!-- 计算按钮 -->
-                <button class="btn" onclick="calculateOptimalPlan()">计算最优方案</button>
+                <div style="text-align: center; margin: 15px 0;">
+                    <button class="btn" style="width: auto; padding: 8px 20px; display: inline-block;" onclick="calculateOptimalPlan()">计算最优方案</button>
+                </div>
             </div>
 
             <!-- 输出区域 -->
@@ -117,7 +129,7 @@
                     <p>请输入参数并点击计算按钮，获取最优方案</p>
                 </div>
             </div>
-        </section>
+
     </main>
 
     <footer>
@@ -228,6 +240,8 @@
             margin: 5px;
             text-align: center;
             white-space: nowrap; /* 不换行 */
+            width: 80px; /* 固定宽度，确保所有标签等宽 */
+            display: inline-block; /* 确保宽度设置生效 */
         }
 
             .job-tag:hover {
@@ -398,7 +412,7 @@
         // 属性名称映射
         const attrNames = ["力", "技", "敏", "体", "感", "意"];
         // 案例关键职业ID
-        //const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
+        const caseJobIds = ["light-infantry", "apprentice-rider", "scout"];
         // 修复装备-职业映射表中的错误（主要是"重装骑兵骑兵"的笔误）
         const equipJobMap = {
             "单手剑": ["见习骑手", "轻骑兵", "皇家骑兵", "统御骑士", "翼骑兵", "曙光骑兵", "轻步兵", "勇士", "斥候", "剑圣", "重步兵", "方阵步兵", "王室禁卫", "神鹰侍卫", "圣堂铁卫", "内宗剑圣", "新兵"],
@@ -463,18 +477,18 @@
 
         // 选择案例职业
         
-        //function selectCaseJobs() {
-        //    document.querySelectorAll(".job-tag.selected").forEach(tag => {
-        //        tag.classList.remove("selected");
-        //    });
-        //
-        //    caseJobIds.forEach(jobId => {
-        //        const tag = document.querySelector(`.job-tag[data-job-id="${jobId}"]`);
-        //        if (tag) {
-        //            tag.classList.add("selected");
-        //        }
-        //    });
-        //}
+        function selectCaseJobs() {
+            document.querySelectorAll(".job-tag.selected").forEach(tag => {
+                tag.classList.remove("selected");
+            });
+
+            caseJobIds.forEach(jobId => {
+                const tag = document.querySelector(`.job-tag[data-job-id="${jobId}"]`);
+                if (tag) {
+                    tag.classList.add("selected");
+                }
+            });
+        }
 
         // 根据选择的传家宝装备筛选职业
         function filterJobsByEquip() {

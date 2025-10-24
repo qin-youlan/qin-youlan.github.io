@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>太阳之眼-太阳之子识别-懒得工具</title>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <div class="logo-container">
-            <a href="index.html" class="logo-link">
-                <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
-                <h1>懒得工具</h1>
-            </a>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="index.html">
+            <img id="logo" src="icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
         </div>
-    </header>
+        <nav>
+          <ul>
+      <li><a href="wangluoqitao.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
 
     <main>
         <section class="tool-detail">
@@ -27,7 +37,8 @@
                         <i class="fa fa-upload" aria-hidden="true"></i>
                         <span>上传图片</span>
                     </label>
-                    <p class="upload-hint">(仅能识别头发，无法根据眉毛和胡须识别，请勿尝试)</p>
+                    <p class="upload-hint">(仅能识别头发，</p> 
+                    <p class="upload-hint">无法根据眉毛和胡须识别，请勿尝试)</p>
                 </div>
 
                 <div class="input-group">
@@ -165,7 +176,7 @@
             display: none;
         }
         .upload-area { 
-            border: 2px dashed #3498db; 
+            border: 2px dashed #ffffff; 
             border-radius: 8px; 
             padding: 30px 20px; 
             text-align: center; 
@@ -188,7 +199,7 @@
 
         .upload-icon { 
             font-size: 40px; 
-            color: #3498db; 
+            color: #ffffff; 
             margin-bottom: 15px; 
         }
 

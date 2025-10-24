@@ -4,368 +4,24 @@
   <title>血脉极限</title>
   <!-- Font Awesome Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <style>
-    /* 基本页面样式 */
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #333;
-        color: #fff;
-        font-size: 14px; /* 统一基础字号 */
-    }
-    
-    /* 统一文本字号样式 */
-    h1 { font-size: 24px; }
-    h2 { font-size: 20px; }
-    h3 { font-size: 18px; }
-    .section-title { font-size: 16px; }
-    label { font-size: 14px; }
-    select, input, span, p { font-size: 14px; }
-    .god-feature-error { font-size: 13px; }
-
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #333;
-        color: #fff;
-        padding: 10px 20px;
-    }
-
-    /* Logo和标题容器 */
-    .logo-container {
-        display: flex;
-        align-items: center;
-    }
-
-    /* Logo与标题间距 */
-    .logo-container h1 {
-        margin-left: 15px;
-    }
-
-    /* Logo链接样式 */
-    .logo-link {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: #fff;
-    }
-
-    #logo {
-        display: inline-block;
-        width: auto;
-        height: 2.2em;
-        margin-right: 10px;
-        vertical-align: middle;
-    }
-
-    header h1 {
-        margin: 0;
-        font-size: 1.5em;
-        line-height: 1.5;
-    }
-
-    main {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 0 20px;
-    }
-
-    /* 血脉计算器样式 */
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .title {
-        text-align: center;
-        margin-bottom: 30px;
-        color: #fff;
-    }
-
-    .card {
-        background-color: #444;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        color: #fff;
-    }
-
-    select, input[type="range"] {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #555;
-        border-radius: 4px;
-        background-color: #555;
-        color: #fff;
-    }
-
-    input[type="range"] {
-        padding: 8px 0;
-    }
-
-    .percentage-display {
-        display: inline-block;
-        padding: 2px 8px;
-        background-color: #555;
-        color: #fff;
-        border-radius: 12px;
-        font-size: 0.8em;
-        margin-left: 10px;
-    }
-
-    .attribute-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
-    }
-
-    .attribute-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        background-color: #555;
-        border-radius: 4px;
-    }
-
-    .attribute-value {
-        font-weight: bold;
-        color: #ff6347;
-    }
-
-    .hexagon-chart-container {
-        position: relative;
-        width: 100%;
-        max-width: 400px;
-        height: 400px;
-        margin: 0 auto;
-        background-color: #222;
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .gender-btn {
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        text-indent: -9999px;
-    }
-
-    .gender-btn.male {
-        background-image: url('/icons/male.svg');
-    }
-
-    .gender-btn.female {
-        background-image: url('/icons/female.svg');
-    }
-
-    .god-btn {
-        width: 64px;
-        height: 64px;
-        border-radius: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        padding: 4px;
-        font-size: 12px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .god-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1;
-    }
-
-    .god-btn span:first-child {
-        position: relative;
-        z-index: 2;
-        color: white;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        margin-top: 4px;
-    }
-
-    .god-btn span:last-child {
-        position: relative;
-        z-index: 2;
-        color: white;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        margin-bottom: 4px;
-        background-color: rgba(0, 0, 0, 0.5);
-        padding: 0 6px;
-        border-radius: 9999px;
-    }
-
-    .god-btn.palo {
-        background-image: url('/icons/paluo.svg');
-    }
-
-    .god-btn.koneta {
-        background-image: url('/icons/keneita.svg');
-    }
-
-    .god-btn.sainan {
-        background-image: url('/icons/sainan.svg');
-    }
-
-    .god-btn.level-0::before {
-        background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    .god-btn.level-1::before {
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .god-btn.level-2::before {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .bloodline-select {
-        padding: 8px;
-        border: 1px solid #555;
-        border-radius: 4px;
-        background-color: #555;
-        color: #fff;
-        width: 200px;
-        pointer-events: auto;
-    }
-
-    .slider-container {
-        width: 100%;
-        margin: 10px 0;
-    }
-
-    .slider {
-        width: 100%;
-        height: 8px;
-        background-color: #555;
-        border-radius: 4px;
-        appearance: none;
-        cursor: pointer;
-    }
-
-    .slider::-webkit-slider-thumb {
-        appearance: none;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: #ff6347;
-        cursor: pointer;
-    }
-
-    .radar-attr-text {
-        text-anchor: middle;
-        fill: #FFF;
-        font-size: 14px;
-        font-family: 'Arial', sans-serif;
-    }
-
-    .radar-value-text {
-        text-anchor: middle;
-        fill: #FFF;
-        font-size: 12px;
-        font-weight: bold;
-        font-family: 'Arial', sans-serif;
-    }
-
-    .god-feature-error {
-        color: #ff6347;
-        font-size: 0.8em;
-        margin-top: 5px;
-    }
-
-    .btn-group {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .god-btn-group {
-        display: flex;
-        gap: 16px;
-    }
-
-    .section-title {
-        font-size: 1.2em;
-        margin-bottom: 15px;
-        color: #fff;
-        border-bottom: 1px solid #555;
-        padding-bottom: 5px;
-    }
-
-    .form-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .form-row label {
-        width: 100px;
-        margin-bottom: 0;
-    }
-
-    .form-row select {
-        flex: 1;
-    }
-
-    .error-message {
-        color: #ff6347;
-        font-size: 0.8em;
-        margin-top: 5px;
-    }
-
-    footer {
-        text-align: center;
-        margin-top: 30px;
-        color: #aaa;
-        font-size: 0.8em;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="dark-theme">
   <header>
-    <div class="logo-container">
-      <a href="index.html" class="logo-link">
-        <img id="logo" src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/code_assistant/18a7e2e93def4bc18951388518097afd~tplv-a9rns2rl98-image.image?rcl=202510182229058422D0EDAA6BB2B9E2B2&amp;rk3s=8e244e95&amp;rrcfp=e75484ac&amp;x-expires=1761402546&amp;x-signature=tkPdx6eL%2FYPvZRkv3i0T8L1ZVSY%3D" alt="Logo">
-        <h1>血脉极限查看 -懒得工具</h1>
-      </a>
+    <div class="container">
+      <div>
+        <div>
+          <a href="index.html">
+            <img id="logo" src="icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
+        </div>
+        <nav>
+          <ul>
+      <li><a href="wangluoqitao.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -376,30 +32,29 @@
               <p>血脉极限成长一览</p>
           </div>
 
-          <div class="card">
+
               <!-- 血脉选择区域 -->
-              <div class="mb-6">
-                  <div class="form-row">
-                      <label for="mainBloodline" style="width: 55px;">主血脉</label>
-                      <select id="mainBloodline" class="bloodline-select" style="width: 55px;">
+
+                  <div class="form-row main-bloodline-row">
+                      <label for="mainBloodline">主血脉</label>
+                      <select id="mainBloodline" class="bloodline-select" style="width: 110px;">
                           <!-- 由JavaScript动态填充 -->
                       </select>
                       <span id="mainPercentage" class="percentage-display">100%</span>
                   </div>
 
                   <div class="slider-container">
-                      <input type="range" id="percentageSlider" class="slider" min="70" max="100" step="10" value="100">
+                      <input type="range" id="percentageSlider" class="slider" min="50" max="100" step="5" value="100">
                   </div>
 
-                  <div id="secondaryBloodlineContainer" class="form-row justify-end mt-2 hidden">
-                      <span id="secondaryPercentage" class="percentage-display mr-2">0%</span>
-                      <select id="secondaryBloodline" class="bloodline-select" style="width: 55px;">
+                  <div id="secondaryBloodlineContainer" class="form-row secondary-bloodline-row mt-2 hidden">
+                      <span id="secondaryPercentage" class="percentage-display">0%</span>
+                      <select id="secondaryBloodline" class="bloodline-select" style="width: 110px;">
                           <!-- 由JavaScript动态填充 -->
                       </select>
-                      <label for="secondaryBloodline" class="ml-2" style="width: 55px;">次血脉</label>
+                      <label for="secondaryBloodline">次血脉</label>
                   </div>
-              </div>
-          </div>
+
 
 
 
@@ -407,7 +62,7 @@
 
 
           <!-- 属性值显示区域 -->
-          <h3 class="section-title">属性值</h3>
+          <h3 class="section-title">极限属性值</h3>
           <div class="attribute-container">
               <div class="attribute-item">
                   <span>力量</span>
@@ -502,7 +157,7 @@
   </main>
   
     <footer>
-        <p>秦又懒 © 2025</p>
+      <p>秦又懒 © 2025</p>
     </footer>
   <script>
     // 1. 血脉基础属性数据
