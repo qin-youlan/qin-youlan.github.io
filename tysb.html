@@ -37,8 +37,6 @@
                         <i class="fa fa-upload" aria-hidden="true"></i>
                         <span>上传图片</span>
                     </label>
-                    <p class="upload-hint">(仅能识别头发，</p> 
-                    <p class="upload-hint">无法根据眉毛和胡须识别，请勿尝试)</p>
                 </div>
 
                 <div class="input-group">
@@ -314,11 +312,11 @@
 
         // 固定参数（保持不变）
         const T_PARAMS = {
-            hMin: 40, hMax: 50,
-            sMin: 35, sMax: 46,
-            vMin: 5, vMax: 100
+            hMin: 30, hMax: 45,
+            sMin: 30, sMax: 55,
+            vMin: 20, vMax: 100
         };
-        const JUDGE_RATIO = 0.21;
+        const JUDGE_RATIO = 0.39;
 
         // 全局变量
         let circleRadius = 20;
@@ -368,12 +366,21 @@
 
                     // 计算缩放比例
                     const containerWidth = positionWrapper.clientWidth || 350;
-                    imgScaleRatio = containerWidth / previewImg.naturalWidth;
-                    const scaledHeight = Math.max(200, previewImg.naturalHeight * imgScaleRatio);
+                    const containerHeight = Math.max(200, containerWidth * (previewImg.naturalHeight / previewImg.naturalWidth));
                     
-                    detectionCanvas.width = containerWidth;
-                    detectionCanvas.height = scaledHeight;
-                    circleRadius = Math.max(20, containerWidth / 20);
+                    // 正确设置预览图的样式，确保它完全适应容器
+                    previewImg.style.width = '100%';
+                    previewImg.style.height = 'auto';
+                    
+                    // 延迟设置canvas尺寸，确保预览图已经正确渲染
+                    setTimeout(() => {
+                        // 计算实际的缩放比例（考虑设备像素比和图片实际显示尺寸）
+                        imgScaleRatio = previewImg.naturalWidth / previewImg.clientWidth;
+                        
+                        detectionCanvas.width = previewImg.clientWidth;
+                        detectionCanvas.height = previewImg.clientHeight;
+                        circleRadius = Math.max(20, previewImg.clientWidth / 20);
+                    }, 100);
 
                     // 更新UI状态
                     previewImg.style.opacity = 1;
@@ -420,10 +427,18 @@
             }, { timeout: 1000 }); // 最多等待1秒，避免超时无响应
         }
 
-        // 统计像素（优化：减少遍历次数和计算量）
+        // 统计像素（优化：减少遍历次数和计算量，修复设备间差异）
         function countTFPixels(centerX, centerY) {
             let tPixel = 0;
             let fPixel = 0;
+
+            // 获取图片实际显示的尺寸和位置
+            const imgRect = previewImg.getBoundingClientRect();
+            const wrapperRect = positionWrapper.getBoundingClientRect();
+            
+            // 计算实际的缩放比例（使用图片实际尺寸与原始尺寸的比值）
+            const actualScaleRatioX = previewImg.naturalWidth / previewImg.clientWidth;
+            const actualScaleRatioY = previewImg.naturalHeight / previewImg.clientHeight;
 
             // 计算识别圈范围（整数化边界，减少小数计算）
             const radiusSquared = circleRadius * circleRadius;
@@ -438,13 +453,13 @@
 
             // 遍历像素（优化：减少循环内计算）
             for (let y = minY; y <= maxY; y++) {
-                // 预计算Y方向偏移量
-                const originalY = Math.round(y / imgScaleRatio);
+                // 使用实际的Y方向缩放比例映射到原始图片坐标
+                const originalY = Math.round(y * actualScaleRatioY);
                 if (originalY < 0 || originalY >= imgHeight) continue;
 
                 for (let x = minX; x <= maxX; x++) {
-                    // 预计算X方向偏移量
-                    const originalX = Math.round(x / imgScaleRatio);
+                    // 使用实际的X方向缩放比例映射到原始图片坐标
+                    const originalX = Math.round(x * actualScaleRatioX);
                     if (originalX < 0 || originalX >= imgWidth) continue;
 
                     // 圆内判断（提前计算平方，减少乘法）
@@ -462,7 +477,7 @@
                     const { h, s, v } = fastRgbToHsv(r, g, b);
 
                     // 判断金色像素（F）
-                    if (h >= 30 && h <= 65 && s >= 30 && s <= 100 && v >= 0 && v <= 100) {
+                    if (h >= 30 && h <= 65 && s >= 30 && s <= 100 && v >= 20 && v <= 100) {
                         fPixel++;
                         drawMaskPixel(x, y, 'rgba(255,0,0,0.4)');
 
@@ -527,6 +542,39 @@
         function updateResult(text, className) {
             finalResult.textContent = text;
             finalResult.className = `result-content ${className}`;
+            
+            // 获取main部分的所有div元素
+            const mainDivs = document.querySelectorAll('main div');
+            
+            // 根据识别结果更新main部分div的背景颜色
+            if (className === 'result-sun') {
+                // 太阳之子：浅金色25%透明度
+                mainDivs.forEach(div => {
+                    // 保存原始背景色以便后续恢复
+                    if (!div.dataset.originalBg) {
+                        div.dataset.originalBg = div.style.backgroundColor;
+                    }
+                    div.style.backgroundColor = 'rgba(255, 215, 0, 0.25)';
+                });
+            } else if (className === 'result-not-sun') {
+                // 非太阳之子：红色75%透明度
+                mainDivs.forEach(div => {
+                    // 保存原始背景色以便后续恢复
+                    if (!div.dataset.originalBg) {
+                        div.dataset.originalBg = div.style.backgroundColor;
+                    }
+                    div.style.backgroundColor = 'rgba(255, 0, 0, 0.75)';
+                });
+            } else {
+                // 未识别或其他情况：恢复原来的颜色
+                mainDivs.forEach(div => {
+                    if (div.dataset.originalBg) {
+                        div.style.backgroundColor = div.dataset.originalBg;
+                    } else {
+                        div.style.backgroundColor = '';
+                    }
+                });
+            }
         }
 
         judgeAndShowResult = function(tPixel, fPixel) {
