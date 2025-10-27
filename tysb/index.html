@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太阳之眼-太阳之子识别-懒得工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="tysb.css">
+</head>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="/index.html">
+            <img id="logo" src="../assets/icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
+        </div>
+        <nav>
+          <ul>
+      <li><a href="wangluoqitao.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+    <main>
+        <section class="tool-detail">
+            <h3 class="text-xl font-bold mb-4">太阳之子发色识别</h3>
+
+            <div class="input-section">
+                <div class="form-item">
+                    <label class="upload-button" for="imageUpload">
+                        <input type="file" id="imageUpload" accept="image/*">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        <span>上传图片</span>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-item">
+                        <div id="previewContainer">
+                            <div id="positionWrapper">
+                                <img id="previewImg" alt="图片预览">
+                                <canvas id="detectionCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-text" id="mainTip">请先上传图片</div>
+            </div>
+
+            <div class="output-section mt-6">
+                <div class="output-title">识别结果</div>
+                <div class="result-content" id="finalResult">
+                    <p>请上传图片并点击发色区域识别</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>秦又懒 © 2025</p>
+    </footer>
+
+    <script src="../assets/js/face-api.min.js"></script>
+    <script src="../assets/js/tf.min.js"></script>
+    <script src="tysb.js"></script>
+</body>
+</html>
+
+
