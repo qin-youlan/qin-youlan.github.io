@@ -1,0 +1,1413 @@
+/* styles.css - 统一样式文件 */
+
+/* 全局样式重置和基础设置 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    color: #fff;
+    line-height: 1.6;
+}
+
+/* 全局链接样式 */
+a {
+    color: inherit; /* 继承父元素颜色 */
+    text-decoration: none; /* 移除默认下划线 */
+}
+
+a:hover {
+    color: inherit; /* 悬停时保持颜色一致 */
+}
+
+/* 深色主题 */
+body.dark-theme {
+    background-color: #333;
+    color: #fff;
+}
+
+/* 统一文本字号样式 */
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { 
+    font-size: 18px; 
+    margin: 5px 0;
+    padding: 5px 0;
+}
+.section-title { font-size: 16px; }
+label { font-size: 14px; }
+select, input, span, p { font-size: 14px; }
+.god-feature-error { font-size: 13px; }
+
+/* 头部样式 */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* 移动端优化 - 减小header大小 */
+@media (max-width: 768px) {
+    header {
+        padding: 8px 15px;
+    }
+    
+    #logo {
+        height: 1.8em;
+        margin-right: 8px;
+    }
+    
+    header h1 {
+        font-size: 1.2em;
+        margin-left: 8px;
+        line-height: 1.3;
+    }
+    
+    /* 隐藏不必要的导航元素，保留最重要的 */
+    header nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    header nav ul li {
+        font-size: 0.9em;
+    }
+}
+
+/* Logo和标题容器 */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo与标题间距 */
+.logo-container h1 {
+    margin-left: 15px;
+}
+
+/* Logo链接样式 */
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    transition: opacity 0.2s ease;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+#logo {
+    display: inline-block;
+    width: auto;
+    height: 2.2em;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* 确保header中的a标签内的元素在同一行 */
+header a {
+    display: flex;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    margin-left: 10px;
+    font-size: 1.5em;
+    line-height: 1.5;
+    display: inline-block;
+}
+
+/* 搜索框样式 */
+.search-container {
+    position: relative;
+    width: 250px;
+}
+
+.search-container.full-width {
+    width: 50%;
+}
+
+#search-input {
+    width: 100%;
+    padding: 8px 8px 8px 35px;
+    border: 1px solid #555;
+    border-radius: 20px;
+    background-color: transparent;
+    color: #fff;
+    font-size: 0.9em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+#search-input::placeholder {
+    color: #aaa;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #777;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+/* 主内容区样式 */
+main {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    min-height: calc(100vh - 200px);
+    background-color: rgba(51, 51, 51, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* 确保所有label靠左对齐 */
+label {
+    text-align: left !important;
+}
+
+/* 表单行基础样式 */
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: rgba(68, 68, 68, 0.5);
+    border-radius: 8px;
+    border: 1px solid #555;
+}
+
+/* 主血脉样式 - 标签靠左 */
+.main-bloodline-row {
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.main-bloodline-row label {
+    order: 1;
+    text-align: left;
+    width: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.main-bloodline-row select {
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.main-bloodline-row .percentage-display {
+    order: 3;
+    flex-shrink: 0;
+}
+
+/* 次血脉样式 - 标签靠右 */
+.secondary-bloodline-row {
+    justify-content: flex-end;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.secondary-bloodline-row .percentage-display {
+    order: 1;
+    flex-shrink: 0;
+}
+
+.secondary-bloodline-row select {
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.secondary-bloodline-row label {
+    order: 3;
+    text-align: right;
+    width: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* 推荐区域和列表样式 - 首页专用 */
+#recommendations {
+    margin-bottom: 20px;
+}
+
+#software-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* 磁贴样式 */
+.software-tile {
+    position: relative;
+    width: calc(20% - 20px);
+    padding: 0;
+    background-color: #333;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    color: #fff;
+}
+
+/* 磁贴链接样式 */
+.tile-link {
+    display: block;
+    text-decoration: none;
+    height: 100%;
+    color: inherit; /* 继承父元素颜色 */
+}
+
+.tile-link:hover {
+    color: inherit; /* 悬停时保持颜色一致 */
+}
+
+.software-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 磁贴内容样式 */
+.tile-content {
+    padding: 20px;
+    text-align: center;
+}
+
+/* 图标容器样式 */
+.icon-container {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.icon-container img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    fill: currentColor;
+}
+
+/* 确保SVG图标正确显示 */
+.icon-container img[src$=".svg"] {
+    width: 70%;
+    height: 70%;
+    fill: #fff;
+    stroke: #fff;
+}
+
+/* 磁贴标题样式 */
+.software-tile h3 {
+    margin: 0 0 10px;
+    font-size: 1.1em;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* URL文本样式 - 保留但不再使用 */
+.url-text {
+    margin: 0;
+    font-size: 0.8em;
+    color: #666;
+    word-break: break-all;
+}
+
+/* 分类文本样式 */
+.category-text {
+    margin: 0;
+    font-size: 0.8em;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* 磁贴覆盖层样式 */
+.tile-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 99, 71, 0.9);
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-sizing: border-box;
+}
+
+.software-tile:hover .tile-overlay {
+    opacity: 1;
+}
+
+/* 覆盖层文本样式 */
+.overlay-text {
+    margin: 0 0 15px;
+    font-size: 0.9em;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* 访问按钮样式 */
+.visit-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #444;
+    color: #ff6347;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.visit-btn:hover {
+    background-color: #555;
+}
+
+/* 占位图标样式 */
+.placeholder-icon {
+    font-size: 2em;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* 相关工具部分样式 */
+#related-tools {
+    padding: 20px 0;
+}
+
+/* 工具详情页面样式 */
+.tool-detail {
+    background-color: #444;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 深色主题下的工具详情 */
+body.dark-theme .tool-detail {
+    background-color: #444;
+}
+
+.text-xl {
+    font-size: 20px;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+}
+
+/* 输入区域样式 */
+.input-section {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* 深色主题下的输入区域 */
+body.dark-theme .input-section {
+    background-color: #555;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.form-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.form-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.form-item label {
+    min-width: 100px;
+    margin-right: 10px;
+    color: #333;
+}
+
+/* 深色主题下的标签 */
+body.dark-theme .form-item label {
+    color: #fff;
+}
+
+.form-item input, .form-item select {
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #555;
+    color: #fff;
+}
+
+/* 深色主题下的输入框 */
+body.dark-theme .form-item input, 
+body.dark-theme .form-item select {
+    border-color: #555;
+    background-color: #555;
+    color: #fff;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #ff4500;
+}
+
+/* 输出区域样式 */
+.output-section {
+    margin-top: 20px;
+}
+
+.output-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 深色主题下的输出标题 */
+body.dark-theme .output-title {
+    color: #fff;
+}
+
+.result-content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #333;
+}
+
+/* 深色主题下的结果内容 */
+body.dark-theme .result-content {
+    background-color: #555;
+    color: #fff;
+}
+
+/* 卡片样式 */
+.card {
+    background-color: #444;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 深色主题下的卡片 */
+body.dark-theme .card {
+    background-color: #444;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 容器样式 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 标题样式 */
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* 深色主题下的标题 */
+body.dark-theme .title {
+    color: #fff;
+}
+
+/* 表单组样式 */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* 深色主题下的表单组标签 */
+body.dark-theme .form-group label {
+    color: #fff;
+}
+
+.form-group select, .form-group input[type="range"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #555;
+    color: #fff;
+}
+
+/* 深色主题下的表单组输入 */
+body.dark-theme .form-group select, 
+body.dark-theme .form-group input[type="range"] {
+    border-color: #555;
+    background-color: #555;
+    color: #fff;
+}
+
+.form-group input[type="range"] {
+    padding: 8px 0;
+}
+
+/* 百分比显示样式 */
+.percentage-display {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #e9ecef;
+    color: #333;
+    border-radius: 12px;
+    font-size: 0.8em;
+    margin-left: 10px;
+}
+
+/* 深色主题下的百分比显示 */
+body.dark-theme .percentage-display {
+    background-color: #555;
+    color: #fff;
+}
+
+/* 属性容器样式 */
+.attribute-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.attribute-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+/* 深色主题下的属性项 */
+body.dark-theme .attribute-item {
+    background-color: #555;
+}
+
+.attribute-value {
+    font-weight: bold;
+    color: #ff9b37;
+}
+
+/* 滑块容器样式 */
+.slider-container {
+    width: 100%;
+    margin: 10px 0;
+}
+
+.slider {
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 4px;
+    appearance: none;
+    cursor: pointer;
+}
+
+/* 深色主题下的滑块 */
+body.dark-theme .slider {
+    background-color: #555;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ff6347;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ff6347;
+    cursor: pointer;
+    border: none;
+}
+
+/* 按钮组样式 */
+.btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.god-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-left: 8px;
+}
+
+/* 表单行样式 */
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* 主血脉div靠左对齐 */
+.main-bloodline-row {
+    justify-content: flex-start;
+}
+
+/* 次血脉div靠右对齐 */
+.secondary-bloodline-row {
+    justify-content: flex-end;
+}
+
+/* 标签样式 */
+.form-row label {
+    margin-bottom: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 0;
+}
+
+/* 深色主题下的表单行标签 */
+body.dark-theme .form-row label {
+    color: #fff;
+}
+
+/* 选择框样式 */
+.form-row select {
+    width: 150px;
+    padding: 8px 12px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 神血特性区域样式 */
+.god-features-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 神血特性错误提示 - 增强可见性 */
+.god-feature-error {
+  grid-column: 1 / -1;
+  padding: 15px 20px;
+  border-radius: 6px;
+  font-size: 16px; /* 增大字体 */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  min-height: 50px; /* 增大高度 */
+  background-color: rgba(255, 99, 71, 0.2); /* 加深背景 */
+  border: 3px solid tomato; /* 加粗边框 */
+  color: #ff473d; /* 更鲜艳的颜色 */
+  margin-top: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease; /* 添加过渡效果 */
+  z-index: 100; /* 确保在最上层 */
+}
+
+.god-feature-error.info {
+  background-color: rgba(70, 130, 180, 0.2); /* 加深背景 */
+  border: 3px solid #4682b4; /* 加粗边框 */
+  color: #3a72a3; /* 更鲜艳的颜色 */
+}
+
+.god-feature-error i.fa-exclamation-circle {
+  color: #ff473d;
+  font-size: 20px; /* 增大图标 */
+  margin-right: 10px;
+}
+
+.god-feature-error i.fa-info-circle {
+  color: #3a72a3;
+  font-size: 20px; /* 增大图标 */
+  margin-right: 10px;
+}
+
+/* 只使用display属性控制显示/隐藏，避免冲突 */
+.god-feature-error.hidden {
+  display: none;
+}
+
+.mr-1 {
+  margin-right: 8px;
+  margin-left: 2px;
+}
+
+.god-feature-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+}
+
+.god-feature-item label {
+    min-width: 80px;
+    text-align: left;
+    margin-right: 15px;
+    white-space: nowrap;
+}
+
+.god-feature-item select {
+    margin-left: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.form-row select:hover {
+    border-color: #888;
+    background-color: #4a4a4a;
+}
+
+.form-row select:focus {
+    outline: none;
+    border-color: #888;
+    box-shadow: 0 0 0 2px rgba(136, 136, 136, 0.3);
+}
+
+/* 确保百分比显示元素显示正确 */
+.form-row span.percentage-display {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffa600;
+    padding: 5px 10px;
+    background-color: rgba(255, 166, 0, 0.1);
+    border-radius: 4px;
+    min-width: 50px;
+    text-align: center;
+}
+
+/* 错误消息样式 */
+.error-message, .god-feature-error {
+    color: #ff6347;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+/* 隐藏元素 */
+.hidden {
+    display: none;
+}
+
+/* 页脚样式 */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    color: #aaa;
+    font-size: 0.8em;
+    background-color: #333;
+}
+
+/* 深色主题下的页脚 */
+body.dark-theme footer {
+    color: #aaa;
+    background-color: #333;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    /* 头部响应式 */
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    .logo-container {
+        margin-bottom: 10px;
+    }
+    
+    .search-container, .search-container.full-width {
+        width: 100%;
+    }
+    
+    /* 磁贴响应式 */
+    .software-tile {
+        width: 100%;
+    }
+    
+    /* 属性容器响应式 */
+    .attribute-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* 表单响应式 */
+    .form-row {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    
+    
+    /* 主血脉移动响应式 */
+    .main-bloodline-row {
+        justify-content: flex-start;
+    }
+    
+    .main-bloodline-row label {
+        width: auto;
+        font-size: 13px;
+    }
+    
+    .main-bloodline-row select {
+        width: 120px;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    /* 次血脉移动响应式 */
+    .secondary-bloodline-row {
+        justify-content: flex-end;
+    }
+    
+    .secondary-bloodline-row label {
+        width: auto;
+        font-size: 13px;
+    }
+    
+    .secondary-bloodline-row select {
+        width: 120px;
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    
+    /* 百分比显示响应式 */
+    .form-row span.percentage-display {
+        font-size: 13px;
+        min-width: 45px;
+        padding: 4px 8px;
+    }
+    
+    /* 按钮组响应式 */
+    .btn-group {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .god-btn-group {
+        flex: 1;
+        margin-left: 0;
+        justify-content: flex-end;
+    }
+    
+    .gender-btn,
+    .god-btn {
+        height: 45px;
+        width: 45px;
+    }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+    .software-tile {
+        width: calc(33.333% - 20px);
+    }
+}
+
+@media (max-width: 1200px) and (min-width: 1025px) {
+    .software-tile {
+        width: calc(25% - 20px);
+    }
+}
+
+/* 性别按钮样式 */
+.gender-btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-indent: -9999px;
+    border: none;
+}
+
+.gender-btn.male {
+    background-image: url('../icons/male.svg');
+}
+
+.gender-btn.female {
+    background-image: url('../icons/female.svg');
+}
+
+/* 神明按钮样式 */
+.god-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+/* 为每个神像按钮设置对应的背景图片 */
+.god-btn.palo {
+    background-image: url('../icons/paluo.svg');
+}
+
+.god-btn.koneta {
+    background-image: url('../icons/keneita.svg');
+}
+
+.god-btn.sainan {
+    background-image: url('../icons/sainan.svg');
+}
+
+.god-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.god-btn span:first-child {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin-top: 4px;
+}
+
+.god-btn span:last-child {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    margin-bottom: 4px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 0 6px;
+    border-radius: 9999px;
+}
+
+.god-btn.level-0::before {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.god-btn.level-1::before {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.god-btn.level-2::before {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 血脉选择器样式 */
+.bloodline-select {
+    padding: 8px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #555;
+    color: #fff;
+    width: 200px;
+    pointer-events: auto;
+}
+
+/* 雷达图文本样式 */
+.radar-attr-text {
+    text-anchor: middle;
+    fill: #FFF;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+}
+
+.radar-value-text {
+    text-anchor: middle;
+    fill: #FFF;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+}
+
+/* 六边形容器样式 */
+.hexagon-chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 0;
+    padding-bottom: 100%; /* 1:1 宽高比例 */
+    margin: 0 auto;
+    background-color: #222;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hexagon-chart-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    preserveAspectRatio: xMidYMid meet;
+}
+
+/* 打赏页面专用样式 */
+/* 颜色变量 */
+:root {
+    --primary-color: #ff9b37;
+    --secondary-color: #ff6b00;
+    --dark-color: #333333;
+    --darker-color: #222222;
+    --light-color: #555555;
+    --highlight-color: #ffcc99;
+}
+
+/* 打赏页面容器 */
+.donate-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 已移除.donate-title和.donate-card样式 */
+
+/* 统一Header样式 */
+header {
+    background-color: var(--dark-color);
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+header .container > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* Logo和标题靠左 */
+header .container > div > div:first-child {
+    display: flex;
+    align-items: flex-start;
+}
+
+header .logo-link,
+header a[href="index.html"] {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+header #logo {
+    display: inline-block;
+    width: auto;
+    height: 2.2em;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 1.5em;
+    margin: 0;
+}
+
+/* 导航部分靠右 */
+header nav {
+    text-align: right;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.5rem;
+}
+
+/* 导航链接统一字号和样式 */
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    padding: 0.5rem 0;
+}
+
+header nav a:hover {
+    color: var(--primary-color);
+}
+
+header nav a.active,
+header nav a[href="wangluoqitao.html"] {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* 支付方式样式 */
+.payment-method {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #444;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.payment-method.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 155, 55, 0.1);
+}
+
+.payment-method:hover:not(.selected) {
+    border-color: var(--light-color);
+}
+
+.payment-method-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-method-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.payment-method-info p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* 支付按钮样式 */
+.pay-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.pay-btn:hover {
+    background-color: var(--secondary-color);
+    box-shadow: 0 4px 12px rgba(255, 155, 55, 0.3);
+}
+
+/* 渐变背景 */
+.bg-gradient {
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--darker-color) 100%);
+}
+
+/* 边框发光效果 */
+.border-glow {
+    box-shadow: 0 0 5px rgba(255, 155, 55, 0.5);
+}
+
+/* 文本阴影 */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 过渡效果 */
+.transition-all-300 {
+    transition: all 0.3s ease;
+}
+
+/* 打赏页面特定的页脚样式 */
+.donate-footer {
+    background-color: var(--darker-color);
+    padding: 1.5rem 1.5rem;
+    margin-top: 2rem;
+}
+
+.donate-footer .container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.donate-footer-content {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.875rem;
+}
+
+.donate-footer-content p {
+    margin: 0 0 0.5rem 0;
+}
+
+/* 打赏页面的导航样式 */
+.donate-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.donate-nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.donate-nav a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.donate-nav a:hover {
+    color: var(--primary-color);
+}
+
+.donate-nav a.active {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* 打赏图片样式 */
+.donate-image {
+    display: block;
+    margin: 0 auto 2rem;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
