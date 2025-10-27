@@ -1,0 +1,172 @@
+<html lang="zh-CN"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>血脉极限</title>
+  <!-- Font Awesome Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="../index.html">
+            <img id="logo" src="../assets/icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
+        </div>
+        <nav>
+          <ul>
+      <li><a href="../wangluoqitao/index.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+      <div class="container">
+          <div class="title">
+              <h1>血脉极限</h1>
+              <p>血脉极限成长一览</p>
+          </div>
+
+
+              <!-- 血脉选择区域 -->
+
+                  <div class="form-row main-bloodline-row">
+                      <label for="mainBloodline">主血脉</label>
+                      <select id="mainBloodline" class="bloodline-select" style="width: 110px;">
+                          <!-- 由JavaScript动态填充 -->
+                      </select>
+                      <span id="mainPercentage" class="percentage-display">100%</span>
+                  </div>
+
+                  <div class="slider-container">
+                      <input type="range" id="percentageSlider" class="slider" min="50" max="100" step="5" value="100">
+                  </div>
+
+                  <div id="secondaryBloodlineContainer" class="form-row secondary-bloodline-row mt-2 hidden">
+                      <span id="secondaryPercentage" class="percentage-display">0%</span>
+                      <select id="secondaryBloodline" class="bloodline-select" style="width: 110px;">
+                          <!-- 由JavaScript动态填充 -->
+                      </select>
+                      <label for="secondaryBloodline">次血脉</label>
+                  </div>
+
+
+
+
+
+
+
+          <!-- 属性值显示区域 -->
+          <h3 class="section-title">极限属性值</h3>
+          <div class="attribute-container">
+              <div class="attribute-item">
+                  <span>力量</span>
+                  <span id="strengthValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item">
+                  <span>体力</span>
+                  <span id="bodyValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item">
+                  <span>技巧</span>
+                  <span id="skillValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item">
+                  <span>感知</span>
+                  <span id="perceptionValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item">
+                  <span>敏捷</span>
+                  <span id="agilityValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item">
+                  <span>意志</span>
+                  <span id="willValue" class="attribute-value">0.0</span>
+              </div>
+              <div class="attribute-item" style="grid-column: span 2;">
+                  <span>总计:</span>
+                  <span id="totalValue" class="attribute-value">0.0</span>
+              </div>
+          </div>
+
+
+
+          <!-- 六角图显示区域（SVG雷达图） -->
+          <div class="hexagon-chart-container" id="radar-container">
+              <!-- SVG将由JavaScript动态生成 -->
+          </div>
+
+
+
+          <!-- 按钮区域 -->
+          <div class="btn-group">
+              <button id="genderToggle" class="gender-btn female">
+                  <span>♀</span>
+              </button>
+
+              <div class="god-btn-group">
+                  <button id="paloBtn" class="god-btn palo level-0" data-god="palo">
+                      <span>帕洛</span>
+                      <span id="paloLevel">0</span>
+                  </button>
+                  <button id="konetaBtn" class="god-btn koneta level-0" data-god="koneta">
+                      <span>科内塔</span>
+                      <span id="konetaLevel">0</span>
+                  </button>
+                  <button id="sainanBtn" class="god-btn sainan level-0" data-god="sainan">
+                      <span>赛南</span>
+                      <span id="sainanLevel">0</span>
+                  </button>
+              </div>
+          </div>
+
+          <!-- 神血特性选择区域 -->
+          <h3 class="section-title">神血特性</h3>
+          <div class="god-features-container">
+              <div class="god-feature-item">
+                  <label for="godSkill">神子之技</label>
+                  <select id="godSkill" class="bloodline-select">
+                      <option value="" selected="">请选择</option>
+                  </select>
+              </div>
+
+              <div class="god-feature-item">
+                  <label for="godOther1">神血特性1</label>
+                  <select id="godOther1" class="bloodline-select">
+                      <option value="" selected="">请选择</option>
+                  </select>
+              </div>
+
+              <div class="god-feature-item">
+                  <label for="godOther2">神血特性2</label>
+                  <select id="godOther2" class="bloodline-select">
+                      <option value="" selected="">请选择</option>
+                  </select>
+              </div>
+
+              <!-- 神血特性提示元素 - 简化默认样式，由JavaScript完全控制 -->
+              <div id="godFeatureError" style="
+                display: none;
+                visibility: hidden;
+                opacity: 0;
+                padding: 0;
+                margin: 0;
+              ">提示信息</div>
+          </div>
+      </div>
+  </main>
+  
+    <footer>
+      <p>秦又懒 © 2025</p>
+    </footer>
+  <script>
+    // 注意：所有JavaScript代码已经移至hx.js文件中
+  </script>
+  <script src="hx.js"></script>
+
+</body></html>
