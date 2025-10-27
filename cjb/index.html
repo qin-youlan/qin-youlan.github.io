@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>传家宝计算 - 懒得工具</title>
+    <!-- Font Awesome Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="cjb.css">
+</head>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="../index.html">
+            <img id="logo" src="../assets/icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="../wangluoqitao/index.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h3 class="text-xl font-bold mb-4">传家宝转职方案计算</h3>
+
+    <!-- 输入区域 -->
+    <div class="input-section">
+      <!-- 人物六维输入 -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>人物六维：</label>
+          <input type="text" id="person-growth" value="0 0 0 0 0 0" placeholder="输入力技敏体感意，空格分隔，范围-0.2~2">
+        </div>
+      </div>
+      <!-- 初始等级输入 -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>升级总数：</label>
+          <input type="number" id="init-level" value="20" min="1" max="89" placeholder="默认20，最高89（可升级1~89级）">
+        </div>
+      </div>
+      <!-- 传家宝装备选择 -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>传家宝装备（可选）：</label>
+          <select id="heirloom-equip" onchange="filterJobsByEquip()">
+            <option value="">不选择（显示所有职业）</option>
+            <option value="单手剑">单手剑</option>
+            <option value="枪">枪</option>
+            <option value="刀">刀</option>
+            <option value="短弓">短弓</option>
+            <option value="骑枪">骑枪</option>
+            <option value="刺剑">刺剑</option>
+            <option value="弩">弩</option>
+            <option value="长柄">长柄</option>
+            <option value="双手剑">双手剑</option>
+            <option value="单手斧">单手斧</option>
+            <option value="双手斧">双手斧</option>
+            <option value="权杖">权杖</option>
+            <option value="单手锤">单手锤</option>
+            <option value="链锤">链锤</option>
+            <option value="长弓">长弓</option>
+            <option value="匕首">匕首</option>
+            <option value="双手杖">双手杖</option>
+            <option value="瓶子">瓶子</option>
+            <option value="琴">琴</option>
+            <option value="链甲">链甲</option>
+            <option value="皮甲">皮甲</option>
+            <option value="板甲">板甲</option>
+            <option value="布甲">布甲</option>
+          </select>
+        </div>
+      </div>
+      <!-- 目标属性选择 -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>目标属性（第一属性）：</label>
+          <select id="target-attr">
+            <option value="0">力</option>
+            <option value="1">技</option>
+            <option value="2">敏</option>
+            <option value="3">体</option>
+            <option value="4">感</option>
+            <option value="5">意</option>
+          </select>
+        </div>
+      </div>
+      <!-- 第二目标属性选择（可选） -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>第二目标属性（可选）：</label>
+          <select id="second-target-attr">
+            <option value="">不指定</option>
+            <option value="0">力</option>
+            <option value="1">技</option>
+            <option value="2">敏</option>
+            <option value="3">体</option>
+            <option value="4">感</option>
+            <option value="5">意</option>
+          </select>
+        </div>
+      </div>
+      <!-- 职业选择区域 -->
+      <div class="input-group">
+        <div class="form-item">
+          <label>可选职业：</label>
+          <div id="job-tags-container" class="job-tags-container"></div>
+        </div>
+      </div>
+      <!-- 按钮区域 -->
+      <div class="button-group" style="text-align: center;">
+        <button onclick="calculateOptimalPlan()" class="btn btn-primary">计算最优方案</button>
+      </div>
+    </div>
+
+    <!-- 结果区域 -->
+    <div class="output-section">
+      <h4 class="output-title">计算结果</h4>
+      <div id="result-content" class="result-content">
+        <!-- 计算结果将在这里显示 -->
+      </div>
+    </div>
+
+    <!-- 成长数据表格区域 -->
+    <div class="growth-section">
+      <div class="growth-header" onclick="toggleGrowthSection()">
+        <h4>职业成长数据 <i id="growth-toggle-icon" class="fa fa-chevron-down" style="margin-left: 10px; transition: transform 0.3s ease;"></i></h4>
+      </div>
+      <div id="growth-content" class="growth-content" style="display: none;">
+        <div class="growth-table-container">
+          <table class="growth-table">
+            <thead>
+              <tr>
+                <th class="fixed-column">职业名称</th>
+                <th class="sortable" onclick="sortByGrowth(0)">力</th>
+                <th class="sortable" onclick="sortByGrowth(1)">技</th>
+                <th class="sortable" onclick="sortByGrowth(2)">敏</th>
+                <th class="sortable" onclick="sortByGrowth(3)">体</th>
+                <th class="sortable" onclick="sortByGrowth(4)">感</th>
+                <th class="sortable" onclick="sortByGrowth(5)">意</th>
+              </tr>
+            </thead>
+            <tbody id="growth-table-body">
+              <!-- 表格内容将由JavaScript动态生成 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="cjb.js"></script>
+</body>
+</html>
