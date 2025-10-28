@@ -426,14 +426,31 @@ function updateGodFeatureOptions() {
     // 添加其他神血特性选项
     if (mainBloodlineFeatures.others && mainBloodlineFeatures.others.length > 0) {
       mainBloodlineFeatures.others.forEach(feature => {
+        // 构建包含成长属性信息的文本内容
+        let optionText = feature.name;
+        if (feature.growth) {
+          const growthParts = [];
+          // 按照固定顺序检查属性成长
+          ['力', '技', '敏', '体', '感', '意'].forEach(attr => {
+            if (feature.growth[attr] && feature.growth[attr] > 0) {
+              growthParts.push(`${attr}:${feature.growth[attr]}`);
+            }
+          });
+          if (growthParts.length > 0) {
+            optionText += ` (${growthParts.join(' ')})`;
+          }
+        }
+        
+        // 创建第一个选择框的选项
         const option1 = document.createElement('option');
-        option1.value = feature.name;
-        option1.textContent = feature.name;
+        option1.value = feature.name; // 保持value不变，确保功能正常
+        option1.textContent = optionText;
         godOther1Select.appendChild(option1);
         
+        // 创建第二个选择框的选项
         const option2 = document.createElement('option');
-        option2.value = feature.name;
-        option2.textContent = feature.name;
+        option2.value = feature.name; // 保持value不变，确保功能正常
+        option2.textContent = optionText;
         godOther2Select.appendChild(option2);
       });
     }
