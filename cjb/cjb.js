@@ -667,10 +667,13 @@ function sortTableByAttribute(attrIndex, isAscending) {
     });
 }
 
-// 高亮显示目标属性是本职业最高成长的职业标签
+// 高亮显示目标属性是本职业最高成长的职业标签，并为基础职业添加边框
 function highlightJobs() {
     // 获取当前选中的目标属性
     const targetAttr = parseInt(document.getElementById('target-attr').value);
+    
+    // 定义基础职业ID列表
+    const basicJobIds = ['apprentice-rider', 'hunter', 'light-infantry', 'heavy-infantry', 'self-taught-wizard'];
     
     // 获取所有职业标签
     const allTags = document.querySelectorAll('.job-tag');
@@ -682,7 +685,7 @@ function highlightJobs() {
         tag.style.borderStyle = 'solid'; // 确保边框样式一致
     });
     
-    // 遍历所有可见的职业标签，而不是所有职业
+    // 遍历所有可见的职业标签
     allTags.forEach(tag => {
         // 只处理可见的标签
         if (tag.style.display !== 'none' && tag.style.display !== 'hidden') {
@@ -690,6 +693,14 @@ function highlightJobs() {
             const job = allJobs.find(j => j.id === jobId);
             
             if (job) {
+                // 检查是否是基础职业，如果是则添加高亮颜色边框
+                if (basicJobIds.includes(jobId)) {
+                    tag.style.borderWidth = '2px'; // 加粗边框
+                    tag.style.borderColor = '#ff9b37'; // 设置高亮颜色边框
+                    tag.style.borderStyle = 'solid';
+                    tag.style.borderRadius = '20px'; // 保持与原样式相同的圆角
+                }
+                
                 // 检查目标属性是否是该职业的六个成长中的最大值
                 const isTargetAttrMax = job.growth[targetAttr] === Math.max(...job.growth);
                 

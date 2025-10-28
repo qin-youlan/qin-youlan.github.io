@@ -30,6 +30,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch; /* 为iOS设备添加滚动惯性 */
     position: relative;
+    border: 1px solid #666; /* 添加边框，使滚动区域更明确 */
 }
 
 /* 针对移动端的优化 */
@@ -56,15 +57,22 @@
     font-size: 14px; /* 移动端保持合适的字体大小 */
 }
 
-/* 表头固定在顶部 */
+/* 表头固定在顶部 - 增强粘性效果 */
+.growth-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
 .growth-table th {
     background-color: #333;
     color: #fff;
     font-weight: 600;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     border-bottom: 2px solid #ff9b37; /* 表头底部添加突出边框 */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); /* 添加轻微阴影增强可见性 */
 }
 
 /* 固定职业名称列 - 冻结在左侧 */
