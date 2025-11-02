@@ -597,10 +597,8 @@ function renderGrowthTable() {
         job.growth.forEach((value, index) => {
             const cell = document.createElement('td');
             
-            // 使用分数成长表校正小数显示
-            const numerator = job.growthFraction.numerator[index];
-            const denominator = job.growthFraction.denominator;
-            const preciseValue = numerator / denominator;
+            // 直接使用growth表中的值
+            const preciseValue = job.growth[index];
             
             // 格式化显示：0值不保留小数，其他值保留四位小数
             if (preciseValue === 0) {
@@ -610,7 +608,7 @@ function renderGrowthTable() {
             }
             
             // 检查是否是该属性的最高值
-            const isHighest = allJobs.every(j => preciseValue >= j.growthFraction.numerator[index] / j.growthFraction.denominator);
+            const isHighest = allJobs.every(j => preciseValue >= j.growth[index]);
             if (isHighest) {
                 cell.className = 'growth-highlight';
             }
