@@ -79,12 +79,12 @@ const bloodlineAttributes = {
                   { name: "真塞宁王族圣痕", 部位: "圣痕", growth: { "力": 0.1, "技": 0.2 }, life: 100, prerequisite: "", "featureBonus": "力量+20、技巧+20、体质+5、暴击+15%、经验获取+40%" },
                   { name: "烈火镕金", 部位: "发色", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+10%、命中+15%、格挡+15%、对异性表白成功率提升" },
                   { name: "不灭之志", 部位: "眼睛", growth: { "力": 0.1, "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、暴击+20%、攻击力+5、经验获取+25%" },
-                  { name: "引领者", 部位: "眉毛", growth: { "技": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+16、体质+24、最大生命+32、负重+40、对异性表白成功率提升" },
+                  { name: "引领者", 部位: "眉毛", growth: { "技": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+16、体质+24、最大生命+20、负重+40、对异性表白成功率提升" },
                   { name: "无畏", 部位: "耳朵", growth: { "技": 0.1, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+5%、体质+5%、暴击+15%、命中率+25%" },
                   { name: "苍白之血", 部位: "圣痕", growth: { "力": 0.2, "技": 0.1 }, life: 100, prerequisite: "", "featureBonus": "力量+22、技巧+22、攻击力+9、经验获取+40%" },
-                  { name: "褪色之眼", 部位: "眼睛", growth: { "力": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+16%、暴击+15%、攻击力+15" },
-                  { name: "寂灭余晖", 部位: "发色", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、技巧+5%、命中+35%、格挡+10%、对异性表白成功率提升" },
-                  { name: "白夜帷幕", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+24、技巧+16、最大生命+35、负重+40、对异性表白成功率大幅提升" }
+                  { name: "褪色之眼", 部位: "眼睛", growth: { "力": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、暴击+15%、攻击力+15" },
+                  { name: "寂灭余晖", 部位: "发色", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、技巧+5%、命中+35%、抗暴+10%、对异性表白成功率提升" },
+                  { name: "白夜帷幕", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+24、技巧+16、最大生命+35、负重+20、对异性表白成功率大幅提升" }
               ]
           },
           "佩尔": {
@@ -116,8 +116,8 @@ const bloodlineAttributes = {
                   { name: "澄澈之眼", 部位: "眼睛", growth: { "技": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、格挡+20%、经验获取+20%" },
                   { name: "瓦提肯的坚毅", 部位: "发色", growth: { "体": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "体质+10%、最大生命+15、负重+45、对异性表白成功率提升" },
                   { name: "创造之赐", 部位: "发色", growth: { "体": 0.2 }, life: 80, prerequisite: "瓦斯提亚后裔", "featureBonus": "技巧+5%、体质+10%、最大生命+25、格挡+10%" },
-                  { name: "光明之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "太阳之子", "featureBonus": "力量+2%、技巧+10%、攻击力+9、近战命中+10%、经验获取+25%" },
-                  { name: "极星之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.2 }, life: 80, prerequisite: "鹰眉", "featureBonus": "力量+24、技巧+16、最大生命+35、负重+40、对异性表白成功率大幅提升" }
+                  { name: "光明之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.1 }, life: 80, prerequisite: "太阳之子", "featureBonus": "力量+5%、技巧+10%、攻击力+9、近战命中+10%、经验获取+25%" },
+                  { name: "极星之引", 部位: "眉毛", growth: { "力": 0.1, "技": 0.2 }, life: 80, prerequisite: "鹰眉", "featureBonus": "力量+24、技巧+16、攻击+18、对异性表白成功率大幅提升" }
               ]
           },
           "牛头": {
@@ -132,7 +132,7 @@ const bloodlineAttributes = {
                   { name: "索弗利夫的自信", 部位: "嘴巴", growth: { "力": 0.2 }, life: 70, prerequisite: "", "featureBonus": "力量+10%、体质+5%、最大负重+30、格挡+5%" },
                   { name: "太阳之眼", 部位: "眼睛", growth: { "力": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+16、体质+24、最大生命+40" },
                   { name: "台地之王", 部位: "肤色", growth: { "力": 0.1, "技": 0.2 }, life: 120, prerequisite: "超人体格", "featureBonus": "体质+10%、最大生命+30、格挡+15%" },
-                  { name: "非凡", 部位: "脸型", growth: { "力": 0.1, "体": 0.2 }, life: 70, prerequisite: "高地人的自负", "featureBonus": "力量+24、体质+16、最大负重+50、格挡+15%" },
+                  { name: "非凡力量", 部位: "脸型", growth: { "力": 0.1, "体": 0.2 }, life: 70, prerequisite: "高地人的自负", "featureBonus": "力量+24、体质+16、最大负重+50、格挡+15%" },
                   { name: "危险嗅觉", 部位: "鼻子", growth: { "体": 0.1, "意": 0.1 }, life: 80, prerequisite: "审判之眼", "featureBonus": "体质+5%、意志+10%、抗爆+20%、经验获取+20%" }
               ]
           },
@@ -147,8 +147,8 @@ const bloodlineAttributes = {
                   { name: "林中鸟", 部位: "脸型", growth: { "技": 0.2, "敏": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+10%、命中+40%、暴击+10%" },
                   { name: "舞蹈者", 部位: "眉毛", growth: { "敏": 0.2 }, life: 80, prerequisite: "", "featureBonus": "技巧+5%、敏捷+10%、爆击+25%" },
                   { name: "自然之子", 部位: "嘴巴", growth: { "敏": 0.1, "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+10、技巧+30、爆击+20%、攻击力+9" },
-                  { name: "真知之眼", 部位: "眼睛", growth: { "技": 0.2, "敏": 0.1 }, life: 100, prerequisite: "神秘气质", "featureBonus": "技巧+20、敏捷+15、感知+10、远程命中+50%、远程偏斜+20%、经验获取+30%" },
-                  { name: "杀戮", 部位: "耳朵", growth: { "力": 0.2, "敏": 0.1 }, life: 120, prerequisite: "自然密码", "featureBonus": "力量+16、敏捷+24、命中+20%、攻击力+12" },
+                  { name: "真知之眼", 部位: "眼睛", growth: { "技": 0.2, "敏": 0.1 }, life: 100, prerequisite: "神秘气质", "featureBonus": "技巧+20、敏捷+15、感知+10、远程命中+50%、远程偏斜+50%、经验获取+30%" },
+                  { name: "杀戮意图", 部位: "耳朵", growth: { "力": 0.2, "敏": 0.1 }, life: 120, prerequisite: "自然密码", "featureBonus": "力量+16、敏捷+24、命中+20%、攻击力+12" },
                   { name: "意动", 部位: "鼻子", growth: { "力": 0.1, "感": 0.1 }, life: 120, prerequisite: "死亡讯息", "featureBonus": "力量+5%、感知+10%、偏斜+40%、攻击力+3" }
               ]
           },
@@ -161,11 +161,11 @@ const bloodlineAttributes = {
                   { name: "波涛之子", 部位: "脸型", growth: { "力": 0.2, "技": 0.1 }, life: 80, prerequisite: "", "featureBonus": "力量+10%、爆击+20%、攻击力+5" },
                   { name: "幻语感应", 部位: "耳朵", growth: { "技": 0.2, "体": 0.1 }, life: 80, prerequisite: "", "featureBonus": "技巧+24、体质+16、命中+30%、偏斜+30%" },
                   { name: "贵族气度", 部位: "鼻子", growth: { "力": 0.1, "体": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+16、体质+24、最大生命+35、负重+20" },
-                  { name: "真·切瓦利王族圣痕", 部位: "圣痕", growth: { "力": 0.2, "体": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、技巧+15、体质+15、攻击力+12、经验获取+15%" },
-                  { name: "隐秘之眼", 部位: "眼睛", growth: { "力": 0.1, "体": 0.1 }, life: 80, prerequisite: "瓦斯提亚后裔（弗莱德里痕鼻子）", "featureBonus": "力量+5%、体质+10%、最大生命+20、负重+30" },
+                  { name: "真·切瓦利王族圣痕", 部位: "圣痕", growth: { "力": 0.2, "体": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、技巧+15、体质+10、攻击力+12、经验获取+15%" },
+                  { name: "隐秘之眼", 部位: "眼睛", growth: { "力": 0.1, "体": 0.1 }, life: 80, prerequisite: "瓦斯提亚后裔", "featureBonus": "力量+5%、体质+10%、最大生命+20、负重+30" },
                   { name: "海之一族", 部位: "圣痕", growth: { "力": 0.2,"体": 0.1 }, life: 90, prerequisite: "", "featureBonus": "力量+20、技巧+15、体质+10、攻击力+12、经验获取+15%" },
                   { name: "水之灵", 部位: "耳朵", growth: { "技": 0.2 }, life: 80, prerequisite: "", "featureBonus": "力量+5%、技巧+10%、命中+20%、爆击+15%" },
-                  { name: "浪潮之涡", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "同类相食（古特嘴巴）", "featureBonus": "力量+16、体质+24、攻击力+18、最大生命+10" },
+                  { name: "浪潮之涡", 部位: "眉毛", growth: { "力": 0.2, "体": 0.1 }, life: 80, prerequisite: "同类相食", "featureBonus": "力量+16、体质+24、攻击力+18、最大生命+10" },
                   { name: "魅蓝之影", 部位: "发色", growth: { "力": 0.1, "体": 0.1 }, life: 80, prerequisite: "邪神之血", "featureBonus": "力量+5%、体质+10%、爆击+20%" }
               ]
           },
