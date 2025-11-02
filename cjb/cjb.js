@@ -1,59 +1,60 @@
 // 全职业数据 - 按成长总值分为四档，每档使用相同公分母的分数，计算使用分数成长表，展示使用小数成长表
+// 注意：小数成长表中的值是根据分数数据重新计算的精确值
 const allJobs = [
     // 第一档：新兵 - 总成长0.4848（48的循环），总成长分数=480/990，公分母990
-    { id: "recruit", name: "新兵", growth: [0.1212, 0.1212, 0.1212, 0.1212, 0, 0], growthFraction: {numerator: [120, 120, 120, 120, 0, 0], denominator: 990} }, // 分数形式: [120/990, 120/990, 120/990, 120/990, 0, 0]
+    { id: "recruit", name: "新兵", growth: [120/990, 120/990, 120/990, 120/990, 0, 0], growthFraction: {numerator: [120, 120, 120, 120, 0, 0], denominator: 990} }, // 分数形式: [120/990, 120/990, 120/990, 120/990, 0, 0]
     
     // 第二档：基础职业 - 总成长0.6464（64的循环），总成长分数=640/990，公分母990
-    { id: "apprentice-rider", name: "见习骑手", growth: [0.2263, 0.1616, 0.097, 0.1616, 0, 0], growthFraction: {numerator: [224, 160, 96, 160, 0, 0], denominator: 990} }, // 分数形式: [224/990, 160/990, 96/990, 160/990, 0, 0]
-    { id: "hunter", name: "猎人", growth: [0.1131, 0.2424, 0.1939, 0.097, 0, 0], growthFraction: {numerator: [112, 240, 192, 96, 0, 0], denominator: 990} }, // 分数形式: [112/990, 240/990, 192/990, 96/990, 0, 0]
-    { id: "light-infantry", name: "轻步兵", growth: [0.2101, 0.1131, 0.2263, 0.097, 0, 0], growthFraction: {numerator: [208, 112, 224, 96, 0, 0], denominator: 990} }, // 分数形式: [208/990, 112/990, 224/990, 96/990, 0, 0]
-    { id: "heavy-infantry", name: "重步兵", growth: [0.1939, 0.1616, 0.0646, 0.2263, 0, 0], growthFraction: {numerator: [192, 160, 64, 224, 0, 0], denominator: 990} }, // 分数形式: [192/990, 160/990, 64/990, 224/990, 0, 0]
-    { id: "self-taught-wizard", name: "自学巫师", growth: [0, 0.1616, 0.0323, 0.0646, 0.1939, 0.1939], growthFraction: {numerator: [0, 160, 32, 64, 192, 192], denominator: 990} }, // 分数形式: [0, 160/990, 32/990, 64/990, 192/990, 192/990]
+    { id: "apprentice-rider", name: "见习骑手", growth: [224/990, 160/990, 96/990, 160/990, 0, 0], growthFraction: {numerator: [224, 160, 96, 160, 0, 0], denominator: 990} }, // 分数形式: [224/990, 160/990, 96/990, 160/990, 0, 0]
+    { id: "hunter", name: "猎人", growth: [112/990, 240/990, 192/990, 96/990, 0, 0], growthFraction: {numerator: [112, 240, 192, 96, 0, 0], denominator: 990} }, // 分数形式: [112/990, 240/990, 192/990, 96/990, 0, 0]
+    { id: "light-infantry", name: "轻步兵", growth: [208/990, 112/990, 224/990, 96/990, 0, 0], growthFraction: {numerator: [208, 112, 224, 96, 0, 0], denominator: 990} }, // 分数形式: [208/990, 112/990, 224/990, 96/990, 0, 0]
+    { id: "heavy-infantry", name: "重步兵", growth: [192/990, 160/990, 64/990, 224/990, 0, 0], growthFraction: {numerator: [192, 160, 64, 224, 0, 0], denominator: 990} }, // 分数形式: [192/990, 160/990, 64/990, 224/990, 0, 0]
+    { id: "self-taught-wizard", name: "自学巫师", growth: [0, 160/990, 32/990, 64/990, 192/990, 192/990], growthFraction: {numerator: [0, 160, 32, 64, 192, 192], denominator: 990} }, // 分数形式: [0, 160/990, 32/990, 64/990, 192/990, 192/990]
     
     // 第三档：进阶职业 - 总成长1.4545（45的循环），总成长分数=1440/990，公分母990
-    { id: "light-cavalry", name: "轻骑兵", growth: [0.4364, 0.5455, 0.1455, 0.3273, 0, 0], growthFraction: {numerator: [432, 540, 144, 324, 0, 0], denominator: 990} }, // 分数形式: [432/990, 540/990, 144/990, 324/990, 0, 0]
-    { id: "heavy-cavalry", name: "重骑兵", growth: [0.5455, 0.2545, 0.1455, 0.5091, 0, 0], growthFraction: {numerator: [540, 252, 144, 504, 0, 0], denominator: 990} }, // 分数形式: [540/990, 252/990, 144/990, 504/990, 0, 0]
-    { id: "archer", name: "弓箭手", growth: [0.2545, 0.5818, 0.4727, 0.1455, 0, 0], growthFraction: {numerator: [252, 576, 468, 144, 0, 0], denominator: 990} }, // 分数形式: [252/990, 576/990, 468/990, 144/990, 0, 0]
-    { id: "crossbowman", name: "弩手", growth: [0.3273, 0.5455, 0.1455, 0.4364, 0, 0], growthFraction: {numerator: [324, 540, 144, 432, 0, 0], denominator: 990} }, // 分数形式: [324/990, 540/990, 144/990, 432/990, 0, 0]
-    { id: "warrior", name: "勇士", growth: [0.5818, 0.1455, 0.4, 0.3273, 0, 0], growthFraction: {numerator: [576, 144, 396, 324, 0, 0], denominator: 990} }, // 分数形式: [576/990, 144/990, 396/990, 324/990, 0, 0]
-    { id: "scout", name: "斥候", growth: [0.2545, 0.4, 0.5818, 0.2182, 0, 0], growthFraction: {numerator: [252, 396, 576, 216, 0, 0], denominator: 990} }, // 分数形式: [252/990, 396/990, 576/990, 216/990, 0, 0]
-    { id: "phalanx-infantry", name: "方阵步兵", growth: [0.3273, 0.4727, 0.1455, 0.5091, 0, 0], growthFraction: {numerator: [324, 468, 144, 504, 0, 0], denominator: 990} }, // 分数形式: [324/990, 468/990, 144/990, 504/990, 0, 0]
-    { id: "heavy-spearman", name: "重甲枪兵", growth: [0.4727, 0.2545, 0.1455, 0.5818, 0, 0], growthFraction: {numerator: [468, 252, 144, 576, 0, 0], denominator: 990} }, // 分数形式: [468/990, 252/990, 144/990, 576/990, 0, 0]
-    { id: "druid", name: "德鲁伊", growth: [0, 0, 0.0727, 0.2182, 0.7273, 0.4364], growthFraction: {numerator: [0, 0, 72, 216, 720, 432], denominator: 990} }, // 分数形式: [0, 0, 72/990, 216/990, 720/990, 432/990]
-    { id: "priest", name: "牧师", growth: [0, 0, 0.0727, 0.1455, 0.5091, 0.7273], growthFraction: {numerator: [0, 0, 72, 144, 504, 720], denominator: 990} }, // 分数形式: [0, 0, 72/990, 144/990, 504/990, 720/990]
+    { id: "light-cavalry", name: "轻骑兵", growth: [432/990, 540/990, 144/990, 324/990, 0, 0], growthFraction: {numerator: [432, 540, 144, 324, 0, 0], denominator: 990} }, // 分数形式: [432/990, 540/990, 144/990, 324/990, 0, 0]
+    { id: "heavy-cavalry", name: "重骑兵", growth: [540/990, 252/990, 144/990, 504/990, 0, 0], growthFraction: {numerator: [540, 252, 144, 504, 0, 0], denominator: 990} }, // 分数形式: [540/990, 252/990, 144/990, 504/990, 0, 0]
+    { id: "archer", name: "弓箭手", growth: [252/990, 576/990, 468/990, 144/990, 0, 0], growthFraction: {numerator: [252, 576, 468, 144, 0, 0], denominator: 990} }, // 分数形式: [252/990, 576/990, 468/990, 144/990, 0, 0]
+    { id: "crossbowman", name: "弩手", growth: [324/990, 540/990, 144/990, 432/990, 0, 0], growthFraction: {numerator: [324, 540, 144, 432, 0, 0], denominator: 990} }, // 分数形式: [324/990, 540/990, 144/990, 432/990, 0, 0]
+    { id: "warrior", name: "勇士", growth: [576/990, 144/990, 396/990, 324/990, 0, 0], growthFraction: {numerator: [576, 144, 396, 324, 0, 0], denominator: 990} }, // 分数形式: [576/990, 144/990, 396/990, 324/990, 0, 0]
+    { id: "scout", name: "斥候", growth: [252/990, 396/990, 576/990, 216/990, 0, 0], growthFraction: {numerator: [252, 396, 576, 216, 0, 0], denominator: 990} }, // 分数形式: [252/990, 396/990, 576/990, 216/990, 0, 0]
+    { id: "phalanx-infantry", name: "方阵步兵", growth: [324/990, 468/990, 144/990, 504/990, 0, 0], growthFraction: {numerator: [324, 468, 144, 504, 0, 0], denominator: 990} }, // 分数形式: [324/990, 468/990, 144/990, 504/990, 0, 0]
+    { id: "heavy-spearman", name: "重甲枪兵", growth: [468/990, 252/990, 144/990, 576/990, 0, 0], growthFraction: {numerator: [468, 252, 144, 576, 0, 0], denominator: 990} }, // 分数形式: [468/990, 252/990, 144/990, 576/990, 0, 0]
+    { id: "druid", name: "德鲁伊", growth: [0, 0, 72/990, 216/990, 720/990, 432/990], growthFraction: {numerator: [0, 0, 72, 216, 720, 432], denominator: 990} }, // 分数形式: [0, 0, 72/990, 216/990, 720/990, 432/990]
+    { id: "priest", name: "牧师", growth: [0, 0, 72/990, 144/990, 504/990, 720/990], growthFraction: {numerator: [0, 0, 72, 144, 504, 720], denominator: 990} }, // 分数形式: [0, 0, 72/990, 144/990, 504/990, 720/990]
     
     // 第四档：高级职业 - 总成长2.5859（92的循环），总成长分数=2560/990，公分母990
-    { id: "royal-cavalry", name: "皇家骑兵", growth: [0.7758, 0.9697, 0.2586, 0.5818, 0, 0], growthFraction: {numerator: [768, 960, 256, 576, 0, 0], denominator: 990} }, // 分数形式: [768/990, 960/990, 256/990, 576/990, 0, 0]
-    { id: "raider-cavalry", name: "掠袭骑兵", growth: [0.7111, 0.3879, 0.9697, 0.5172, 0, 0], growthFraction: {numerator: [704, 384, 960, 512, 0, 0], denominator: 990} }, // 分数形式: [704/990, 384/990, 960/990, 512/990, 0, 0]
-    { id: "heavy-armor-cavalry", name: "重装骑兵", growth: [1.099, 0.3879, 0.1939, 0.9051, 0, 0], growthFraction: {numerator: [1088, 384, 192, 896, 0, 0], denominator: 990} }, // 分数形式: [1088/990, 384/990, 192/990, 896/990, 0, 0]
-    { id: "command-cavalry", name: "统御骑士", growth: [0.5818, 0.7758, 0.1293, 0.6465, 0, 0.4525], growthFraction: {numerator: [576, 768, 128, 640, 0, 448], denominator: 990} }, // 分数形式: [576/990, 768/990, 128/990, 640/990, 0, 448/990]
-    { id: "fear-cavalry", name: "恐惧骑士", growth: [1.0343, 0.2586, 0.5172, 0.7758, 0, 0], growthFraction: {numerator: [1024, 256, 512, 768, 0, 0], denominator: 990} }, // 分数形式: [1024/990, 256/990, 512/990, 768/990, 0, 0]
-    { id: "apocalypse-cavalry", name: "天启骑士", growth: [0, 0, 0, 0.8404, 0.4525, 1.2929], growthFraction: {numerator: [0, 0, 0, 832, 448, 1280], denominator: 990} }, // 分数形式: [0, 0, 0, 832/990, 448/990, 1280/990]
-    { id: "winged-cavalry", name: "翼骑兵", growth: [1.099, 0.1939, 0.2585, 1.0343, 0, 0], growthFraction: {numerator: [1088, 192, 256, 1024, 0, 0], denominator: 990} }, // 分数形式: [1088/990, 192/990, 256/990, 1024/990, 0, 0]
-    { id: "longbowman", name: "长弓手", growth: [0.8404, 1.099, 0.3879, 0.2586, 0, 0], growthFraction: {numerator: [832, 1088, 384, 256, 0, 0], denominator: 990} }, // 分数形式: [832/990, 1088/990, 384/990, 256/990, 0, 0]
-    { id: "ranger", name: "游侠", growth: [0.4525, 1.0343, 0.8404, 0.2586, 0, 0], growthFraction: {numerator: [448, 1024, 832, 256, 0, 0], denominator: 990} }, // 分数形式: [448/990, 1024/990, 832/990, 256/990, 0, 0]
-    { id: "shield-crossbowman", name: "盾弩手", growth: [0.5818, 0.9697, 0.2586, 0.7758, 0, 0], growthFraction: {numerator: [576, 960, 256, 768, 0, 0], denominator: 990} }, // 分数形式: [576/990, 960/990, 256/990, 768/990, 0, 0]
-    { id: "heavy-crossbowman", name: "重弩手", growth: [0.7111, 0.7758, 0.1939, 0.9051, 0, 0], growthFraction: {numerator: [704, 768, 192, 896, 0, 0], denominator: 990} }, // 分数形式: [704/990, 768/990, 192/990, 896/990, 0, 0]
-    { id: "jungle-hunter", name: "丛林猎手", growth: [0.52, 0.9, 0.97, 0.19, 0, 0], growthFraction: {numerator: [512, 896, 960, 192, 0, 0], denominator: 990} }, // 分数形式: [512/990, 896/990, 960/990, 192/990, 0, 0]
-    { id: "magic-archer", name: "魔弓手", growth: [0, 0, 0.2586, 0.1939, 1.2282, 0.9051], growthFraction: {numerator: [0, 0, 256, 192, 1216, 896], denominator: 990} }, // 分数形式: [0, 0, 256/990, 192/990, 1216/990, 896/990]
-    { id: "berserker", name: "狂战士", growth: [1.0343, 0.2586, 0.7111, 0.5818, 0, 0], growthFraction: {numerator: [1024, 256, 704, 576, 0, 0], denominator: 990} }, // 分数形式: [1024/990, 256/990, 704/990, 576/990, 0, 0]
-    { id: "great-swordsman", name: "大剑士", growth: [0.9697, 0.7758, 0.3232, 0.5172, 0, 0], growthFraction: {numerator: [960, 768, 320, 512, 0, 0], denominator: 990} }, // 分数形式: [960/990, 768/990, 320/990, 512/990, 0, 0]
-    { id: "assassin", name: "刺客", growth: [0.2586, 0.9697, 1.099, 0.2586, 0, 0], growthFraction: {numerator: [256, 960, 1088, 256, 0, 0], denominator: 990} }, // 分数形式: [256/990, 960/990, 1088/990, 256/990, 0, 0]
-    { id: "sword-saint", name: "剑圣", growth: [0.7758, 0.5818, 1.0343, 0.1939, 0, 0], growthFraction: {numerator: [768, 576, 1024, 192, 0, 0], denominator: 990} }, // 分数形式: [768/990, 576/990, 1024/990, 192/990, 0, 0]
-    { id: "gladiator", name: "决斗士", growth: [0.5818, 1.0343, 0.6465, 0.3232, 0, 0], growthFraction: {numerator: [576, 1024, 640, 320, 0, 0], denominator: 990} }, // 分数形式: [576/990, 1024/990, 640/990, 320/990, 0, 0]
-    { id: "shadow-swordsman", name: "暗影刀客", growth: [0.5818, 0, 0.6465, 0.2263, 1.1313, 0], growthFraction: {numerator: [576, 0, 640, 224, 1120, 0], denominator: 990} }, // 分数形式: [576/990, 0, 640/990, 224/990, 1120/990, 0]
-    { id: "royal-guard", name: "王室禁卫", growth: [0.5818, 0.8404, 0.1939, 0.9697, 0, 0], growthFraction: {numerator: [576, 832, 192, 960, 0, 0], denominator: 990} }, // 分数形式: [576/990, 832/990, 192/990, 960/990, 0, 0]
-    { id: "iron-armor-soldier", name: "铁甲军士", growth: [0.8404, 0.4525, 0.1939, 1.099, 0, 0], growthFraction: {numerator: [832, 448, 192, 1088, 0, 0], denominator: 990} }, // 分数形式: [832/990, 448/990, 192/990, 1088/990, 0, 0]
-    { id: "heavy-armor-monk", name: "重甲僧侣", growth: [0.3232, 0.1939, 0.1939, 0.8404, 0.3879, 0.6465], growthFraction: {numerator: [320, 192, 192, 832, 384, 640], denominator: 990} }, // 分数形式: [320/990, 192/990, 192/990, 832/990, 384/990, 640/990]
-    { id: "holy-guard", name: "圣堂铁卫", growth: [0.7758, 0.3232, 0.1939, 0.8404, 0, 0.4525], growthFraction: {numerator: [768, 320, 192, 832, 0, 448], denominator: 990} }, // 分数形式: [768/990, 320/990, 192/990, 832/990, 0, 448/990]
-    { id: "eagle-guard", name: "神鹰侍卫", growth: [0.4525, 0.9697, 0.4848, 0.6788, 0, 0], growthFraction: {numerator: [448, 960, 480, 672, 0, 0], denominator: 990} }, // 分数形式: [448/990, 960/990, 480/990, 672/990, 0, 0]
-    { id: "elite-warrior", name: "勇士精英", growth: [0.4525, 0.9697, 0.1939, 0.9697, 0, 0], growthFraction: {numerator: [448, 960, 192, 960, 0, 0], denominator: 990} }, // 分数形式: [448/990, 960/990, 192/990, 960/990, 0, 0]
-    { id: "great-druid", name: "大德鲁伊", growth: [0, 0, 0.3232, 0.1939, 1.2929, 0.7758], growthFraction: {numerator: [0, 0, 320, 192, 1280, 768], denominator: 990} }, // 分数形式: [0, 0, 320/990, 192/990, 1280/990, 768/990]
-    { id: "bishop", name: "主教", growth: [0, 0, 0.1293, 0.2586, 0.9051, 1.2929], growthFraction: {numerator: [0, 0, 128, 256, 896, 1280], denominator: 990} }, // 分数形式: [0, 0, 128/990, 256/990, 896/990, 1280/990]
-    { id: "alchemist", name: "炼金术师", growth: [0, 0.5818, 0.1939, 0.3879, 0.5172, 0.9051], growthFraction: {numerator: [0, 576, 192, 384, 512, 896], denominator: 990} }, // 分数形式: [0, 576/990, 192/990, 384/990, 512/990, 896/990]
-    { id: "bard", name: "吟游诗人", growth: [0, 0, 0.5818, 0.2586, 1.2929, 0.4525], growthFraction: {numerator: [0, 0, 576, 256, 1280, 448], denominator: 990} }, // 分数形式: [0, 0, 576/990, 256/990, 1280/990, 448/990]
-    { id: "imperial-envoy", name: "帝国密使", growth: [0, 0, 0, 0.3232, 1.1313, 1.1313], growthFraction: {numerator: [0, 0, 0, 320, 1120, 1120], denominator: 990} }, // 分数形式: [0, 0, 0, 320/990, 1120/990, 1120/990]
-    { id: "inner-sword-saint", name: "内宗剑圣", growth: [0, 0.9051, 1.0343, 0.1293, 0.5172, 0], growthFraction: {numerator: [0, 896, 1024, 128, 512, 0], denominator: 990} } // 分数形式: [0, 896/990, 1024/990, 128/990, 512/990, 0]
+    { id: "royal-cavalry", name: "皇家骑兵", growth: [768/990, 960/990, 256/990, 576/990, 0, 0], growthFraction: {numerator: [768, 960, 256, 576, 0, 0], denominator: 990} }, // 分数形式: [768/990, 960/990, 256/990, 576/990, 0, 0]
+    { id: "raider-cavalry", name: "掠袭骑兵", growth: [704/990, 384/990, 960/990, 512/990, 0, 0], growthFraction: {numerator: [704, 384, 960, 512, 0, 0], denominator: 990} }, // 分数形式: [704/990, 384/990, 960/990, 512/990, 0, 0]
+    { id: "heavy-armor-cavalry", name: "重装骑兵", growth: [1088/990, 384/990, 192/990, 896/990, 0, 0], growthFraction: {numerator: [1088, 384, 192, 896, 0, 0], denominator: 990} }, // 分数形式: [1088/990, 384/990, 192/990, 896/990, 0, 0]
+    { id: "command-cavalry", name: "统御骑士", growth: [576/990, 768/990, 128/990, 640/990, 0, 448/990], growthFraction: {numerator: [576, 768, 128, 640, 0, 448], denominator: 990} }, // 分数形式: [576/990, 768/990, 128/990, 640/990, 0, 448/990]
+    { id: "fear-cavalry", name: "恐惧骑士", growth: [1024/990, 256/990, 512/990, 768/990, 0, 0], growthFraction: {numerator: [1024, 256, 512, 768, 0, 0], denominator: 990} }, // 分数形式: [1024/990, 256/990, 512/990, 768/990, 0, 0]
+    { id: "apocalypse-cavalry", name: "天启骑士", growth: [0, 0, 0, 832/990, 448/990, 1280/990], growthFraction: {numerator: [0, 0, 0, 832, 448, 1280], denominator: 990} }, // 分数形式: [0, 0, 0, 832/990, 448/990, 1280/990]
+    { id: "winged-cavalry", name: "翼骑兵", growth: [1088/990, 192/990, 256/990, 1024/990, 0, 0], growthFraction: {numerator: [1088, 192, 256, 1024, 0, 0], denominator: 990} }, // 分数形式: [1088/990, 192/990, 256/990, 1024/990, 0, 0]
+    { id: "longbowman", name: "长弓手", growth: [832/990, 1088/990, 384/990, 256/990, 0, 0], growthFraction: {numerator: [832, 1088, 384, 256, 0, 0], denominator: 990} }, // 分数形式: [832/990, 1088/990, 384/990, 256/990, 0, 0]
+    { id: "ranger", name: "游侠", growth: [448/990, 1024/990, 832/990, 256/990, 0, 0], growthFraction: {numerator: [448, 1024, 832, 256, 0, 0], denominator: 990} }, // 分数形式: [448/990, 1024/990, 832/990, 256/990, 0, 0]
+    { id: "shield-crossbowman", name: "盾弩手", growth: [576/990, 960/990, 256/990, 768/990, 0, 0], growthFraction: {numerator: [576, 960, 256, 768, 0, 0], denominator: 990} }, // 分数形式: [576/990, 960/990, 256/990, 768/990, 0, 0]
+    { id: "heavy-crossbowman", name: "重弩手", growth: [704/990, 768/990, 192/990, 896/990, 0, 0], growthFraction: {numerator: [704, 768, 192, 896, 0, 0], denominator: 990} }, // 分数形式: [704/990, 768/990, 192/990, 896/990, 0, 0]
+    { id: "jungle-hunter", name: "丛林猎手", growth: [512/990, 896/990, 960/990, 192/990, 0, 0], growthFraction: {numerator: [512, 896, 960, 192, 0, 0], denominator: 990} }, // 分数形式: [512/990, 896/990, 960/990, 192/990, 0, 0]
+    { id: "magic-archer", name: "魔弓手", growth: [0, 0, 256/990, 192/990, 1216/990, 896/990], growthFraction: {numerator: [0, 0, 256, 192, 1216, 896], denominator: 990} }, // 分数形式: [0, 0, 256/990, 192/990, 1216/990, 896/990]
+    { id: "berserker", name: "狂战士", growth: [1024/990, 256/990, 704/990, 576/990, 0, 0], growthFraction: {numerator: [1024, 256, 704, 576, 0, 0], denominator: 990} }, // 分数形式: [1024/990, 256/990, 704/990, 576/990, 0, 0]
+    { id: "great-swordsman", name: "大剑士", growth: [960/990, 768/990, 320/990, 512/990, 0, 0], growthFraction: {numerator: [960, 768, 320, 512, 0, 0], denominator: 990} }, // 分数形式: [960/990, 768/990, 320/990, 512/990, 0, 0]
+    { id: "assassin", name: "刺客", growth: [256/990, 960/990, 1088/990, 256/990, 0, 0], growthFraction: {numerator: [256, 960, 1088, 256, 0, 0], denominator: 990} }, // 分数形式: [256/990, 960/990, 1088/990, 256/990, 0, 0]
+    { id: "sword-saint", name: "剑圣", growth: [768/990, 576/990, 1024/990, 192/990, 0, 0], growthFraction: {numerator: [768, 576, 1024, 192, 0, 0], denominator: 990} }, // 分数形式: [768/990, 576/990, 1024/990, 192/990, 0, 0]
+    { id: "gladiator", name: "决斗士", growth: [576/990, 1024/990, 640/990, 320/990, 0, 0], growthFraction: {numerator: [576, 1024, 640, 320, 0, 0], denominator: 990} }, // 分数形式: [576/990, 1024/990, 640/990, 320/990, 0, 0]
+    { id: "shadow-swordsman", name: "暗影刀客", growth: [576/990, 0, 640/990, 224/990, 1120/990, 0], growthFraction: {numerator: [576, 0, 640, 224, 1120, 0], denominator: 990} }, // 分数形式: [576/990, 0, 640/990, 224/990, 1120/990, 0]
+    { id: "royal-guard", name: "王室禁卫", growth: [576/990, 832/990, 192/990, 960/990, 0, 0], growthFraction: {numerator: [576, 832, 192, 960, 0, 0], denominator: 990} }, // 分数形式: [576/990, 832/990, 192/990, 960/990, 0, 0]
+    { id: "iron-armor-soldier", name: "铁甲军士", growth: [832/990, 448/990, 192/990, 1088/990, 0, 0], growthFraction: {numerator: [832, 448, 192, 1088, 0, 0], denominator: 990} }, // 分数形式: [832/990, 448/990, 192/990, 1088/990, 0, 0]
+    { id: "heavy-armor-monk", name: "重甲僧侣", growth: [320/990, 192/990, 192/990, 832/990, 384/990, 640/990], growthFraction: {numerator: [320, 192, 192, 832, 384, 640], denominator: 990} }, // 分数形式: [320/990, 192/990, 192/990, 832/990, 384/990, 640/990]
+    { id: "holy-guard", name: "圣堂铁卫", growth: [768/990, 320/990, 192/990, 832/990, 0, 448/990], growthFraction: {numerator: [768, 320, 192, 832, 0, 448], denominator: 990} }, // 分数形式: [768/990, 320/990, 192/990, 832/990, 0, 448/990]
+    { id: "eagle-guard", name: "神鹰侍卫", growth: [448/990, 960/990, 480/990, 672/990, 0, 0], growthFraction: {numerator: [448, 960, 480, 672, 0, 0], denominator: 990} }, // 分数形式: [448/990, 960/990, 480/990, 672/990, 0, 0]
+    { id: "elite-warrior", name: "勇士精英", growth: [448/990, 960/990, 192/990, 960/990, 0, 0], growthFraction: {numerator: [448, 960, 192, 960, 0, 0], denominator: 990} }, // 分数形式: [448/990, 960/990, 192/990, 960/990, 0, 0]
+    { id: "great-druid", name: "大德鲁伊", growth: [0, 0, 320/990, 192/990, 1280/990, 768/990], growthFraction: {numerator: [0, 0, 320, 192, 1280, 768], denominator: 990} }, // 分数形式: [0, 0, 320/990, 192/990, 1280/990, 768/990]
+    { id: "bishop", name: "主教", growth: [0, 0, 128/990, 256/990, 896/990, 1280/990], growthFraction: {numerator: [0, 0, 128, 256, 896, 1280], denominator: 990} }, // 分数形式: [0, 0, 128/990, 256/990, 896/990, 1280/990]
+    { id: "alchemist", name: "炼金术师", growth: [0, 576/990, 192/990, 384/990, 512/990, 896/990], growthFraction: {numerator: [0, 576, 192, 384, 512, 896], denominator: 990} }, // 分数形式: [0, 576/990, 192/990, 384/990, 512/990, 896/990]
+    { id: "bard", name: "吟游诗人", growth: [0, 0, 576/990, 256/990, 1280/990, 448/990], growthFraction: {numerator: [0, 0, 576, 256, 1280, 448], denominator: 990} }, // 分数形式: [0, 0, 576/990, 256/990, 1280/990, 448/990]
+    { id: "imperial-envoy", name: "帝国密使", growth: [0, 0, 0, 320/990, 1120/990, 1120/990], growthFraction: {numerator: [0, 0, 0, 320, 1120, 1120], denominator: 990} }, // 分数形式: [0, 0, 0, 320/990, 1120/990, 1120/990]
+    { id: "inner-sword-saint", name: "内宗剑圣", growth: [0, 896/990, 1024/990, 128/990, 512/990, 0], growthFraction: {numerator: [0, 896, 1024, 128, 512, 0], denominator: 990} } // 分数形式: [0, 896/990, 1024/990, 128/990, 512/990, 0]
 ];
 
 // 属性名称
@@ -594,10 +595,21 @@ function renderGrowthTable() {
         // 为每个属性创建一个单元格
         job.growth.forEach((value, index) => {
             const cell = document.createElement('td');
-            cell.textContent = value.toFixed(4);
+            
+            // 使用分数成长表校正小数显示
+            const numerator = job.growthFraction.numerator[index];
+            const denominator = job.growthFraction.denominator;
+            const preciseValue = numerator / denominator;
+            
+            // 格式化显示：0值不保留小数，其他值保留四位小数
+            if (preciseValue === 0) {
+                cell.textContent = '0';
+            } else {
+                cell.textContent = preciseValue.toFixed(4);
+            }
             
             // 检查是否是该属性的最高值
-            const isHighest = allJobs.every(j => value >= j.growth[index]);
+            const isHighest = allJobs.every(j => preciseValue >= j.growthFraction.numerator[index] / j.growthFraction.denominator);
             if (isHighest) {
                 cell.className = 'growth-highlight';
             }
