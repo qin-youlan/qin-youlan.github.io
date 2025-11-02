@@ -457,21 +457,24 @@ function updateGodFeatureOptions() {
   }
   
   // 添加神血特性选项的事件监听器，确保选择时触发属性重新计算并保存
-  godSkillSelect.addEventListener('change', function() {
-    applyGodFeatures(); // 立即检查并更新提示信息
+  function handleGodFeatureChange() {
+    // 首先清除当前显示的消息，确保重新生成
+    const godFeatureError = document.getElementById('godFeatureError');
+    if (godFeatureError) {
+      godFeatureError.textContent = '';
+      hideErrorMessage(godFeatureError);
+    }
+    
+    // 先应用普通特性，更新基本信息
+    applyGodFeatures();
+    // 然后重新计算属性，这会处理神子之技的显示
     calculateAttributes();
     saveUserPreferences();
-  });
-  godOther1Select.addEventListener('change', function() {
-    applyGodFeatures(); // 立即检查并更新提示信息
-    calculateAttributes();
-    saveUserPreferences();
-  });
-  godOther2Select.addEventListener('change', function() {
-    applyGodFeatures(); // 立即检查并更新提示信息
-    calculateAttributes();
-    saveUserPreferences();
-  });
+  }
+  
+  godSkillSelect.addEventListener('change', handleGodFeatureChange);
+  godOther1Select.addEventListener('change', handleGodFeatureChange);
+  godOther2Select.addEventListener('change', handleGodFeatureChange);
   
   console.log('God feature options updated successfully');
 }
@@ -913,29 +916,44 @@ function applyGodFeatures() {
   
   // 特性信息已经在前面定义
   
-  // 显示选择信息，包含特性名称和前置要求
+  // 显示选择信息，包含特性名称、前置要求和特性加成
   if (feature1 && feature2) {
     let message = `已选择：`;
+    // 特性1信息
     message += `${feature1.name}(${part1})`;
     if (feature1.prerequisite) {
       message += `【前置：${feature1.prerequisite}】`;
     }
-    message += ` 和 `;
-    message += `${feature2.name}(${part2})`;
+    if (feature1.featureBonus) {
+      message += `\n特性加成：${feature1.featureBonus}`;
+    }
+    
+    // 特性2信息
+    message += `\n和 ${feature2.name}(${part2})`;
     if (feature2.prerequisite) {
       message += `【前置：${feature2.prerequisite}】`;
     }
+    if (feature2.featureBonus) {
+      message += `\n特性加成：${feature2.featureBonus}`;
+    }
+    
     updateErrorMessage(godFeatureError, message, false);
   } else if (feature1) {
     let message = `已选择：${feature1.name}(${part1})`;
     if (feature1.prerequisite) {
       message += `【前置：${feature1.prerequisite}】`;
     }
+    if (feature1.featureBonus) {
+      message += `\n特性加成：${feature1.featureBonus}`;
+    }
     updateErrorMessage(godFeatureError, message, false);
   } else if (feature2) {
     let message = `已选择：${feature2.name}(${part2})`;
     if (feature2.prerequisite) {
       message += `【前置：${feature2.prerequisite}】`;
+    }
+    if (feature2.featureBonus) {
+      message += `\n特性加成：${feature2.featureBonus}`;
     }
     updateErrorMessage(godFeatureError, message, false);
   }
@@ -1013,6 +1031,18 @@ function calculateAttributes() {
       if (skillFeature.growth["敏"]) agility += skillFeature.growth["敏"];
       if (skillFeature.growth["感"]) perception += skillFeature.growth["感"];
       if (skillFeature.growth["意"]) will += skillFeature.growth["意"];
+    }
+    // 显示神子之技的特性加成
+    if (skillFeature && skillFeature.featureBonus && godFeatureError) {
+      const currentMessage = godFeatureError.textContent;
+      // 检查是否已经显示了这个特性的加成
+      if (!currentMessage.includes(skillFeature.featureBonus)) {
+        // 如果当前没有其他消息，直接显示；否则添加到现有消息
+        const skillMessage = currentMessage ? 
+          `\n\n神子之技加成：${skillFeature.featureBonus}` : 
+          `神子之技加成：${skillFeature.featureBonus}`;
+        updateErrorMessage(godFeatureError, currentMessage + skillMessage, false);
+      }
     }
   }
   
