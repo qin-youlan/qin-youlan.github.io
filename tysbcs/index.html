@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太阳之眼-太阳之子识别-懒得工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="tysb.css">
+    <script>
+     var _hmt = _hmt || [];
+     (function() {
+       var hm = document.createElement("script");
+       hm.src = "https://hm.baidu.com/hm.js?c7aa4b01e336a3f0edeeb2d978b19d6b";
+       var s = document.getElementsByTagName("script")[0];  
+       s.parentNode.insertBefore(hm, s);
+     })();
+    </script>
+</head>
+<body class="dark-theme">
+  <header>
+    <div class="container">
+      <div>
+        <div>
+          <a href="/index.html">
+            <img id="logo" src="../assets/icons/lan.png" alt="Lande">
+            <h1>懒得工具</h1>
+          </a>
+        </div>
+        <nav>
+          <ul>
+      <li><a href="wangluoqitao.html">打赏</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+    <main>
+        <section class="tool-detail">
+            <h3 class="text-xl font-bold mb-4">太阳之子发色识别</h3>
+
+            <div class="input-section">
+                <div class="form-item">
+                    <label class="upload-button" for="imageUpload">
+                        <input type="file" id="imageUpload" accept="image/*">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        <span>上传图片</span>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-item">
+                        <div id="previewContainer">
+                            <div id="positionWrapper">
+                                <img id="previewImg" alt="图片预览">
+                                <canvas id="detectionCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-text" id="mainTip">请先上传图片</div>
+        </div>
+
+        <!-- 参数配置区域 -->
+        <div class="params-section mt-6">
+            <h4 class="text-lg font-semibold mb-3">参数配置</h4>
+            
+            <!-- T_PARAMS配置 -->
+            <div class="param-group">
+                <h5 class="text-md font-medium mb-2">T_PARAMS范围 (目标像素)</h5>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>H最小值:</label>
+                        <input type="number" id="t-h-min" value="30" min="0" max="360" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>H最大值:</label>
+                        <input type="number" id="t-h-max" value="45" min="0" max="360" class="param-input">
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>S最小值:</label>
+                        <input type="number" id="t-s-min" value="75" min="0" max="255" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>S最大值:</label>
+                        <input type="number" id="t-s-max" value="135" min="0" max="255" class="param-input">
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>V最小值:</label>
+                        <input type="number" id="t-v-min" value="50" min="0" max="255" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>V最大值:</label>
+                        <input type="number" id="t-v-max" value="255" min="0" max="255" class="param-input">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- F_PIXEL配置 -->
+            <div class="param-group mt-4">
+                <h5 class="text-md font-medium mb-2">fPixel判定范围 (金色像素)</h5>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>H最小值:</label>
+                        <input type="number" id="f-h-min" value="30" min="0" max="360" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>H最大值:</label>
+                        <input type="number" id="f-h-max" value="65" min="0" max="360" class="param-input">
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>S最小值:</label>
+                        <input type="number" id="f-s-min" value="75" min="0" max="255" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>S最大值:</label>
+                        <input type="number" id="f-s-max" value="255" min="0" max="255" class="param-input">
+                    </div>
+                </div>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>V最小值:</label>
+                        <input type="number" id="f-v-min" value="50" min="0" max="255" class="param-input">
+                    </div>
+                    <div class="param-item">
+                        <label>V最大值:</label>
+                        <input type="number" id="f-v-max" value="255" min="0" max="255" class="param-input">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- JUDGE_RATIO配置 -->
+            <div class="param-group mt-4">
+                <h5 class="text-md font-medium mb-2">JUDGE_RATIO范围 (判定比例)</h5>
+                <div class="param-row">
+                    <div class="param-item">
+                        <label>判定比例:</label>
+                        <input type="number" id="judge-ratio" value="0.39" min="0" max="1" step="0.01" class="param-input">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 更新参数按钮 -->
+            <div class="param-actions mt-4">
+                <button id="update-params" class="btn btn-primary">更新参数</button>
+            </div>
+        </div>
+
+        <div class="output-section mt-6">
+                <div class="output-title">识别结果</div>
+                <div class="result-content" id="finalResult">
+                    <p>请上传图片并点击发色区域识别</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>秦又懒 © 2025</p>
+    </footer>
+
+    <script src="../assets/js/face-api.min.js"></script>
+    <script src="../assets/js/tf.min.js"></script>
+    <script src="tysb.js"></script>
+</body>
+</html>
+
 

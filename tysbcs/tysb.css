@@ -1,0 +1,323 @@
+/* 太阳之子发色识别样式 */
+
+/* 基础样式 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    color: #fff;
+}
+
+/* 头部样式 */
+header {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+#logo {
+    height: 2.2em;
+    margin-right: 10px;
+}
+
+header h1 {
+    margin: 0 0 0 15px;
+    font-size: 1.5em;
+}
+
+/* 主要内容区域 */
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.tool-detail h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 输入区域样式 */
+.input-section {
+    padding: 20px;
+    background-color: #555;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* 上传按钮样式 */
+.upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: #ff9b37;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+.upload-button:hover {
+    background-color: #ff9b55;
+}
+
+.upload-button i {
+    font-size: 18px;
+}
+
+/* 上传提示文字 */
+.upload-hint {
+    color: #ccc;
+    font-size: 14px;
+    margin: 8px 0 0 0;
+    text-align: center;
+}
+
+/* 确保按钮不超出容器 */
+.form-item {
+    width: 100%;
+    max-width: 800px;
+    text-align: center; /* 按钮居中显示 */
+}
+
+#imageUpload {
+    display: none;
+}
+
+/* 上传区域样式 */
+.upload-area { 
+    border: 2px dashed #ffffff; 
+    border-radius: 8px; 
+    padding: 30px 20px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    width: 100%;
+    background-color: #444;
+}
+
+.upload-area:hover { 
+    border-color: #ff9b37; 
+    background: #4a4a4a; 
+}
+
+.upload-icon { 
+    font-size: 40px; 
+    color: #ffffff; 
+    margin-bottom: 15px; 
+}
+
+.upload-text { 
+    color: #ccc; 
+    font-size: 14px; 
+    line-height: 1.5;
+}
+
+/* 预览容器样式 */
+#previewContainer { 
+    width: 100%; 
+    border: 1px solid #666; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    background-color: #444; 
+    min-height: 200px; 
+    cursor: pointer;
+}
+
+#positionWrapper { 
+    position: relative; 
+    width: 100%; 
+}
+
+#previewImg { 
+    width: 100%; 
+    height: auto; 
+    display: block; 
+    opacity: 0; 
+    transition: opacity 0.3s; 
+}
+
+#detectionCanvas { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    pointer-events: none; 
+}
+
+/* 提示文字样式 */
+.tip-text { 
+    color: #ccc; 
+    font-size: 14px; 
+    margin: 0 auto 20px; 
+    text-align: center; 
+    max-width: 800px;
+}
+
+/* 输出区域样式 */
+.output-section {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #555;
+}
+
+.output-title {
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.result-content {
+    line-height: 1.8;
+    color: #fff;
+    font-size: 16px;
+    padding: 15px;
+    border-radius: 6px;
+    min-height: 60px;
+    text-align: center;
+}
+
+/* 结果样式变体 */
+.result-sun { 
+    background-color: #5a4a13; 
+    color: #ffd700; 
+    border: 1px solid #ffd70033; 
+}
+
+.result-not-sun { 
+    background-color: #133a5a; 
+    color: #87ceeb; 
+    border: 1px solid #87ceeb33; 
+}
+
+.result-error { 
+    background-color: #5a1313; 
+    color: #ff6b6b; 
+    border: 1px solid #ff6b6b33; 
+}
+
+/* 参数配置区域样式 */
+.params-section {
+    padding: 20px;
+    background-color: #555;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.params-section h4 {
+    margin-top: 0;
+    color: #fff;
+}
+
+.param-group {
+    background-color: #444;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.param-group h5 {
+    margin-top: 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.param-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.param-item {
+    flex: 1;
+    min-width: 150px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.param-item label {
+    min-width: 70px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.param-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+}
+
+.param-input:focus {
+    outline: none;
+    border-color: #ff9b37;
+}
+
+.param-actions {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #ff9b37;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #ff9b55;
+}
+
+/* 页脚样式 */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #aaa;
+    font-size: 0.8em;
+}
