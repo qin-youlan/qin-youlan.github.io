@@ -10,8 +10,8 @@ let previewImg, positionWrapper, detectionCanvas, detectionCtx, mainTip, finalRe
 // 固定参数（保持不变）
 const T_PARAMS = {
     hMin: 30, hMax: 45,
-    sMin: 30, sMax: 48,
-    vMin: 20, vMax: 100
+    sMin: 75, sMax: 135,
+    vMin: 50, vMax: 255
 };
 const JUDGE_RATIO = 0.39;
 
@@ -176,7 +176,7 @@ function countTFPixels(centerX, centerY) {
             const { h, s, v } = fastRgbToHsv(r, g, b);
 
             // 判断金色像素（F）
-            if (h >= 30 && h <= 65 && s >= 30 && s <= 100 && v >= 20 && v <= 100) {
+            if (h >= 30 && h <= 65 && s >= 75 && s <= 255 && v >= 50 && v <= 255) {
                 fPixel++;
                 drawMaskPixel(x, y, 'rgba(255,0,0,0.4)');
 
@@ -195,11 +195,10 @@ function countTFPixels(centerX, centerY) {
 
 // 快速HSV转换（优化：减少数学运算）
 function fastRgbToHsv(r, g, b) {
-    r /= 255; g /= 255; b /= 255;
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     let h = 0, s = 0;
-    const v = Math.round(max * 100); // 只保留V的百分比整数
+    const v = max; // V直接使用最大值(0-255)
 
     const delta = max - min;
     if (delta > 0) {
@@ -214,8 +213,8 @@ function fastRgbToHsv(r, g, b) {
         h = Math.round(h * 60);
         if (h < 0) h += 360;
 
-        // 简化S计算
-        s = Math.round((delta / max) * 100);
+        // 简化S计算（转换为0-255范围）
+        s = Math.round((delta / max) * 255);
     }
     return { h, s, v };
 }
