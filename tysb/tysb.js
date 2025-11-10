@@ -10,7 +10,7 @@ let previewImg, positionWrapper, detectionCanvas, detectionCtx, mainTip, finalRe
 // 固定参数（保持不变）
 const T_PARAMS = {
     hMin: 30, hMax: 45,
-    sMin: 75, sMax: 135,
+    sMin: 75, sMax: 125,
     vMin: 50, vMax: 255
 };
 const JUDGE_RATIO = 0.39;
