@@ -26,6 +26,64 @@ let originalImage = new Image();
 let isImageLoaded = false;
 let imageDataCache = null; // 缓存图片像素数据
 
+// 保存参数到localStorage
+function saveParamsToLocalStorage() {
+    try {
+        const params = {
+            T_PARAMS,
+            F_PIXEL_PARAMS,
+            JUDGE_RATIO,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('tysbcs_params', JSON.stringify(params));
+        console.log('参数已保存到localStorage');
+    } catch (error) {
+        console.error('保存参数失败:', error);
+    }
+}
+
+// 从localStorage加载参数
+function loadParamsFromLocalStorage() {
+    try {
+        const savedParams = localStorage.getItem('tysbcs_params');
+        if (savedParams) {
+            const { T_PARAMS: savedT, F_PIXEL_PARAMS: savedF, JUDGE_RATIO: savedRatio } = JSON.parse(savedParams);
+            
+            // 验证并应用保存的参数
+            if (savedT) {
+                T_PARAMS = { ...T_PARAMS, ...savedT };
+            }
+            if (savedF) {
+                F_PIXEL_PARAMS = { ...F_PIXEL_PARAMS, ...savedF };
+            }
+            if (typeof savedRatio === 'number') {
+                JUDGE_RATIO = savedRatio;
+            }
+            
+            // 更新输入控件的值
+            if (document.getElementById('t-h-min')) document.getElementById('t-h-min').value = T_PARAMS.hMin;
+            if (document.getElementById('t-h-max')) document.getElementById('t-h-max').value = T_PARAMS.hMax;
+            if (document.getElementById('t-s-min')) document.getElementById('t-s-min').value = T_PARAMS.sMin;
+            if (document.getElementById('t-s-max')) document.getElementById('t-s-max').value = T_PARAMS.sMax;
+            if (document.getElementById('t-v-min')) document.getElementById('t-v-min').value = T_PARAMS.vMin;
+            if (document.getElementById('t-v-max')) document.getElementById('t-v-max').value = T_PARAMS.vMax;
+            
+            if (document.getElementById('f-h-min')) document.getElementById('f-h-min').value = F_PIXEL_PARAMS.hMin;
+            if (document.getElementById('f-h-max')) document.getElementById('f-h-max').value = F_PIXEL_PARAMS.hMax;
+            if (document.getElementById('f-s-min')) document.getElementById('f-s-min').value = F_PIXEL_PARAMS.sMin;
+            if (document.getElementById('f-s-max')) document.getElementById('f-s-max').value = F_PIXEL_PARAMS.sMax;
+            if (document.getElementById('f-v-min')) document.getElementById('f-v-min').value = F_PIXEL_PARAMS.vMin;
+            if (document.getElementById('f-v-max')) document.getElementById('f-v-max').value = F_PIXEL_PARAMS.vMax;
+            
+            if (document.getElementById('judge-ratio')) document.getElementById('judge-ratio').value = JUDGE_RATIO;
+            
+            console.log('已从localStorage加载参数');
+        }
+    } catch (error) {
+        console.error('加载参数失败:', error);
+    }
+}
+
 // 初始化参数
 function initParams() {
     // 从输入控件读取参数
@@ -66,6 +124,9 @@ function initParams() {
     const judgeRatio = parseFloat(document.getElementById('judge-ratio')?.value || JUDGE_RATIO);
     JUDGE_RATIO = isNaN(judgeRatio) ? 0.39 : judgeRatio;
     
+    // 保存参数到localStorage
+    saveParamsToLocalStorage();
+    
     console.log('参数已更新:', T_PARAMS, F_PIXEL_PARAMS, JUDGE_RATIO);
 }
 
@@ -89,6 +150,9 @@ function init() {
     if (document.getElementById('update-params')) {
         document.getElementById('update-params').addEventListener('click', initParams);
     }
+    
+    // 从localStorage加载参数
+    loadParamsFromLocalStorage();
     
     // 初始化参数
     initParams();
