@@ -346,36 +346,104 @@ function calculateOptimalPlan() {
     } 
 
     // 第三步：提取最终方案 
-    const finalPlans = []; 
-
     // 方案一：reward1最大且升级次数最少 
     const plan1Candidates = [...firstAttrMaxPlans].sort((a, b) => a.upgradeCount - b.upgradeCount); 
-    finalPlans.push(plan1Candidates[0]); 
+    const plan1 = plan1Candidates[0]; 
 
     // 方案二：reward1最大前提下，reward2最大的方案 
     const plan2Candidates = [...firstAttrMaxPlans].sort((a, b) => { 
         if (b.reward2 !== a.reward2) return b.reward2 - a.reward2; 
         return a.upgradeCount - b.upgradeCount; // reward2相同则取升级次数少的 
     }); 
-    
-    // 判断方案一和方案二是否相同，如果不同才添加方案二 
-    const isPlan1AndPlan2Same = arePlansSame(plan1Candidates[0], plan2Candidates[0]); 
-    if (!isPlan1AndPlan2Same) { 
-        finalPlans.push(plan2Candidates[0]); 
-    } 
+    const plan2 = plan2Candidates[0]; 
+    const isPlan1AndPlan2Same = arePlansSame(plan1, plan2); 
 
-    // 其他方案：reward1最大前提下，reward2为非方案二属性且reward2最大且升级次数最少 
-    const plan2SecondAttrIdx = plan2Candidates[0].secondAttrIdx; 
-    const otherCandidates = [...firstAttrMaxPlans] 
-        .filter(plan => plan.secondAttrIdx !== plan2SecondAttrIdx); // 排除方案二的第二属性 
+    // 收集所有独特的第二属性+第三属性+reward2+reward3组合并为每个组合获取最优方案
+    // 这样可以展示更多不同属性或不同数值的方案
+    const uniqueAttrCombinations = [...new Set(firstAttrMaxPlans.map(plan => `${plan.secondAttrIdx}-${plan.thirdAttrIdx}-${plan.reward2}-${plan.reward3}`))];
+    const attributePlans = uniqueAttrCombinations.map(attrCombo => {
+        const [secondAttrIdx, thirdAttrIdx, reward2, reward3] = attrCombo.split('-').map(Number);
+        const candidates = firstAttrMaxPlans.filter(plan => 
+            plan.secondAttrIdx === secondAttrIdx && 
+            plan.thirdAttrIdx === thirdAttrIdx &&
+            plan.reward2 === reward2 &&
+            plan.reward3 === reward3
+        );
+        return [...candidates].sort((a, b) => {
+            // reward2和reward3都相同时，选择升级次数最少的方案
+            return a.upgradeCount - b.upgradeCount;
+        })[0];
+    });
 
-    if (otherCandidates.length > 0) { 
-        otherCandidates.sort((a, b) => { 
-            if (b.reward2 !== a.reward2) return b.reward2 - a.reward2; 
-            return a.upgradeCount - b.upgradeCount; 
-        }); 
-        finalPlans.push(otherCandidates[0]); 
-    } 
+    // 使用Map收集最终方案，确保每个（属性组合+reward值）只保留一个最优方案
+    const finalPlansMap = new Map();
+
+    // 添加方案一
+    const plan1Key = `${plan1.secondAttrIdx}-${plan1.thirdAttrIdx}-${plan1.reward2}-${plan1.reward3}`;
+    finalPlansMap.set(plan1Key, plan1);
+
+    // 添加方案二（如果与方案一不同）
+    if (!isPlan1AndPlan2Same) {
+        const plan2Key = `${plan2.secondAttrIdx}-${plan2.thirdAttrIdx}-${plan2.reward2}-${plan2.reward3}`;
+        const existingPlan = finalPlansMap.get(plan2Key);
+        if (!existingPlan || plan2.upgradeCount < existingPlan.upgradeCount) {
+            finalPlansMap.set(plan2Key, plan2);
+        }
+    }
+
+    // 添加属性方案
+    attributePlans.forEach(plan => {
+        if (plan) {
+            const planKey = `${plan.secondAttrIdx}-${plan.thirdAttrIdx}-${plan.reward2}-${plan.reward3}`;
+            const existingPlan = finalPlansMap.get(planKey);
+            if (!existingPlan || plan.upgradeCount < existingPlan.upgradeCount) {
+                finalPlansMap.set(planKey, plan);
+            }
+        }
+    });
+
+    // 将Map转换为数组并确保方案按照正确的优先级排序
+    const finalPlans = Array.from(finalPlansMap.values());
+
+    // 优先级排序：选择第二目标时优先展示第二目标属性数值更高的方案 > 方案一 > reward2降序 > reward3降序 > 升级次数升序
+    finalPlans.sort((a, b) => {
+        // 如果选择了第二目标
+        if (secondTarget !== null) {
+            // 检查方案a是否包含第二目标属性
+            const aHasSecondTarget = a.secondAttrIdx === secondTarget || a.thirdAttrIdx === secondTarget;
+            // 检查方案b是否包含第二目标属性
+            const bHasSecondTarget = b.secondAttrIdx === secondTarget || b.thirdAttrIdx === secondTarget;
+
+            // 如果只有方案a包含第二目标属性，a排在前面
+            if (aHasSecondTarget && !bHasSecondTarget) return -1;
+            // 如果只有方案b包含第二目标属性，b排在前面
+            if (bHasSecondTarget && !aHasSecondTarget) return 1;
+
+            // 如果两个方案都包含第二目标属性，比较该属性的数值
+            if (aHasSecondTarget && bHasSecondTarget) {
+                // 获取方案a的第二目标属性数值
+                const aSecondTargetValue = a.secondAttrIdx === secondTarget ? a.reward2 : a.reward3;
+                // 获取方案b的第二目标属性数值
+                const bSecondTargetValue = b.secondAttrIdx === secondTarget ? b.reward2 : b.reward3;
+
+                // 数值高的排在前面
+                if (bSecondTargetValue !== aSecondTargetValue) return bSecondTargetValue - aSecondTargetValue;
+            }
+        }
+
+        // 如果是方案一，排在最前面
+        if (a === plan1) return -1;
+        if (b === plan1) return 1;
+
+        // 比较reward2
+        if (b.reward2 !== a.reward2) return b.reward2 - a.reward2;
+
+        // 如果reward2相同，比较reward3
+        if (b.reward3 !== a.reward3) return b.reward3 - a.reward3;
+
+        // 如果reward3相同，选择升级次数最少的方案
+        return a.upgradeCount - b.upgradeCount;
+    });
 
     // 展示结果 
     displayResults(finalPlans, initLevel, targetAttrIndex, secondTarget, selectedJobs); 
@@ -397,8 +465,20 @@ function displayResults(plans, initLevel, targetAttrIndex, secondTarget, selecte
     // 属性名称定义
     const attrNames = ["力量", "技巧", "敏捷", "体质", "感知", "意志"];
 
-    // 生成方案标题 - 统一使用固定的方案标题
-    const planTitles = ["方案一：升级次数最少", "方案二：第二属性最大", "方案三：不同第二属性最大"];
+    // 生成方案标题 - 统一格式，清晰明了
+    const planTitles = plans.map((plan, index) => {
+        // 转换为汉字序号
+        const planNum = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'][index] || (index + 1);
+        // 获取三个属性的名称和数值
+        const firstAttrName = attrNames[targetAttrIndex];
+        const firstAttrValue = plan.reward1;
+        const secondAttrName = attrNames[plan.secondAttrIdx];
+        const secondAttrValue = plan.reward2;
+        const thirdAttrName = attrNames[plan.thirdAttrIdx];
+        const thirdAttrValue = plan.reward3;
+        // 统一格式：方案X：第一属性名称和数值、第二属性名称和数值、第三属性名称和数值
+        return `方案${planNum}：${firstAttrName}${firstAttrValue}、${secondAttrName}${secondAttrValue}、${thirdAttrName}${thirdAttrValue}`;
+    });
 
     plans.forEach((plan, index) => { 
         if (!plan) return; 
