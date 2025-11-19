@@ -188,7 +188,7 @@ const bloodlineAttributes = {
                   { name: "森之指引", 部位: "眉毛", growth: { "感": 0.2, "意": 0.1 }, life: 90, prerequisite: "", "featureBonus": "敏捷+10、感知+20、意志+15、偏斜+10%、法术攻击+12" },
                   { name: "灵魂颂者", 部位: "耳朵", growth: { "感": 0.1, "意": 0.1 }, life: 90, prerequisite: "", "featureBonus": "感知+15%、法术命中+45%、法术抵抗+35%" },
                   { name: "心之锐目", 部位: "眼睛", growth: { "感": 0.2, "意": 0.1 }, life: 110, prerequisite: "", "featureBonus": "感知+24、意志+16、法术攻击+15、法术抵抗+25%" },
-                  { name: "恩泽圣颜", 部位: "眼睛", growth: { "感": 0.1, "意": 0.1 }, life: 110, prerequisite: "", "featureBonus": "感知+10%、意志+5%、法术攻击+9、经验获取+30%" },
+                  { name: "恩泽圣颜", 部位: "脸型", growth: { "感": 0.1, "意": 0.1 }, life: 110, prerequisite: "", "featureBonus": "感知+10%、意志+5%、法术攻击+9、经验获取+30%" },
                   { name: "生灵吐息", 部位: "鼻子", growth: { "感": 0.1, "意": 0.2 }, life: 0, prerequisite: "", "featureBonus": "敏捷+10、感知+15、意志+20、偏斜+30%、法术命中+50%" },
                   { name: "真言之口", 部位: "嘴巴", growth: { "感": 0.1, "意": 0.1 }, life: 0, prerequisite: "", "featureBonus": "感知+5%、意志+10%、法术命中+35%、法术抵抗+45%" },
                   { name: "长夜守望", 部位: "眼睛", growth: { "力": 0.2, "感": 0.1 }, life: 130, prerequisite: "狩猎本能", "featureBonus": "力量+24、感知+16、攻击+15、法术攻击+9" },
@@ -813,15 +813,46 @@ function updateErrorMessage(element, message, isError = true) {
   element.style.opacity = '1';
   element.style.transition = 'all 0.3s ease';
   
+  // 检查是否需要添加神子之技特性加成
+  let updatedMessage = message;
+  if (element.id === 'godFeatureError' && !isError) {
+    const godSkillSelect = document.getElementById('godSkill');
+    const selectedGodSkill = godSkillSelect ? godSkillSelect.value : '';
+    
+    if (selectedGodSkill) {
+      // 获取当前主血统的神血特性数据
+      const featuresData = bloodlineGodFeatureMap[currentMainBloodline] || bloodlineGodFeatureMap['default'];
+      
+      if (featuresData && featuresData.skills) {
+        const skillFeature = featuresData.skills.find(skill => skill.name === selectedGodSkill);
+        
+        if (skillFeature && skillFeature.featureBonus) {
+          const bonusMessage = ` 神子之技加成：${skillFeature.featureBonus}。\n`;
+          
+          // 检查是否已经包含这个特性加成信息
+          if (!updatedMessage.includes(skillFeature.featureBonus)) {
+            // 将神子之技加成添加到"已选择："后面
+            if (updatedMessage.includes('已选择：')) {
+              updatedMessage = updatedMessage.replace('已选择：', '已选择：' + bonusMessage);
+            } else {
+              // 如果没有"已选择："，就添加到开头
+              updatedMessage = bonusMessage + updatedMessage;
+            }
+          }
+        }
+      }
+    }
+  }
+  
   // 错误/信息样式设置 - 移除边框和背景色
   if (isError) {
     // 移除背景色和边框
     element.style.color = '#ff473d';
-    element.innerHTML = '<i class="fa fa-exclamation-circle" style="margin-right: 10px; font-size: 24px; color: #ff473d;"></i><span>' + message + '</span>';
+    element.innerHTML = '<i class="fa fa-exclamation-circle" style="margin-right: 10px; font-size: 24px; color: #ff473d;"></i><span>' + updatedMessage + '</span>';
   } else {
     // 移除背景色和边框
     element.style.color = '#3a72a3';
-    element.innerHTML = '<i class="fa fa-info-circle" style="margin-right: 10px; font-size: 24px; color: #3a72a3;"></i><span>' + message + '</span>';
+    element.innerHTML = '<i class="fa fa-info-circle" style="margin-right: 10px; font-size: 24px; color: #3a72a3;"></i><span>' + updatedMessage + '</span>';
   }
   
   // 强制重排重绘，确保样式立即生效
@@ -1029,6 +1060,7 @@ function calculateAttributes() {
   
   // 应用神血特性加成
   const featuresData = bloodlineGodFeatureMap[currentMainBloodline] || bloodlineGodFeatureMap['default'];
+  const godFeatureError = document.getElementById('godFeatureError');
   
   // 应用神子之技加成
   if (selectedGodSkill && featuresData.skills) {
