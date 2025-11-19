@@ -67,13 +67,8 @@ const bloodlineAttributes = {
   const bloodlineGodFeatureMap = {
           "赛宁": {
               "skills": [
-                  {
-                      name: "赛宁之技",
-                      growth: { "力": 0.1, "体": 0.1, "意": 0.1 },
-                      life: "血统*2+30",
-                      prerequisite: "",
-                      "featureBonus": "1.6力量等级、1.5技巧等级、0.6体质等级"
-                  }
+                  {name: "赛宁之技",growth: { "力": 0.1, "体": 0.1, "意": 0.1 },life: "血统*2+30",prerequisite: "","featureBonus": "1.6力量等级、1.5技巧等级、0.6体质等级"},
+                  {name: "永昼之技",growth: { "力": 0.1, "体": 0.1, "意": 0.1 },life: "血统*2+30",prerequisite: "","featureBonus": "1.6力量等级、1.5技巧等级、0.6体质等级"}
               ],
               "others": [
                   { name: "真塞宁王族圣痕", 部位: "圣痕", growth: { "力": 0.1, "技": 0.2 }, life: 100, prerequisite: "", "featureBonus": "力量+20、技巧+20、体质+5、暴击+15%、经验获取+40%" },
@@ -183,6 +178,22 @@ const bloodlineAttributes = {
                   { name: "远方的思念", 部位: "发色", growth: { "敏": 0.1, "体": 0.2 }, life: 70, prerequisite: "高地人的耐力", "featureBonus": "敏捷+16、体质+24、最大生命+35" },
                   { name: "恶魔之眼", 部位: "眼睛", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "雄狮之力", "featureBonus": "力量+10%、偏斜+10%、攻击力+18" },
                   { name: "复仇烈焰", 部位: "鼻子", growth: { "力": 0.2, "敏": 0.1 }, life: 70, prerequisite: "欧里克的神力", "featureBonus": "力量+24、敏捷+16、攻击力+9、最大生命+30" }
+              ]
+          },
+          "精灵": {
+              "skills": [
+                  { name: "精灵之技", growth: { "力": 0.1, "体": 0.1, "意": 0.1 }, life: "血统*2+30", prerequisite: "", "featureBonus": "未公开" }
+              ],
+              "others": [
+                  { name: "森之指引", 部位: "眉毛", growth: { "感": 0.2, "意": 0.1 }, life: 90, prerequisite: "", "featureBonus": "敏捷+10、感知+20、意志+15、偏斜+10%、法术攻击+12" },
+                  { name: "灵魂颂者", 部位: "耳朵", growth: { "感": 0.1, "意": 0.1 }, life: 90, prerequisite: "", "featureBonus": "感知+15%、法术命中+45%、法术抵抗+35%" },
+                  { name: "心之锐目", 部位: "眼睛", growth: { "感": 0.2, "意": 0.1 }, life: 110, prerequisite: "", "featureBonus": "感知+24、意志+16、法术攻击+15、法术抵抗+25%" },
+                  { name: "恩泽圣颜", 部位: "眼睛", growth: { "感": 0.1, "意": 0.1 }, life: 110, prerequisite: "", "featureBonus": "感知+10%、意志+5%、法术攻击+9、经验获取+30%" },
+                  { name: "生灵吐息", 部位: "鼻子", growth: { "感": 0.1, "意": 0.2 }, life: 0, prerequisite: "", "featureBonus": "敏捷+10、感知+15、意志+20、偏斜+30%、法术命中+50%" },
+                  { name: "真言之口", 部位: "嘴巴", growth: { "感": 0.1, "意": 0.1 }, life: 0, prerequisite: "", "featureBonus": "感知+5%、意志+10%、法术命中+35%、法术抵抗+45%" },
+                  { name: "长夜守望", 部位: "眼睛", growth: { "力": 0.2, "感": 0.1 }, life: 130, prerequisite: "狩猎本能", "featureBonus": "力量+24、感知+16、攻击+15、法术攻击+9" },
+                  { name: "根脉之形", 部位: "脸型", growth: { "力": 0.1, "感": 0.1 }, life: 130, prerequisite: "死亡讯息", "featureBonus": "力量+10%、感知+5%、攻击力+12、经验获取+30%" },
+                  { name: "翠色梦乡", 部位: "发色", growth: { "感": 0.1, "意": 0.2 }, life: 90, prerequisite: "贤者气度", "featureBonus": "感知+16、意志+24、法术攻击+12、法术命中+30%、法术抵抗+30%" }
               ]
           },
           "默认": {
