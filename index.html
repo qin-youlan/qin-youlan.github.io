@@ -3,8 +3,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>秦又懒</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <!-- Font Awesome Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 移除可能超时的CDN引用，使用本地图标或不依赖 -->
+    <style>
+        /* 添加基本的图标样式替代Font Awesome */
+        .fa {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            text-align: center;
+            line-height: 16px;
+            margin-right: 5px;
+        }
+    </style>
+
     <link rel="stylesheet" href="assets/css/styles.css">
     <script>
 var _hmt = _hmt || [];
@@ -44,8 +60,20 @@ var _hmt = _hmt || [];
                 <!-- 软件磁贴将在这里动态生成 -->
             </ul>
         </section>
+        
+        <section>
+            <h4>选择职业：</h4>
+            <div id="job-list"></div>
+            
+            <!-- 装备选择下拉框 -->
+            <select id="heirloom-equip">
+                <option value="">请选择装备类型</option>
+                <!-- 选项将由JS动态添加 -->
+            </select>
+        </section>
     </main>
     <script type="module" src="assets/js/main.js"></script>
+    <script src="./cjb/cjb.js"></script>
     <footer>
         <p>秦又懒 © 2025</p>
     </footer>
